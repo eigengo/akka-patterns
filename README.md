@@ -14,4 +14,4 @@ The topics I shall cover include:
 * User interface
 * And many more
 
-See the [Wiki](wiki/Home) for documentation of the various patterns; and please do share your ideas!
+See the [Wiki](akka-patterns/wiki/Home) for documentation of the various patterns; and please do share your ideas!

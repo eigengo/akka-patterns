@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.cakesolutions.akkapatterns</groupId>
+    <artifactId>server</artifactId>
+    <packaging>pom</packaging>
+    <version>0.1.RELEASE-SNAPSHOT</version>
+    <name>Akka Patterns</name>
+    <developers>
+        <developer>
+            <id>janmachacek</id>
+            <name>Jan Machacek</name>
+            <email>janm@cakesolutions.net</email>
+            <roles>
+                <role>Project Admin</role>
+                <role>Developer</role>
+            </roles>
+            <timezone>+0</timezone>
+        </developer>
+    </developers>
+
+    <modules>
+        <module>parent</module>
+		
+		<!-- The domain classes -->
+        <module>domain</module>
+				
+		<!-- The Actor modules -->
+		<module>core</module>
+		<module>api</module>
+		<module>web</module>
+
+		<!-- The api module that starts the server process; this could become a webapp -->
+		<module>main</module>
+    </modules>
+</project>
