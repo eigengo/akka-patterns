@@ -7,6 +7,9 @@
     <packaging>pom</packaging>
     <version>0.1.RELEASE-SNAPSHOT</version>
     <name>Akka Patterns - Parent</name>
+    <scm>
+        <connection>scm:git:git@github.com:janm399/akka-patterns.git</connection>
+    </scm>
     <properties>
         <spring.framework.version>3.1.1.RELEASE</spring.framework.version>
         <scala.version>2.9.2</scala.version>
