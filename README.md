@@ -11,7 +11,7 @@ The topics I shall cover include:
 * Transactional behaviour
 * Proper application of purely functional code & patterns (Shapeless and Scalaz)
 * Authentication and authorisation
-* User interface
+* [User interface](akka-patterns/wiki/UserInterface)
 * [Comparison with Spring Framework](akka-patterns/wiki/Spring)
 
 See the [Wiki](akka-patterns/wiki/Home) for documentation of the various patterns; and please do share your ideas!
