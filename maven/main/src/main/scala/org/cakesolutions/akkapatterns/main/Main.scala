@@ -8,6 +8,10 @@ import org.cakesolutions.akkapatterns.web.Web
 object Main extends App {
   // -javaagent:/Users/janmachacek/.m2/repository/org/springframework/spring-instrument/3.1.1.RELEASE/spring-instrument-3.1.1.RELEASE.jar -Xmx512m -XX:MaxPermSize=256m
 
+  class RuntimeConfiguration {
+
+  }
+
   implicit val system = ActorSystem("AkkaPatterns")
 
   class Application(val actorSystem: ActorSystem) extends Core with Api with Web
