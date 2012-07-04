@@ -1,7 +1,8 @@
 package org.cakesolutions.akkapatterns.core.application
 
 import org.cakesolutions.akkapatterns.core.{Started, Stop, Start}
-import akka.actor.{ActorRef, Actor}
+import akka.actor.{Props, ActorRef, Actor}
+import akka.routing.RoundRobinRouter
 
 case class Load(path: String)
 case class Unload(path: String)
@@ -41,6 +42,9 @@ class ApplicationActor extends Actor {
      * Scans the application for the actors
      */
     case Scan() =>
+      context.actorOf(
+        props = Props[BombActor].withRouter(RoundRobinRouter(nrOfInstances = 10)),
+        name = "bomb")
 
       sender ! Scanned(0)
 
