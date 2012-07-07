@@ -14,10 +14,11 @@ class BombActorSpec extends TestKit(ActorSystem()) with Specification with Impli
   "flooding the actor's queue" in {
     val bombActor = system actorFor "user/application/bomb"
 
-    within(Duration("2s")) {
+    within(Duration("3s")) {
+      // 10 * 10ms = 1000msgs/s
       for (i <- 0 to 100) {
         bombActor ! Bomb()
-        expectMsg(Some("boom!"))
+        expectMsg(Duration("20ms"), Some("boom!"))
       }
     }
 
