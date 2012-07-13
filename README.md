@@ -6,6 +6,7 @@ The topics I shall cover include:
 
 * [Building (Maven and SBT)](akka-patterns/wiki/Building)
 * [Composing features](akka-patterns/wiki/Composing)
+* [Configuration](akka-patterns/wiki/Configuration)
 * Testing (unit, integration and white-box), including BDD
 * Data access (relational, document, key-value and graph databases)
 * Transactional behaviour
