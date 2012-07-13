@@ -195,6 +195,18 @@
                 <version>1.0.2</version>
             </dependency>
 
+            <!-- DBCP -->
+            <dependency>
+                <groupId>commons-dbcp</groupId>
+                <artifactId>commons-dbcp</artifactId>
+                <version>1.4</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hsqldb</groupId>
+                <artifactId>hsqldb</artifactId>
+                <version>2.2.4</version>
+            </dependency>
+
             <!-- Lift JSON -->
             <dependency>
                 <groupId>net.liftweb</groupId>

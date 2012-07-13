@@ -10,26 +10,25 @@ private object ConfigurationStore {
     entries += ((key, value))
   }
 
-  def get[A] = {
-    entries.values.find(_.isInstanceOf[A]) match {
-      case Some(v) => v.asInstanceOf[A]
-      case None => throw new Exception("Cannot find")
-    }
-  }
+  def get[A] =
+    entries.values.find(_.isInstanceOf[A]).asInstanceOf[Option[A]]
+
 }
 
 trait Configured {
 
   def configured[A](implicit actorContext: ActorContext): A =
-    ConfigurationStore.get[A]
+    ConfigurationStore.get[A].get
 
 
 }
 
-trait Configurable {
+trait Configuration {
 
-  def configure[R](f: => R) = {
-
+  def configure[R <: AnyRef](f: => R) = {
+    val a = f
+    ConfigurationStore.put(a.getClass.getName, a)
+    a
   }
 
 }

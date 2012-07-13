@@ -3,6 +3,7 @@ package org.cakesolutions.akkapatterns.api
 import akka.actor.{ActorRef, Props}
 import cc.spray.{RootService, Route, HttpService, SprayCanRootService}
 import org.cakesolutions.akkapatterns.core.Core
+import akka.util.Timeout
 
 trait Api {
   this: Core =>
@@ -19,5 +20,10 @@ trait Api {
     )),
     name = "root-service"
   )
+
+}
+
+trait DefaultTimeout {
+  final implicit val timeout = Timeout(3000)
 
 }

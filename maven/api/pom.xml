@@ -17,6 +17,11 @@
             <artifactId>core</artifactId>
             <version>0.1.RELEASE-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>org.cakesolutions.akkapatterns</groupId>
+            <artifactId>domain</artifactId>
+            <version>0.1.RELEASE-SNAPSHOT</version>
+        </dependency>
 
         <dependency>
             <groupId>cc.spray</groupId>

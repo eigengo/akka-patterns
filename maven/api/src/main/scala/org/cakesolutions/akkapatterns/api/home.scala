@@ -10,8 +10,7 @@ import org.cakesolutions.akkapatterns.core.application.{PoisonPill, GetImplement
 
 case class SystemInfo(implementation: Implementation, host: String)
 
-class HomeService(implicit val actorSystem: ActorSystem) extends Directives with Marshallers {
-  implicit val timeout = Timeout(3000)
+class HomeService(implicit val actorSystem: ActorSystem) extends Directives with Marshallers with DefaultTimeout {
 
   def applicationActor = actorSystem.actorFor("/user/application")
 
