@@ -8,48 +8,52 @@
         <relativePath>../parent/pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>core</artifactId>
+    <artifactId>test</artifactId>
     <packaging>jar</packaging>
-    <name>Akka Patterns - Core</name>
+    <name>Akka Patterns - Test support</name>
     <dependencies>
         <dependency>
-            <groupId>com.typesafe.akka</groupId>
-            <artifactId>akka-actor</artifactId>
+            <groupId>org.specs2</groupId>
+            <artifactId>specs2_${scala.version}</artifactId>
         </dependency>
         <dependency>
             <groupId>org.cakesolutions.akkapatterns</groupId>
             <artifactId>domain</artifactId>
             <version>0.1.RELEASE-SNAPSHOT</version>
         </dependency>
-
-        <!-- MongoDB -->
         <dependency>
             <groupId>org.mongodb</groupId>
             <artifactId>casbah-core_${scala.version}</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.mongodb</groupId>
-            <artifactId>casbah-commons_${scala.version}</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.mongodb</groupId>
-            <artifactId>mongo-java-driver</artifactId>
-        </dependency>
 
+        <!--
         <dependency>
-            <groupId>com.typesafe.akka</groupId>
-            <artifactId>akka-testkit</artifactId>
-            <scope>test</scope>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-neo4j-aspects</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>log4j</artifactId>
+                    <groupId>log4j</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>log4j</artifactId>
+                    <groupId>log4j</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
-            <groupId>org.specs2</groupId>
-            <artifactId>specs2_${scala.version}</artifactId>
-            <scope>test</scope>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-mongodb</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.cakesolutions.akkapatterns</groupId>
-            <artifactId>test</artifactId>
-            <version>0.1.RELEASE-SNAPSHOT</version>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-neo4j-cross-store</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-mongodb-cross-store</artifactId>
+        </dependency>
+        -->
+
     </dependencies>
 </project>

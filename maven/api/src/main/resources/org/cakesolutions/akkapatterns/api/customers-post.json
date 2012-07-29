@@ -1,0 +1,9 @@
+{
+    "firstName":"Joe",
+    "lastName":"Bloggs",
+    "email":"joe@cakesolutions.net",
+    "id":"00000000-0000-0000-0100-000000000000",
+    "addresses":[
+        {"line1":"123 Winding Road", "line2":"Cowley", "line3":"Oxford"}
+    ]
+}

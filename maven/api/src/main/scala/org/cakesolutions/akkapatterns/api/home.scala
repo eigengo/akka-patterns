@@ -5,12 +5,11 @@ import cc.spray.Directives
 import cc.spray.directives.Slash
 import java.net.InetAddress
 import akka.pattern.ask
-import akka.util.Timeout
 import org.cakesolutions.akkapatterns.core.application.{PoisonPill, GetImplementation, Implementation}
 
 case class SystemInfo(implementation: Implementation, host: String)
 
-class HomeService(implicit val actorSystem: ActorSystem) extends Directives with Marshallers with DefaultTimeout {
+class HomeService(implicit val actorSystem: ActorSystem) extends Directives with Marshallers with DefaultTimeout with LiftJSON {
 
   def applicationActor = actorSystem.actorFor("/user/application")
 

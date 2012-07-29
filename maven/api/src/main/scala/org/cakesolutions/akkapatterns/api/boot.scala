@@ -1,7 +1,7 @@
 package org.cakesolutions.akkapatterns.api
 
 import akka.actor.{ActorRef, Props}
-import cc.spray.{RootService, Route, HttpService, SprayCanRootService}
+import cc.spray.{RootService, Route, HttpService}
 import org.cakesolutions.akkapatterns.core.Core
 import akka.util.Timeout
 
@@ -9,7 +9,10 @@ trait Api {
   this: Core =>
 
   val routes =
-    new HomeService().route :: Nil
+    new HomeService().route ::
+    //new DummyService("customers").route ::
+    new CustomerService().route ::
+    Nil
 
   val svc: Route => ActorRef = route => actorSystem.actorOf(Props(new HttpService(route)))
 

@@ -6,10 +6,10 @@ import cc.spray.http.{HttpContent, ContentType}
 import cc.spray.http.MediaTypes._
 import net.liftweb.json.Serialization._
 import cc.spray.http.ContentTypeRange
+import java.util.UUID
 
 trait Marshallers extends DefaultMarshallers {
-  implicit def liftJsonFormats: Formats =
-    DefaultFormats + FieldSerializer[AnyRef]()
+  this: LiftJSON =>
 
   implicit def liftJsonMarshaller[A <: Product] = new SimpleMarshaller[A] {
     val canMarshalTo = ContentType(`application/json`) :: Nil
@@ -21,9 +21,8 @@ trait Marshallers extends DefaultMarshallers {
 
 }
 
-trait Unmarshallers extends DefaultMarshallers {
-  implicit def liftJsonFormats: Formats =
-    DefaultFormats + FieldSerializer[AnyRef]()
+trait Unmarshallers extends DefaultUnmarshallers {
+  this: LiftJSON =>
 
   implicit def liftJsonUnmarshaller[A <: Product : Manifest] = new SimpleUnmarshaller[A] {
     val canUnmarshalFrom = ContentTypeRange(`application/json`) :: Nil
@@ -33,4 +32,24 @@ trait Unmarshallers extends DefaultMarshallers {
     }
   }
 
+}
+
+trait LiftJSON {
+  implicit def liftJsonFormats: Formats =
+    DefaultFormats + new UUIDSerializer + FieldSerializer[AnyRef]()
+
+  class UUIDSerializer extends Serializer[UUID] {
+    private val UUIDClass = classOf[UUID]
+
+    def deserialize(implicit format: Formats): PartialFunction[(TypeInfo, JValue), UUID] = {
+      case (TypeInfo(UUIDClass, _), json) => json match {
+        case JString(s) => UUID.fromString(s)
+        case x => throw new MappingException("Can't convert " + x + " to UUID")
+      }
+    }
+
+    def serialize(implicit format: Formats): PartialFunction[Any, JValue] = {
+      case x: UUID => JString(x.toString)
+    }
+  }
 }

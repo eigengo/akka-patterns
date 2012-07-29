@@ -24,6 +24,8 @@
 		
 		<!-- The domain classes -->
         <module>domain</module>
+
+        <module>test</module>
 				
 		<!-- The Actor modules -->
 		<module>core</module>

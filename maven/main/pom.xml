@@ -24,8 +24,17 @@
         </dependency>
         <dependency>
             <groupId>org.cakesolutions.akkapatterns</groupId>
+            <artifactId>domain</artifactId>
+            <version>0.1.RELEASE-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.cakesolutions.akkapatterns</groupId>
             <artifactId>web</artifactId>
             <version>0.1.RELEASE-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>casbah-core_${scala.version}</artifactId>
         </dependency>
         <dependency>
             <groupId>cc.spray</groupId>
