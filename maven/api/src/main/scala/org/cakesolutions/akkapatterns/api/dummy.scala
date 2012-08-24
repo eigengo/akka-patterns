@@ -41,7 +41,7 @@ class DummyService(path: String)(implicit val actorSystem: ActorSystem) extends 
       scala.io.Source.fromInputStream(getClass.getResourceAsStream(filename)).mkString
     }
     catch {
-      case _ => "{body of file " + filename + " -- Missing File!}"
+      case _: Throwable => "{body of file " + filename + " -- Missing File!}"
     }
   }
 }

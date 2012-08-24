@@ -1,10 +1,10 @@
 package org.cakesolutions.akkapatterns.core
 
 import akka.actor.{Props, ActorSystem}
-import akka.dispatch.Await
 import application.ApplicationActor
 import akka.pattern.ask
 import akka.util.Timeout
+import concurrent.Await
 
 case class Start()
 case class Started()

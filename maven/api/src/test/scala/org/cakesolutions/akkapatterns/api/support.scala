@@ -1,7 +1,6 @@
 package org.cakesolutions.akkapatterns.api
 
 import cc.spray.test.SprayTest
-import akka.util.Duration
 import java.util.concurrent.TimeUnit
 import akka.actor.ActorRef
 import cc.spray.RequestContext
@@ -10,6 +9,7 @@ import io.Source
 import org.specs2.mutable.Specification
 import org.cakesolutions.akkapatterns.test.{DefaultTestData, SpecConfiguration}
 import org.cakesolutions.akkapatterns.core.Core
+import concurrent.util.Duration
 
 trait RootSprayTest extends SprayTest {
   protected def testRoot(request: HttpRequest, timeout: Duration = Duration(10000, TimeUnit.MILLISECONDS))

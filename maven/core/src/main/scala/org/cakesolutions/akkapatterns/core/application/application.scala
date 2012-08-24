@@ -10,7 +10,7 @@ case class PoisonPill()
 
 class ApplicationActor extends Actor {
 
-  protected def receive = {
+  def receive = {
     case GetImplementation() =>
       val manifestStream = getClass.getResourceAsStream("/META-INF/MANIFEST.MF")
       val manifest = new java.util.jar.Manifest(manifestStream)

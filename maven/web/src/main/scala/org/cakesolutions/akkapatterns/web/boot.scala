@@ -19,7 +19,7 @@ trait Web {
   // handled by the root service actor
   val sprayCanServer = actorSystem.actorOf(
     Props(new HttpServer(ioWorker, MessageHandlerDispatch.SingletonHandler(
-      actorSystem.actorOf(Props(new SprayCanRootService(rootService)))))),
+      actorSystem.actorOf(Props(new SprayCanRootService(rootService)))), actorSystem.settings.config)),
     name = "http-server"
   )
 

@@ -6,11 +6,14 @@ import org.specs2.mutable.Specification
 import akka.testkit.{ImplicitSender, TestActorRef, TestKit}
 import akka.actor.ActorSystem
 import org.cakesolutions.akkapatterns.domain.Customer
+import org.specs2.runner.JUnitRunner
+import org.junit.runner.RunWith
 
 /**
  * @author janmachacek
  */
-class CustomerActorSpec extends TestKit(ActorSystem()) with Specification with SpecConfiguration with DefaultTestData with ImplicitSender {
+@RunWith(classOf[JUnitRunner])
+class CustomerActorSpecx extends TestKit(ActorSystem()) with Specification with SpecConfiguration with DefaultTestData with ImplicitSender {
   val customerActor = TestActorRef[CustomerActor]
 
   "Getting a known customer works" in {

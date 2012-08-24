@@ -14,7 +14,7 @@
     <dependencies>
         <dependency>
             <groupId>com.typesafe.akka</groupId>
-            <artifactId>akka-actor</artifactId>
+            <artifactId>akka-actor_${scala.version}</artifactId>
         </dependency>
         <dependency>
             <groupId>org.cakesolutions.akkapatterns</groupId>
@@ -22,7 +22,7 @@
             <version>0.1.RELEASE-SNAPSHOT</version>
         </dependency>
 
-        <!-- MongoDB -->
+        <!--
         <dependency>
             <groupId>org.mongodb</groupId>
             <artifactId>casbah-core_${scala.version}</artifactId>
@@ -35,15 +35,27 @@
             <groupId>org.mongodb</groupId>
             <artifactId>mongo-java-driver</artifactId>
         </dependency>
+        -->
 
         <dependency>
             <groupId>com.typesafe.akka</groupId>
-            <artifactId>akka-testkit</artifactId>
+            <artifactId>akka-testkit_${scala.version}</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.specs2</groupId>
             <artifactId>specs2_${scala.version}</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.specs2</groupId>
+            <artifactId>specs2-scalaz-core_${scala.version}</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.8.2</version>
             <scope>test</scope>
         </dependency>
         <dependency>

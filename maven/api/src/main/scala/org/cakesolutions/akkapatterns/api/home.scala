@@ -12,6 +12,7 @@ case class SystemInfo(implementation: Implementation, host: String)
 class HomeService(implicit val actorSystem: ActorSystem) extends Directives with Marshallers with DefaultTimeout with LiftJSON {
 
   def applicationActor = actorSystem.actorFor("/user/application")
+  import scala.concurrent.ExecutionContext.Implicits.global
 
   val route = {
     path(Slash) {

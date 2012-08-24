@@ -11,10 +11,10 @@ import java.util.UUID
 trait Marshallers extends DefaultMarshallers {
   this: LiftJSON =>
 
-  implicit def liftJsonMarshaller[A <: Product] = new SimpleMarshaller[A] {
+  implicit def liftJsonMarshaller[A <: AnyRef] = new SimpleMarshaller[A] {
     val canMarshalTo = ContentType(`application/json`) :: Nil
     def marshal(value: A, contentType: ContentType) = {
-      val jsonSource = write(value)
+      val jsonSource = write(value.asInstanceOf[AnyRef])
       DefaultMarshallers.StringMarshaller.marshal(jsonSource, contentType)
     }
   }
