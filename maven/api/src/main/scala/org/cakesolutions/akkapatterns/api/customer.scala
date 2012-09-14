@@ -3,9 +3,13 @@ package org.cakesolutions.akkapatterns.api
 import akka.actor.ActorSystem
 import cc.spray.Directives
 import org.cakesolutions.akkapatterns.domain.Customer
-import org.cakesolutions.akkapatterns.core.application.{Insert, FindAll, Get}
+import org.cakesolutions.akkapatterns.core.application._
 import cc.spray.directives.JavaUUID
 import akka.pattern.ask
+import org.cakesolutions.akkapatterns.core.application.RegisterCustomer
+import org.cakesolutions.akkapatterns.domain.Customer
+import org.cakesolutions.akkapatterns.core.application.Get
+import org.cakesolutions.akkapatterns.core.application.FindAll
 
 /**
  * @author janmachacek
@@ -24,8 +28,8 @@ class CustomerService(implicit val actorSystem: ActorSystem) extends Directives 
         completeWith((customerActor ? FindAll()).mapTo[List[Customer]])
       } ~
       post {
-        content(as[Customer]) { customer =>
-          completeWith((customerActor ? Insert(customer)).mapTo[Customer])
+        content(as[RegisterCustomer]) { rc =>
+          completeWith((customerActor ? rc).mapTo[Either[NotRegisteredCustomer, RegisteredCustomer]])
         }
       }
     }

@@ -1,7 +1,9 @@
 package org.cakesolutions.akkapatterns.api
 
-import org.cakesolutions.akkapatterns.domain.Customer
+import org.cakesolutions.akkapatterns.domain.{User, Customer}
 import cc.spray.http.HttpMethods._
+import org.cakesolutions.akkapatterns.core.application.{RegisteredCustomer, RegisterCustomer}
+import java.util.UUID
 
 /**
  * @author janmachacek
@@ -21,10 +23,15 @@ class CustomerServiceSpec extends DefaultApiSpecification {
     customers must contain (janMachacek)
   }
 
-  "Saving a customer gets the saved one" in {
-    val customer = perform[Customer](POST, "/customers", jsonContent("/org/cakesolutions/akkapatterns/api/customers-post.json"))
+  "Registering a customer" in {
+    val rc = RegisterCustomer(
+      joeBloggs,
+      User(UUID.randomUUID(), "janm", "Like I'll tell you!"))
+    val registered = perform[RegisterCustomer, RegisteredCustomer](POST, "/customers", rc)
 
-    customer must_== joeBloggs
+    (registered.customer must_== joeBloggs) and
+    (registered.user.username must_== "janm") and
+    (registered.user.password must_!= "Like I'll tell you")
   }
 
 }

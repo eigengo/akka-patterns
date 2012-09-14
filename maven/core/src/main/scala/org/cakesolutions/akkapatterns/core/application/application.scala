@@ -2,6 +2,8 @@ package org.cakesolutions.akkapatterns.core.application
 
 import org.cakesolutions.akkapatterns.core.{Started, Stop, Start}
 import akka.actor.{Props, Actor}
+import org.cakesolutions.akkapatterns.domain.Configured
+import com.mongodb.casbah.MongoDB
 
 case class GetImplementation()
 case class Implementation(title: String, version: String, build: String)
@@ -23,6 +25,7 @@ class ApplicationActor extends Actor {
 
     case Start() =>
       context.actorOf(Props[CustomerActor], "customer")
+      context.actorOf(Props[UserActor], "user")
 
       sender ! Started()
 
@@ -35,5 +38,11 @@ class ApplicationActor extends Actor {
     case PoisonPill() =>
       sys.exit(-1)
   }
+
+}
+
+trait MongoCollections extends Configured {
+  def customers = configured[MongoDB].apply("customers")
+  def users = configured[MongoDB].apply("users")
 
 }

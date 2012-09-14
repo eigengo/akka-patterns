@@ -2,7 +2,7 @@ package org.cakesolutions.akkapatterns.core.application
 
 import com.mongodb.casbah.Imports._
 import java.util.UUID
-import org.cakesolutions.akkapatterns.domain.{Address, Customer}
+import org.cakesolutions.akkapatterns.domain.{User, Address, Customer}
 
 /**
  * Contains type classes that deserialize records from Casbah into "our" types.
@@ -38,6 +38,10 @@ trait CasbahDeserializers {
         innerList[Address](o, "addresses"), o.as[UUID]("id"))
   }
 
+  implicit object UserDeserializer extends CasbahDeserializer[User] {
+    def apply(o: DBObject) = User(o.as[UUID]("id"), o.as[String]("username"), o.as[String]("password"))
+  }
+
 }
 
 /**
@@ -61,6 +65,18 @@ trait CasbahSerializers {
       builder += "line1" -> address.line1
       builder += "line2" -> address.line2
       builder += "line3" -> address.line2
+
+      builder.result()
+    }
+  }
+
+  implicit object UserSerializer extends CasbahSerializer[User] {
+    def apply(user: User) = {
+      val builder = MongoDBObject.newBuilder
+
+      builder += "username" -> user.username
+      builder += "password" -> user.password
+      builder += "id" -> user.id
 
       builder.result()
     }
