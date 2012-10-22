@@ -52,4 +52,17 @@ trait LiftJSON {
       case x: UUID => JString(x.toString)
     }
   }
+
+  class StringBuilderMarshallingContent(sb: StringBuilder) extends MarshallingContext {
+
+    def marshalTo(content: HttpContent) {
+      if (sb.length > 0) sb.append(",")
+      sb.append(new String(content.buffer))
+    }
+
+    def handleError(error: Throwable) {}
+
+    def startChunkedMessage(contentType: ContentType) = throw new UnsupportedOperationException
+  }
+
 }

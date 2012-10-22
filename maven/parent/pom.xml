@@ -11,9 +11,9 @@
         <connection>scm:git:git@github.com:janm399/akka-patterns.git</connection>
     </scm>
     <properties>
-        <scala.version>2.10.0-M7</scala.version>
+        <scala.version>2.9.2</scala.version>
         <scala.plugin.version>3.0.1</scala.plugin.version>
-        <akka.version>2.1-M2</akka.version>
+        <akka.version>2.0.1</akka.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spray.version>1.0-M2</spray.version>
     </properties>
@@ -241,7 +241,7 @@
             <dependency>
                 <groupId>org.specs2</groupId>
                 <artifactId>specs2_${scala.version}</artifactId>
-                <version>1.12.1.1</version>
+                <version>1.11</version>
                 <scope>test</scope>
             </dependency>
             <dependency>

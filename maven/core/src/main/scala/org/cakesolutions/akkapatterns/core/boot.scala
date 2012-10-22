@@ -4,7 +4,7 @@ import akka.actor.{Props, ActorSystem}
 import application.ApplicationActor
 import akka.pattern.ask
 import akka.util.Timeout
-import concurrent.Await
+import akka.dispatch.Await
 
 case class Start()
 case class Started()

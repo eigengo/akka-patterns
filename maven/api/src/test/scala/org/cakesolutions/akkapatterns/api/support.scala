@@ -61,6 +61,20 @@ trait ApiSpecification extends Specification with SpecConfiguration with RootSpr
     obj
   }
 
+  protected def perform[In, Out](method: HttpMethod, url: String, in: In)
+                            (implicit root: ActorRef, marshaller: Marshaller[In], unmarshaller: Unmarshaller[Out]): Out = {
+    marshaller(t => Some(t)) match {
+      case MarshalWith(f) =>
+        val sb = new StringBuilder()
+        val ctx = new StringBuilderMarshallingContent(sb)
+        f(ctx)(in)
+
+        perform[Out](method, url, Some(HttpContent(ContentType(MediaTypes.`application/json`), sb.toString())))
+      case CantMarshal(_) =>
+        throw new Exception("Cant marshal " + in)
+    }
+  }
+
 }
 
 /**
