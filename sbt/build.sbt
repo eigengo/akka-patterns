@@ -15,10 +15,19 @@ shellPrompt := { state => System.getProperty("user.name") + "> " }
 shellPrompt in ThisBuild := { state => Project.extract(state).currentRef.project + "> " }
 
 /** Dependencies */
-resolvers ++= Seq("snapshots-repo" at "http://scala-tools.org/repo-snapshots")
+resolvers += "snapshots-repo" at "http://scala-tools.org/repo-snapshots"
 
-libraryDependencies <<= scalaVersion { scala_version => Seq(
-  )
+resolvers += "spray repo" at "http://repo.spray.io"
+
+resolvers += "Typesafe Repository" at "http://repo.typesafe.com/typesafe/releases/"
+
+libraryDependencies <<= scalaVersion { scala_version => 
+	val sprayVersion = "1.1-M4"
+	val akkaVersion  = "2.1.0-RC1"
+	Seq(
+		"com.typesafe.akka" % "akka-kernel" % akkaVersion,
+		"io.spray" % "spray-can" % sprayVersion
+	)
 }
 
 /** Compilation */
