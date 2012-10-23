@@ -3,7 +3,7 @@ import sbtrelease._
 /** Project */
 name := "akka-patterns"
 
-version := "1.7.1"
+version := "1.0"
 
 organization := "org.cakesolutions"
 
@@ -21,12 +21,20 @@ resolvers += "spray repo" at "http://repo.spray.io"
 
 resolvers += "Typesafe Repository" at "http://repo.typesafe.com/typesafe/releases/"
 
+resolvers += "Sonatype OSS Releases" at "http://oss.sonatype.org/content/repositories/releases/"
+
+resolvers += "Sonatype OSS Snapshots" at "http://oss.sonatype.org/content/repositories/snapshots/"
+
 libraryDependencies <<= scalaVersion { scala_version => 
 	val sprayVersion = "1.1-M4"
 	val akkaVersion  = "2.1.0-RC1"
 	Seq(
-		"com.typesafe.akka" % "akka-kernel" % akkaVersion,
-		"io.spray" % "spray-can" % sprayVersion
+		"com.typesafe.akka" % "akka-kernel_2.10.0-RC1"  % akkaVersion,
+		"io.spray" % "spray-can" % sprayVersion,
+		"io.spray" % "spray-routing" % sprayVersion,
+		"io.spray" % "spray-httpx" % sprayVersion,
+		"io.spray" % "spray-util" % sprayVersion,
+		"io.spray" % "spray-json_2.9.2" % "1.2.2"
 	)
 }
 

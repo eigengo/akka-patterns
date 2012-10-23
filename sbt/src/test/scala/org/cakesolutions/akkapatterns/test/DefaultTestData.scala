@@ -3,7 +3,6 @@ package org.cakesolutions.akkapatterns.test
 import org.cakesolutions.akkapatterns.domain.{Address, Customer}
 import java.util.UUID
 
-
 /**
  * @author janmachacek
  */

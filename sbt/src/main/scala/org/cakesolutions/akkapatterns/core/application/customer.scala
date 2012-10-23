@@ -3,8 +3,6 @@ package org.cakesolutions.akkapatterns.core.application
 import akka.actor.Actor
 import java.util.UUID
 import org.cakesolutions.akkapatterns.domain.{User, Configured, Customer}
-import com.mongodb.casbah.{MongoCollection, MongoDB}
-import org.specs2.internal.scalaz.Identity
 import org.cakesolutions.akkapatterns.domain
 
 /**
@@ -31,28 +29,28 @@ case class NotRegisteredCustomer(code: String) extends Failure
 /**
  * CRUD operations for the [[org.cakesolutions.akkapatterns.domain.Customer]]s
  */
-trait CustomerOperations extends TypedCasbah with SearchExpressions {
-  def customers: MongoCollection
+trait CustomerOperations {
+  // def customers: MongoCollection
 
-  def getCustomer(id: domain.Identity) = customers.findOne(entityId(id)).map(mapper[Customer])
+  def getCustomer(id: domain.Identity): Option[Customer] = None
 
-  def findAllCustomers() = customers.find().map(mapper[Customer]).toList
+  def findAllCustomers(): List[Customer] = List()
 
-  def insertCustomer(customer: Customer) = {
-    customers += serialize(customer)
+  def insertCustomer(customer: Customer): Customer = {
+    //customers += serialize(customer)
     customer
   }
 
   def registerCustomer(customer: Customer)(ru: RegisteredUser): Either[Failure, RegisteredCustomer] = {
-    customers += serialize(customer)
+    //customers += serialize(customer)
     Right(RegisteredCustomer(customer, ru.user))
   }
 
 }
 
-class CustomerActor extends Actor with Configured with CustomerOperations with UserOperations with MongoCollections {
+class CustomerActor extends Actor with CustomerOperations with UserOperations {
 
-  protected def receive = {
+  def receive = {
     case Get(id) =>
       sender ! getCustomer(id)
 
@@ -63,10 +61,10 @@ class CustomerActor extends Actor with Configured with CustomerOperations with U
       sender ! insertCustomer(customer)
 
     case RegisterCustomer(customer, user) =>
-      import scalaz._
-      import Scalaz._
+      //import scalaz._
+      //import Scalaz._
 
-      sender ! (registerUser(user) >>= registerCustomer(customer))
+      //sender ! (registerUser(user) >>= registerCustomer(customer))
 
   }
 }

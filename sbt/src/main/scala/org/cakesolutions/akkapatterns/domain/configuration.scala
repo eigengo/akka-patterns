@@ -1,6 +1,7 @@
 package org.cakesolutions.akkapatterns.domain
 
 import collection.mutable
+import reflect.{ClassTag, classTag}
 
 private object ConfigurationStore {
   val entries = mutable.Map[String, AnyRef]()
@@ -9,8 +10,8 @@ private object ConfigurationStore {
     entries += ((key, value))
   }
 
-  def get[A: Manifest] = {
-    val erasure = manifest[A].erasure
+  def get[A: ClassTag] = {
+    val erasure = classTag[A].runtimeClass
     entries.values.find(x => erasure.isAssignableFrom(x.getClass)) match {
       case Some(v) => Some(v.asInstanceOf[A])
       case None => None
