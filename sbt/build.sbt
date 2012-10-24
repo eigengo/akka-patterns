@@ -34,7 +34,7 @@ libraryDependencies <<= scalaVersion { scala_version =>
 		"io.spray" % "spray-routing" % sprayVersion,
 		"io.spray" % "spray-httpx" % sprayVersion,
 		"io.spray" % "spray-util" % sprayVersion,
-		"io.spray" % "spray-json_2.9.2" % "1.2.2"
+		"io.spray" % "spray-json" % "1.2.2" cross CrossVersion.full
 	)
 }
 
@@ -62,3 +62,5 @@ testOptions := Seq(Tests.Filter(s =>
 
 /** Console */
 initialCommands in console := "import org.cakesolutions.akkapatterns._"
+
+EclipseKeys.withSource := true
