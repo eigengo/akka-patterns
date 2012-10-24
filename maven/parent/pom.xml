@@ -24,6 +24,24 @@
         <shapeless.version>1.2.0</shapeless.version>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>scala-tools.org</id>
+            <name>Scala-tools Repository</name>
+            <url>http://scala-tools.org/repo-releases</url>
+        </repository>
+        <repository>
+            <id>spray</id>
+            <name>Spray Repository</name>
+            <url>http://repo.spray.io</url>
+        </repository>
+        <repository>
+            <id>typesafe</id>
+            <name>Typesafe Repository</name>
+            <url>http://repo.typesafe.com/typesafe/releases/</url>
+        </repository>        
+    </repositories>
+
     <build>
         <pluginManagement>
             <plugins>
@@ -228,22 +246,27 @@
             <dependency>
                 <groupId>org.scalaz</groupId>
                 <artifactId>scalaz-core_${scala.version}</artifactId>
-                <version>7.0-SNAPSHOT</version>
+                <version>7.0.0-M3</version>
             </dependency>
             <dependency>
                 <groupId>org.scalaz</groupId>
                 <artifactId>scalaz-effect_${scala.version}</artifactId>
-                <version>7.0-SNAPSHOT</version>
+                <version>7.0.0-M3</version>
             </dependency>
             <dependency>
                 <groupId>org.scalaz</groupId>
                 <artifactId>scalaz-xml_${scala.version}</artifactId>
-                <version>7.0-SNAPSHOT</version>
+                <version>7.0.0-M3</version>
             </dependency>
             <dependency>
                 <groupId>org.scalaz</groupId>
                 <artifactId>scalaz-iteratee_${scala.version}</artifactId>
-                <version>7.0-SNAPSHOT</version>
+                <version>7.0.0-M3</version>
+            </dependency>
+            <dependency>
+                <groupId>org.specs2</groupId>
+                <artifactId>specs2-scalaz-core_${scala.version}</artifactId>
+                <version>6.0.1</version>
             </dependency>
 
             <dependency>
