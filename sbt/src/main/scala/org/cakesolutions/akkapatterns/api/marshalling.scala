@@ -30,5 +30,5 @@ trait Marshalling extends DefaultJsonProtocol with UuidMarshalling with SprayJso
   implicit val RegisteredCustomerFormat = jsonFormat2(RegisteredCustomer)
 
   implicit val ImplementationFormat = jsonFormat3(Implementation)
-  implicit val SystemInfoFormat = jsonFormat2(SystemInfo)
+  implicit val SystemInfoFormat = jsonFormat3(SystemInfo)
 }

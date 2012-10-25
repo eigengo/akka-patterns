@@ -15,9 +15,9 @@ class ApplicationActor extends Actor {
     case GetImplementation() =>
       val manifestStream = getClass.getResourceAsStream("/META-INF/MANIFEST.MF")
       val manifest = new java.util.jar.Manifest(manifestStream)
-      val title = manifest.getMainAttributes.getValue("Implementation-Title")
-      val version = manifest.getMainAttributes.getValue("Implementation-Version")
-      val build = manifest.getMainAttributes.getValue("Implementation-Build")
+      val title = "Akka-Patterns" // manifest.getMainAttributes.getValue("Implementation-Title")
+      val version = "1.0" // manifest.getMainAttributes.getValue("Implementation-Version")
+      val build = "1.0" //manifest.getMainAttributes.getValue("Implementation-Build")
       manifestStream.close()
 
       sender ! Implementation(title, version, build)

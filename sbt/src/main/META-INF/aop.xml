@@ -1,7 +1,0 @@
-<aspectj>
-
-    <weaver options="-XnoInline -Xreweavable ">
-        <include within="org.cakesolutions.akkapatterns..*"/>
-    </weaver>
-
-</aspectj>

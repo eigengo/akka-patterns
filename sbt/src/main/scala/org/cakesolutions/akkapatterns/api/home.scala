@@ -6,8 +6,10 @@ import akka.pattern.ask
 import spray.httpx.marshalling.MetaMarshallers
 import spray.routing.Directives
 import org.cakesolutions.akkapatterns.core.application.{ PoisonPill, GetImplementation, Implementation }
+import java.util.Date
+import scala.concurrent.ExecutionContext.Implicits._
 
-case class SystemInfo(implementation: Implementation, host: String)
+case class SystemInfo(implementation: Implementation, host: String, timestamp: Long)
 
 class HomeService(implicit val actorSystem: ActorSystem) extends Directives with Marshalling with MetaMarshallers with DefaultTimeout {
 
@@ -17,9 +19,8 @@ class HomeService(implicit val actorSystem: ActorSystem) extends Directives with
     path(Slash) {
       get {
         complete {
-          import scala.concurrent.ExecutionContext.Implicits._
           (applicationActor ? GetImplementation()).mapTo[Implementation].map {
-            SystemInfo(_, InetAddress.getLocalHost.getCanonicalHostName)
+            SystemInfo(_, InetAddress.getLocalHost.getCanonicalHostName, new Date().getTime)
           }
         }
       }
