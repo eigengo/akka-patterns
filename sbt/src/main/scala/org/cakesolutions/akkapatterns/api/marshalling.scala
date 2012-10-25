@@ -2,7 +2,6 @@ package org.cakesolutions.akkapatterns.api
 
 import java.util.UUID
 import spray.json._
-import spray.httpx.marshalling._
 import spray.httpx.SprayJsonSupport
 import org.cakesolutions.akkapatterns.domain._
 import org.cakesolutions.akkapatterns.core.application._

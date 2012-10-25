@@ -23,7 +23,7 @@ class HomeService(implicit val actorSystem: ActorSystem) extends Directives with
           }
         }
       }
-    } ~
+    } /*~
       path("poisonpill") {
         post {
           complete {
@@ -32,7 +32,7 @@ class HomeService(implicit val actorSystem: ActorSystem) extends Directives with
             "Goodbye"
           }
         }
-      }
+      }*/
   }
 
 }

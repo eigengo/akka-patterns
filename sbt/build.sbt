@@ -63,4 +63,3 @@ testOptions := Seq(Tests.Filter(s =>
 /** Console */
 initialCommands in console := "import org.cakesolutions.akkapatterns._"
 
-EclipseKeys.withSource := true

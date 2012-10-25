@@ -7,32 +7,18 @@ import http.{StatusCodes, HttpResponse}
 import org.cakesolutions.akkapatterns.core.Core
 import akka.util.Timeout
 
-trait Api {
+trait Api extends RouteConcatenation {
   this: Core =>
 
   val routes =
-    new HomeService().route ::
-    new CustomerService().route ::
-    new UserService().route ::
-    Nil
+    new HomeService().route ~
+    new CustomerService().route
 
   def rejectionHandler: PartialFunction[scala.List[Rejection], HttpResponse] = {
     case (rejections: List[Rejection]) => HttpResponse(StatusCodes.BadRequest)
   }
 
-  // FIXME: HttpService is now a trait
-  // @see http://spray.io/documentation/spray-routing/key-concepts/big-picture/#the-httpservice
-  // this file should probably be rewritten to use the new API
-  val svc: Route => ActorRef = route =>
-    actorSystem.actorOf(Props(new HttpService(route, rejectionHandler)))
-
-  val rootService = actorSystem.actorOf(
-    props = Props(new RootService(
-      svc(routes.head),
-      routes.tail.map(svc):_*
-    )),
-    name = "root-service"
-  )
+  val rootService = actorSystem.actorOf(Props(new RoutedHttpService(routes)))
 
 }
 
