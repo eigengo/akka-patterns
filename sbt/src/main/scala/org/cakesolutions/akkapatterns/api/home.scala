@@ -8,6 +8,7 @@ import spray.routing.Directives
 import org.cakesolutions.akkapatterns.core.application.{ PoisonPill, GetImplementation, Implementation }
 import java.util.Date
 import scala.concurrent.ExecutionContext.Implicits._
+import spray.routing.directives.{MarshallingDirectives, CompletionMagnet}
 
 case class SystemInfo(implementation: Implementation, host: String, timestamp: Long)
 
@@ -18,7 +19,7 @@ class HomeService(implicit val actorSystem: ActorSystem) extends Directives with
   val route = {
     path(Slash) {
       get {
-        complete {
+        handleWith { x: Any =>
           (applicationActor ? GetImplementation()).mapTo[Implementation].map {
             SystemInfo(_, InetAddress.getLocalHost.getCanonicalHostName, new Date().getTime)
           }
