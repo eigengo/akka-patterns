@@ -10,7 +10,7 @@ import spray.httpx.marshalling.MetaMarshallers
 
 case class SystemInfo(implementation: Implementation, host: String)
 
-class HomeService(implicit val actorSystem: ActorSystem) extends Directives with MetaMarshallers with Marshalling with DefaultTimeout {
+class HomeService(implicit val actorSystem: ActorSystem) extends Directives with Marshalling with MetaMarshallers with DefaultTimeout {
 
   def applicationActor = actorSystem.actorFor("/user/application")
 
@@ -18,7 +18,7 @@ class HomeService(implicit val actorSystem: ActorSystem) extends Directives with
     path(Slash) {
       get {
         complete {
-          import scala.concurrent.ExecutionContext.Implicits.global
+          import scala.concurrent.ExecutionContext.Implicits._
           val futureInfo = (applicationActor ? GetImplementation()).mapTo[Implementation].map {
             SystemInfo(_, InetAddress.getLocalHost.getCanonicalHostName)
           }

@@ -19,24 +19,24 @@ import spray.httpx.marshalling.MetaMarshallers
 class CustomerService(implicit val actorSystem: ActorSystem) extends Directives with Marshalling with MetaMarshallers with DefaultTimeout {
   def customerActor = actorSystem.actorFor("/user/application/customer")
 
+  import scala.concurrent.ExecutionContext.Implicits.global
+
   val route =
     path("customers" / JavaUUID) { id =>
       get {
         complete {
-          import scala.concurrent.ExecutionContext.Implicits.global
           (customerActor ? Get(id)).mapTo[Option[Customer]]
         }
       }
     } ~
       path("customers") {
         get {
-          complete{
-        	 val bob = (customerActor ? FindAll()).mapTo[List[Customer]]
-        	 bob
-            }
+          complete {
+            (customerActor ? FindAll()).mapTo[List[Customer]]
+          }
         } ~
           post {
-            content(as[RegisterCustomer]) { rc =>
+            entity(as[RegisterCustomer]) { rc =>
               complete((customerActor ? rc).mapTo[Either[NotRegisteredCustomer, RegisteredCustomer]])
             }
           }
