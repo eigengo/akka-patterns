@@ -19,10 +19,9 @@ class HomeService(implicit val actorSystem: ActorSystem) extends Directives with
       get {
         complete {
           import scala.concurrent.ExecutionContext.Implicits._
-          val futureInfo = (applicationActor ? GetImplementation()).mapTo[Implementation].map {
+          (applicationActor ? GetImplementation()).mapTo[Implementation].map {
             SystemInfo(_, InetAddress.getLocalHost.getCanonicalHostName)
           }
-          futureInfo
         }
       }
     } ~
