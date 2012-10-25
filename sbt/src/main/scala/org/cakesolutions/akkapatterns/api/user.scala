@@ -1,10 +1,9 @@
 package org.cakesolutions.akkapatterns.api
 
 import akka.actor.ActorSystem
-import spray.routing.Directives
 import akka.pattern.ask
 import spray.httpx.marshalling.MetaMarshallers
-import spray.httpx.SprayJsonSupport._
+import spray.routing.Directives
 import org.cakesolutions.akkapatterns.domain.User
 import org.cakesolutions.akkapatterns.core.application.{ NotRegisteredUser, RegisteredUser }
 

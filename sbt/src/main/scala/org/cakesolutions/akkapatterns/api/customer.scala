@@ -1,17 +1,11 @@
 package org.cakesolutions.akkapatterns.api
 
 import akka.actor.ActorSystem
-import spray.httpx.SprayJsonSupport._
+import akka.pattern.ask
 import spray.routing.Directives
+import spray.httpx.marshalling.MetaMarshallers
 import org.cakesolutions.akkapatterns.domain.Customer
 import org.cakesolutions.akkapatterns.core.application._
-import akka.pattern.ask
-import org.cakesolutions.akkapatterns.core.application.RegisterCustomer
-import org.cakesolutions.akkapatterns.domain.Customer
-import org.cakesolutions.akkapatterns.core.application.Get
-import org.cakesolutions.akkapatterns.core.application.FindAll
-import spray.httpx.SprayJsonSupport
-import spray.httpx.marshalling.MetaMarshallers
 
 /**
  * @author janmachacek
