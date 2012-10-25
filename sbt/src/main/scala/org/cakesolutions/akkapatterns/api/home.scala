@@ -1,12 +1,11 @@
 package org.cakesolutions.akkapatterns.api
 
-import akka.actor.ActorSystem
-import spray.routing.Directives
 import java.net.InetAddress
+import akka.actor.ActorSystem
 import akka.pattern.ask
-import org.cakesolutions.akkapatterns.core.application.{ PoisonPill, GetImplementation, Implementation }
-import spray.httpx.SprayJsonSupport._
 import spray.httpx.marshalling.MetaMarshallers
+import spray.routing.Directives
+import org.cakesolutions.akkapatterns.core.application.{ PoisonPill, GetImplementation, Implementation }
 
 case class SystemInfo(implementation: Implementation, host: String)
 
