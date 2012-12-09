@@ -8,7 +8,13 @@ import org.cakesolutions.akkapatterns.UuidFormats
  *
  * @author janmachacek
  */
-case class User(id: UserReference, username: String, password: String)
+case class User(id: UserReference, username: String, hashedPassword: String) {
+
+  def resetPassword(newPassword: String): User = this
+
+  def checkPassword(password: String): Boolean = true
+
+}
 
 /**
  * Trait that contains the [[spray.json.JsonFormat]] instances for the user

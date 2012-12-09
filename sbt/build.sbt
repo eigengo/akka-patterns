@@ -25,6 +25,10 @@ resolvers += "Sonatype OSS Releases" at "http://oss.sonatype.org/content/reposit
 
 resolvers += "Sonatype OSS Snapshots" at "http://oss.sonatype.org/content/repositories/snapshots/"
 
+resolvers += "neo4j repo" at "http://m2.neo4j.org/content/repositories/releases/"
+
+resolvers += "neo4j snapshot repo" at "http://m2.neo4j.org/content/groups/public/"
+
 libraryDependencies <<= scalaVersion { scala_version => 
 	val sprayVersion = "1.1-M6"
 	val akkaVersion  = "2.1.0-RC3"
@@ -36,7 +40,7 @@ libraryDependencies <<= scalaVersion { scala_version =>
 		"io.spray"             % "spray-httpx"         % sprayVersion,
 		"io.spray"             % "spray-util"          % sprayVersion,
 		"io.spray"             % "spray-client"        % sprayVersion,
-		"org.neo4j"            % "neo4j-kernel"        % "1.9-M02",
+		"org.neo4j"            % "neo4j"               % "1.9-M02",
 		"org.cakesolutions"    % "scalad_2.10"         % "1.0",
 		"io.spray"             % "spray-json"          % "1.2.3" cross CrossVersion.full,
 		"javax.mail"           % "mail"                % "1.4.2",

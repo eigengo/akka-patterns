@@ -2,7 +2,8 @@ package org.cakesolutions.akkapatterns.core
 
 import akka.actor.{ActorRef, Actor}
 import org.cakesolutions.akkapatterns.domain
-import domain.{ApplicationFailure, User}
+import domain.{UserFormats, ApplicationFailure, User}
+import org.neo4j.graphdb.GraphDatabaseService
 
 /**
  * Finds a user by the given username
@@ -31,24 +32,34 @@ case class RegisteredUser(user: User)
  */
 case class NotRegisteredUser(code: String) extends ApplicationFailure
 
+/**
+ * Contains indexes for the ``User`` instances
+ */
+trait UserGraphDatabaseIndexes {
+  this: GraphDatabase =>
 
-trait UserOperations  {
-  //def users: MongoCollection
-  //def sha1 = MessageDigest.getInstance("SHA1")
+  lazy val userIndex = graphDatabase.index().forNodes("user")
 
-  def getUser(id: domain.Identity): Option[User] = None
-
-  def getUserByUsername(username: String): Option[User] = None
-
-  def registerUser(user: User): Either[ApplicationFailure, RegisteredUser] = {
-    Left(NotRegisteredUser("User.notThereYet"))
+  implicit object UserIndexSource extends IndexSource[User] {
+    def getIndex(graphDatabase: GraphDatabaseService) = userIndex
   }
+
+}
+
+/**
+ * Contains the operations that manipulate the ``User`` nodes in Neo4j
+ */
+trait UserOperations extends TypedGraphDatabase with UserGraphDatabaseIndexes with SprayJsonNodeMarshalling with UserFormats {
+
+  def getUserByUsername(username: String): Option[User] = findOneEntityWithIndex[User] { _.get("username", username) }
 
 }
 
 class UserActor(messageDelivery: ActorRef) extends Actor with UserOperations {
 
   def receive = {
-    case _ => // TODO: complete me
+    /* Replies with Option[User] */
+    case GetUserByUsername(username) =>
+      sender ! getUserByUsername(username)
   }
 }
