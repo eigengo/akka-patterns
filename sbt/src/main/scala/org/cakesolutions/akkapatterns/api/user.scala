@@ -1,16 +1,15 @@
 package org.cakesolutions.akkapatterns.api
 
 import akka.actor.ActorSystem
-import akka.pattern.ask
 import spray.httpx.marshalling.MetaMarshallers
 import spray.routing.Directives
-import org.cakesolutions.akkapatterns.domain.User
-import org.cakesolutions.akkapatterns.core.application.{ NotRegisteredUser, RegisteredUser }
+import org.cakesolutions.akkapatterns.domain.{UserFormats, User}
+import spray.httpx.SprayJsonSupport
 
 /**
  * @author janmachacek
  */
-class UserService(implicit val actorSystem: ActorSystem) extends Directives with DefaultTimeout with Marshalling with MetaMarshallers {
+class UserService(implicit val actorSystem: ActorSystem) extends Directives with DefaultTimeout with UserFormats with MetaMarshallers with SprayJsonSupport {
   def userActor = actorSystem.actorFor("/user/application/user")
 
   val route =
@@ -18,8 +17,8 @@ class UserService(implicit val actorSystem: ActorSystem) extends Directives with
       post {
         entity(as[User]) { user =>
           complete {
-            import scala.concurrent.ExecutionContext.Implicits._
-            (userActor ? RegisteredUser(user)).mapTo[Either[NotRegisteredUser, RegisteredUser]]
+            // (userActor ? RegisteredUser(user)).mapTo[Either[NotRegisteredUser, RegisteredUser]]
+            "Wait a bit!"
           }
         }
       }

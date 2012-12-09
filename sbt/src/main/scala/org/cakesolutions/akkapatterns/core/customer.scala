@@ -1,8 +1,7 @@
-package org.cakesolutions.akkapatterns.core.application
+package org.cakesolutions.akkapatterns.core
 
-import akka.actor.Actor
-import java.util.UUID
-import org.cakesolutions.akkapatterns.domain.{User, Configured, Customer}
+import akka.actor.{ActorRef, Actor}
+import org.cakesolutions.akkapatterns.domain._
 import org.cakesolutions.akkapatterns.domain
 
 /**
@@ -24,7 +23,7 @@ case class RegisteredCustomer(customer: Customer, user: User)
  * Reply to unsuccessful customer registration
  * @param code the error code for the failure reason
  */
-case class NotRegisteredCustomer(code: String) extends Failure
+case class NotRegisteredCustomer(code: String) extends ApplicationFailure
 
 /**
  * CRUD operations for the [[org.cakesolutions.akkapatterns.domain.Customer]]s
@@ -41,30 +40,19 @@ trait CustomerOperations {
     customer
   }
 
-  def registerCustomer(customer: Customer)(ru: RegisteredUser): Either[Failure, RegisteredCustomer] = {
+  def registerCustomer(customer: Customer)(ru: RegisteredUser): Either[ApplicationFailure, RegisteredCustomer] = {
     //customers += serialize(customer)
     Right(RegisteredCustomer(customer, ru.user))
   }
 
 }
 
-class CustomerActor extends Actor with CustomerOperations with UserOperations {
+/**
+ * Performs the customer operations
+ */
+class CustomerActor(messageDelivery: ActorRef) extends Actor with CustomerOperations with UserOperations {
 
   def receive = {
-    case Get(id) =>
-      sender ! getCustomer(id)
-
-    case FindAll() =>
-      sender ! findAllCustomers()
-
-    case Insert(customer: Customer) =>
-      sender ! insertCustomer(customer)
-
-    case RegisterCustomer(customer, user) =>
-      //import scalaz._
-      //import Scalaz._
-
-      //sender ! (registerUser(user) >>= registerCustomer(customer))
-
+    case _ => // TODO: complete me by moving me to Scalad
   }
 }

@@ -4,11 +4,11 @@ import akka.actor.{ActorRef, Props}
 import spray._
 import routing._
 import http.{StatusCodes, HttpResponse}
-import org.cakesolutions.akkapatterns.core.Core
+import org.cakesolutions.akkapatterns.core.ServerCore
 import akka.util.Timeout
 
 trait Api extends RouteConcatenation {
-  this: Core =>
+  this: ServerCore =>
 
   val routes =
     new HomeService().route ~

@@ -1,8 +1,8 @@
-package org.cakesolutions.akkapatterns.core.application
+package org.cakesolutions.akkapatterns.core
 
-import akka.actor.Actor
+import akka.actor.{ActorRef, Actor}
 import org.cakesolutions.akkapatterns.domain
-import domain.User
+import domain.{ApplicationFailure, User}
 
 /**
  * Finds a user by the given username
@@ -29,7 +29,7 @@ case class RegisteredUser(user: User)
  * Unsuccessful registration with the error code
  * @param code the error code
  */
-case class NotRegisteredUser(code: String) extends Failure
+case class NotRegisteredUser(code: String) extends ApplicationFailure
 
 
 trait UserOperations  {
@@ -40,22 +40,15 @@ trait UserOperations  {
 
   def getUserByUsername(username: String): Option[User] = None
 
-  def registerUser(user: User): Either[Failure, RegisteredUser] = {
+  def registerUser(user: User): Either[ApplicationFailure, RegisteredUser] = {
     Left(NotRegisteredUser("User.notThereYet"))
   }
 
 }
 
-class UserActor extends Actor with UserOperations {
+class UserActor(messageDelivery: ActorRef) extends Actor with UserOperations {
 
   def receive = {
-    case Get(id) =>
-      sender ! getUser(id)
-
-    case GetUserByUsername(username) =>
-      sender ! getUserByUsername(username)
-
-    case RegisteredUser(user) =>
-      sender ! registerUser(user)
+    case _ => // TODO: complete me
   }
 }

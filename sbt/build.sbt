@@ -7,7 +7,7 @@ version := "1.0"
 
 organization := "org.cakesolutions"
 
-scalaVersion := "2.10.0-RC1"
+scalaVersion := "2.10.0-RC3"
 
 /** Shell */
 shellPrompt := { state => System.getProperty("user.name") + "> " }
@@ -26,21 +26,27 @@ resolvers += "Sonatype OSS Releases" at "http://oss.sonatype.org/content/reposit
 resolvers += "Sonatype OSS Snapshots" at "http://oss.sonatype.org/content/repositories/snapshots/"
 
 libraryDependencies <<= scalaVersion { scala_version => 
-	val sprayVersion = "1.1-M4"
-	val akkaVersion  = "2.1.0-RC1"
+	val sprayVersion = "1.1-M6"
+	val akkaVersion  = "2.1.0-RC3"
 	Seq(
-		"com.typesafe.akka" % "akka-kernel_2.10.0-RC1"  % akkaVersion,
-		"io.spray" % "spray-can" % sprayVersion,
-		"io.spray" % "spray-routing" % sprayVersion,
-		"io.spray" % "spray-httpx" % sprayVersion,
-		"io.spray" % "spray-util" % sprayVersion,
-		"io.spray" % "spray-json" % "1.2.2" cross CrossVersion.full
+		"com.typesafe.akka"    % "akka-kernel"         % akkaVersion cross CrossVersion.full,
+		"com.typesafe.akka"    % "akka-actor"          % akkaVersion cross CrossVersion.full,
+		"io.spray"             % "spray-can"           % sprayVersion,
+		"io.spray"             % "spray-routing"       % sprayVersion,
+		"io.spray"             % "spray-httpx"         % sprayVersion,
+		"io.spray"             % "spray-util"          % sprayVersion,
+		"io.spray"             % "spray-client"        % sprayVersion,
+		"org.neo4j"            % "neo4j-kernel"        % "1.9-M02",
+		"org.cakesolutions"    % "scalad_2.10"         % "1.0",
+		"io.spray"             % "spray-json"          % "1.2.3" cross CrossVersion.full,
+		"javax.mail"           % "mail"                % "1.4.2",
+		"org.specs2"           % "classycle"           % "1.4.1" % "test",
+		"com.typesafe.akka"    % "akka-testkit"        % akkaVersion  % "test" cross CrossVersion.full,
+		"org.specs2"           % "specs2"              % "1.12.3" % "test"  cross CrossVersion.full
 	)
 }
 
 /** Compilation */
-javacOptions ++= Seq("-Xmx1812m", "-Xms512m", "-Xss6m")
-
 javaOptions += "-Xmx2G"
 
 scalacOptions ++= Seq("-deprecation", "-unchecked")

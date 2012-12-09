@@ -3,6 +3,9 @@ package org.cakesolutions.akkapatterns.domain
 import collection.mutable
 import reflect.{ClassTag, classTag}
 
+/**
+ * Stores the configuration
+ */
 private object ConfigurationStore {
   val entries = mutable.Map[String, AnyRef]()
 
