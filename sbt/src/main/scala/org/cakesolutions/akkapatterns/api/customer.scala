@@ -34,25 +34,4 @@ class CustomerService(implicit val actorSystem: ActorSystem) extends Directives 
         }
       }
     }
-  /*
-    path("customers" / JavaUUID) { id =>
-      get {
-        complete {
-          (customerActor ? Get(id)).mapTo[Option[Customer]]
-        }
-      }
-    } ~
-    path("customers") {
-      get {
-        complete {
-          (customerActor ? FindAll()).mapTo[List[Customer]]
-        }
-      } ~
-        post {
-          entity(as[RegisterCustomer]) { rc =>
-            complete((customerActor ? rc).mapTo[Either[NotRegisteredCustomer, RegisteredCustomer]])
-          }
-        }
-    }
-    */
 }
