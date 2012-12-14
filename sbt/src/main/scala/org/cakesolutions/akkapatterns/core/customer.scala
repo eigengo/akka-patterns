@@ -2,7 +2,6 @@ package org.cakesolutions.akkapatterns.core
 
 import akka.actor.{ActorRef, Actor}
 import org.cakesolutions.akkapatterns.domain._
-import org.cakesolutions.akkapatterns.domain
 
 /**
  * Registers a customer and a user. After registering, we have a user account for the given customer.
@@ -26,12 +25,20 @@ case class RegisteredCustomer(customer: Customer, user: User)
 case class NotRegisteredCustomer(code: String) extends ApplicationFailure
 
 /**
+ * Update the customer details
+ *
+ * @param userDetail the user making the call
+ * @param customer the customer to be updated
+ */
+case class UpdateCustomer(userDetail: UserDetailT[CustomerUserKind], customer: Customer)
+
+/**
  * CRUD operations for the [[org.cakesolutions.akkapatterns.domain.Customer]]s
  */
 trait CustomerOperations {
   // def customers: MongoCollection
 
-  def getCustomer(id: domain.Identity): Option[Customer] = None
+  def getCustomer(id: CustomerReference): Option[Customer] = None
 
   def findAllCustomers(): List[Customer] = List()
 

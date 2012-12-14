@@ -9,7 +9,15 @@ package object domain {
    */
   trait ApplicationFailure
 
-  type Identity = UUID
+  /**
+   * Convenience type alias for any kind of user
+   */
+  type UserDetail = UserDetailT[UserKind]
+
+  /**
+   * Type alias for customer identity
+   */
+  type CustomerReference = UUID
 
   /**
    * Type alias for user identity
