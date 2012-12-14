@@ -53,10 +53,31 @@ trait AuthenticationDirectives {
       }
   }
 
+  /**
+   * Checks that the token represents a valid user; i.e. someone is logged in. We make no assumptions about the roles
+   *
+   * @return the authentication of any user kind
+   */
   def validUser: RequestContext => Future[Authentication[UserDetail]] = doValidUser(x => Right(x.asInstanceOf[UserDetailT[UserKind]]))
 
-  def validSuperuser: RequestContext => Future[Authentication[UserDetailT[SuperuserKind.type]]] = doValidUser(x => Right(new UserDetailT[SuperuserKind.type](x.userReference, SuperuserKind)))
+  /**
+   * Checks that the token represents a valid superuser
+   *
+   * @return the authentication for superuser
+   */
+  def validSuperuser: RequestContext => Future[Authentication[UserDetailT[SuperuserKind.type]]] =
+    doValidUser { udc: UserDetailT[_] =>
+      udc.kind match {
+        case SuperuserKind => Right(new UserDetailT(udc.userReference, SuperuserKind))
+        case _ => Left(AuthenticationFailedRejection("Akka-Patterns"))
+      }
+    }
 
+  /**
+   * Checks that the token represents a valid customer
+   *
+   * @return the authentication for superuser
+   */
   def validCustomer: RequestContext => Future[Authentication[UserDetailT[CustomerUserKind]]] = {
     doValidUser { udc: UserDetailT[_] =>
       udc.kind match {
