@@ -26,8 +26,10 @@ class CustomerService(implicit val actorSystem: ActorSystem) extends Directives 
       } ~
       post {
         authenticate(validCustomer) { ud =>
+          // if we authenticated only validUser or validSuperuser
           handleWith { customer: Customer =>
             (customerActor ? UpdateCustomer(ud, customer)).mapTo[Customer]
+            // then this call would not type-check!
           }
         }
       }
