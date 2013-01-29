@@ -4,8 +4,8 @@ INCLUDE(LibFindMacros)
 
 # Find the include directories
 FIND_PATH(SimpleAmqpClient_INCLUDE_DIR
-	NAMES SimpleAmqpClient.h
-    HINTS ${SimpleAmqpClient_DIR}/include/SimpleAmqpClient
+	NAMES SimpleAmqpClient/SimpleAmqpClient.h
+    HINTS ${SimpleAmqpClient_DIR}/include
 	)
 
 FIND_LIBRARY(SimpleAmqpClient_LIBRARY

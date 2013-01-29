@@ -33,10 +33,10 @@ int main() {
     Channel::ptr_t channel = Channel::Create();
     
     //channel->DeclareQueue("faceverify");
-    channel->BindQueue("faceverify", "amq.direct", "identity.f2f");
+    channel->BindQueue("akkapatterns", "amq.direct", "demo.key");
     
     std::string tag;
-    tag = channel->BasicConsume("faceverify", "", true, true, false, 2);
+    tag = channel->BasicConsume("akkapatterns", "", true, true, false, 2);
     
     while (true) {
       // consume the message

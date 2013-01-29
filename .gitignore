@@ -43,3 +43,4 @@ provisioning/.vagrant
 provisioning/*/.vagrant
 provisioning/*/*.known
 /sbt/akka-patterns-store/
+/daemon/src/build/

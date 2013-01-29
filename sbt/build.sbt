@@ -41,6 +41,8 @@ libraryDependencies <<= scalaVersion { scala_version =>
         "io.spray"             % "spray-httpx"         % sprayVersion,
         "io.spray"             % "spray-util"          % sprayVersion,
         "io.spray"             % "spray-client"        % sprayVersion,
+        "com.aphelia"         %% "amqp-client"         % "1.0",
+        "com.rabbitmq"         % "amqp-client"         % "2.8.1",
         "org.neo4j"            % "neo4j"               % "1.9-M02",
         "org.scalaz"           % "scalaz-effect"       % scalazVersion cross CrossVersion.full,
         "org.cakesolutions"    % "scalad_2.10"         % "1.0",
