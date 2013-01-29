@@ -32,7 +32,6 @@ int main() {
   try {
     Channel::ptr_t channel = Channel::Create();
     
-    //channel->DeclareQueue("faceverify");
     channel->BindQueue("akkapatterns", "amq.direct", "demo.key");
     
     std::string tag;
