@@ -6,7 +6,7 @@
 namespace akkapatterns {
 namespace daemon {
 
-  const int32_t message_signature = 0x1000face;
+  const int32_t message_signature = 0x1000acca;
 
   typedef struct {
     int32_t signature;

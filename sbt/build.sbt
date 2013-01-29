@@ -32,10 +32,10 @@ resolvers += "neo4j snapshot repo" at "http://m2.neo4j.org/content/groups/public
 libraryDependencies <<= scalaVersion { scala_version => 
     val sprayVersion = "1.1-M7"
     val akkaVersion  = "2.1.0"
-    val scalazVersion = "7.0.0-M6"
+    val scalazVersion = "7.0.0-M7"
     Seq(
-        "com.typesafe.akka"    % "akka-kernel"         % akkaVersion cross CrossVersion.full,
-        "com.typesafe.akka"    % "akka-actor"          % akkaVersion cross CrossVersion.full,
+        "com.typesafe.akka"   %% "akka-kernel"         % akkaVersion,
+        "com.typesafe.akka"   %% "akka-actor"          % akkaVersion,
         "io.spray"             % "spray-can"           % sprayVersion,
         "io.spray"             % "spray-routing"       % sprayVersion,
         "io.spray"             % "spray-httpx"         % sprayVersion,
@@ -44,13 +44,13 @@ libraryDependencies <<= scalaVersion { scala_version =>
         "com.aphelia"         %% "amqp-client"         % "1.0",
         "com.rabbitmq"         % "amqp-client"         % "2.8.1",
         "org.neo4j"            % "neo4j"               % "1.9-M02",
-        "org.scalaz"           % "scalaz-effect"       % scalazVersion cross CrossVersion.full,
+        "org.scalaz"          %% "scalaz-effect"       % scalazVersion,
         "org.cakesolutions"    % "scalad_2.10"         % "1.0",
-        "io.spray"             % "spray-json"          % "1.2.3" cross CrossVersion.full,
+        "io.spray"            %% "spray-json"          % "1.2.3",
         "javax.mail"           % "mail"                % "1.4.2",
         "org.specs2"           % "classycle"           % "1.4.1" % "test",
-        "com.typesafe.akka"    % "akka-testkit"        % akkaVersion  % "test" cross CrossVersion.full,
-        "org.specs2"           % "specs2"              % "1.13.1" % "test"  cross CrossVersion.full
+        "com.typesafe.akka"   %% "akka-testkit"        % akkaVersion % "test",
+        "org.specs2"          %% "specs2"              % "1.13" % "test"
     )
 }
 

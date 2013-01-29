@@ -36,7 +36,7 @@ int main() {
     channel->BindQueue("akkapatterns", "amq.direct", "demo.key");
     
     std::string tag;
-    tag = channel->BasicConsume("akkapatterns", "", true, true, false, 2);
+    tag = channel->BasicConsume("akkapatterns", "", true, true, false, 1);
     
     while (true) {
       // consume the message
@@ -47,8 +47,9 @@ int main() {
         std::string body = process(request);
         // then reply to this message
         BasicMessage::ptr_t response = BasicMessage::Create();
+        response->CorrelationId(request->CorrelationId());
         response->Body(body);
-        channel->BasicPublish("amq.direct", request->ReplyTo(), response);
+        channel->BasicPublish("", request->ReplyTo(), response);
       } catch (MessageError &e) {
         const std::string* msg = boost::get_error_info<errinfo_message>(e);
         std::cerr << (*msg) << std::endl;

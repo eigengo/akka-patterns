@@ -62,7 +62,9 @@ trait UserFormats extends DefaultJsonProtocol with UuidFormats {
           case Some(Superuser) => SuperuserKind
           case Some(Guest)     => GuestUserKind
           case Some(Customer)  => CustomerUserKindFormat read fields("value")
+          case _               => sys.error("bad kind")
         }
+      case _                   => sys.error("bad json")
     }
   }
 
