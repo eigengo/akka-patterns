@@ -5,6 +5,7 @@
 #include <boost/uuid/uuid.hpp>
 #include <boost/uuid/uuid_generators.hpp>
 #include <boost/exception/all.hpp>
+#include <boost/thread.hpp>
 #include <iostream>
 #include <stdlib.h>
 #include <amqp.h>
@@ -28,32 +29,49 @@ std::string process(BasicMessage::ptr_t request) {
   return "{\"success\":true}";
 }
 
-int main() {
-  try {
-    Channel::ptr_t channel = Channel::Create();
-    
-    channel->BindQueue("akkapatterns", "amq.direct", "demo.key");
-    
-    std::string tag;
-    tag = channel->BasicConsume("akkapatterns", "", true, true, false, 1);
-    
-    while (true) {
-      // consume the message
-      Envelope::ptr_t env = channel->BasicConsumeMessage(tag);
-      BasicMessage::ptr_t request = env->Message();
-      try {
-        // process it
-        std::string body = process(request);
-        // then reply to this message
-        BasicMessage::ptr_t response = BasicMessage::Create();
-        response->CorrelationId(request->CorrelationId());
-        response->Body(body);
-        channel->BasicPublish("", request->ReplyTo(), response);
-      } catch (MessageError &e) {
-        const std::string* msg = boost::get_error_info<errinfo_message>(e);
-        std::cerr << (*msg) << std::endl;
-      }
+void sounder(Channel::ptr_t channel, std::string replyTo, int frequency) {
+  while (true) {
+    try {
+      BasicMessage::ptr_t response = BasicMessage::Create();
+      response->Body("123");
+      channel->BasicPublish("", replyTo, response);
+      std::cout << "sounder: b" << std::endl;
+      boost::this_thread::sleep_for(boost::chrono::milliseconds(frequency));
+      std::cout << "sounder: in " << boost::this_thread::get_id() << std::endl;
+    } catch(const std::runtime_error &e) {
+      std::cerr << e.what() << std::endl;
+      return;
     }
+  }
+}
+
+void workerFunc() {
+  Channel::ptr_t channel = Channel::Create();
+  channel->BindQueue("sound", "amq.direct", "sound.key");
+  std::string tag = channel->BasicConsume("sound", "", true, true, false, 1);
+  // boost::thread *sounderThread = NULL;
+  while (true) {
+    Envelope::ptr_t env = channel->BasicConsumeMessage(tag);
+    BasicMessage::ptr_t request = env->Message();
+    std::string body = request->Body();
+    std::string replyTo = request->ReplyTo();
+    int frequency = boost::lexical_cast<int>(body);
+
+    // if (sounderThread == NULL) sounderThread = new boost::thread(sounder, channel, request->ReplyTo(), frequency);
+    boost::thread s(sounder, channel, replyTo, frequency);
+    std::cout << "changing frequency to " << frequency << std::endl;
+  }
+  // if (sounderThread != NULL) delete sounderThread;
+} 
+
+int main() {
+  int count = 16;
+  try {
+    for (int i = 0; i < count; i++) boost::thread workerThread(workerFunc);
+
+    std::cout << "Quit?" << std::endl;
+    int x;
+    std::cin >> x;
   } catch (std::runtime_error &e) {
     std::cout << "Error " << e.what() << std::endl;
   }

@@ -2,7 +2,7 @@ cmake_minimum_required (VERSION 2.6)
 project (daemon) 
 
 SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/Modules)
-FIND_PACKAGE(Boost REQUIRED COMPONENTS system chrono)
+FIND_PACKAGE(Boost REQUIRED COMPONENTS system chrono thread)
 FIND_PACKAGE(Rabbitmqc REQUIRED)
 FIND_PACKAGE(SimpleAmqpClient REQUIRED)
 
