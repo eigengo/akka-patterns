@@ -1,30 +1,19 @@
 package org.cakesolutions.akkapatterns.main
 
-import akka.actor.{Actor, Props, ActorSystem}
-import org.cakesolutions.akkapatterns.AmqpIO
-import com.aphelia.amqp.{Consumer, ChannelOwner, ConnectionOwner, RpcClient}
+import akka.actor.{Props, ActorSystem}
+import com.aphelia.amqp.{ChannelOwner, ConnectionOwner, RpcClient}
 import com.aphelia.amqp.Amqp._
 import java.io.ByteArrayOutputStream
-import com.aphelia.amqp.RpcClient._
 import akka.pattern.ask
 import akka.util.Timeout
-import util.{Failure, Success}
 import com.rabbitmq.client.{DefaultConsumer, Channel, Envelope, ConnectionFactory}
 import com.rabbitmq.client.AMQP.BasicProperties
-import com.aphelia.amqp.Amqp.Publish
-import util.Success
-import com.aphelia.amqp.Amqp.ChannelParameters
-import com.aphelia.amqp.Amqp.Delivery
-import java.util.UUID
 import com.aphelia.amqp.Amqp.ReturnedMessage
-import com.aphelia.amqp.Amqp.Ack
 import com.aphelia.amqp.Amqp.Publish
 import com.aphelia.amqp.Amqp.ChannelParameters
 import com.aphelia.amqp.RpcClient.Response
 import scala.Some
-import com.aphelia.amqp.Amqp.ExchangeParameters
 import util.Success
-import com.aphelia.amqp.Amqp.Binding
 import com.aphelia.amqp.RpcClient.Request
 import com.aphelia.amqp.Amqp.QueueParameters
 import com.aphelia.amqp.Amqp.Delivery
@@ -58,6 +47,10 @@ object ClientDemo {
     Thread.sleep(1000)
 
     streamingClient ! Request(Publish("amq.direct", "sound.key", "1000".getBytes) :: Nil)
+    Thread.sleep(5000)
+    streamingClient ! Request(Publish("amq.direct", "sound.key", "2000".getBytes) :: Nil)
+    Thread.sleep(5000)
+    streamingClient ! Request(Publish("amq.direct", "sound.key", "500".getBytes) :: Nil)
 
     // publish a request
     val os = new ByteArrayOutputStream()
@@ -79,11 +72,12 @@ object ClientDemo {
     os.write(0x00)
     os.write(0x00)
 
-    val publish = Publish("amq.direct", "demo.key", os.toByteArray)
+    /*val publish = Publish("amq.direct", "demo.key", os.toByteArray)
     client ? Request(publish :: Nil) onComplete {
       case Success(response: Response) => println(response)
       case x => println("Bantha poodoo!" + x)
     }
+    */
   }
 
   class RpcStreamingClient(channelParams: Option[ChannelParameters] = None) extends ChannelOwner(channelParams) {

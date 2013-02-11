@@ -14,6 +14,7 @@
 
 using namespace AmqpClient;
 using namespace akkapatterns::daemon;
+using namespace boost;
 
 std::string process(BasicMessage::ptr_t request) {
   const amqp_bytes_t& bytes = request->getAmqpBody();
@@ -29,49 +30,57 @@ std::string process(BasicMessage::ptr_t request) {
   return "{\"success\":true}";
 }
 
-void sounder(Channel::ptr_t channel, std::string replyTo, int frequency) {
+void sounder(std::string replyTo, int frequency) {
+  Channel::ptr_t channel = Channel::Create();
+  channel->BindQueue("sound", "amq.direct", "sound.key");
   while (true) {
     try {
       BasicMessage::ptr_t response = BasicMessage::Create();
       response->Body("123");
       channel->BasicPublish("", replyTo, response);
-      std::cout << "sounder: b" << std::endl;
-      boost::this_thread::sleep_for(boost::chrono::milliseconds(frequency));
-      std::cout << "sounder: in " << boost::this_thread::get_id() << std::endl;
+      this_thread::sleep_for(chrono::milliseconds(frequency));
+      std::cout << "sounder " << this_thread::get_id() << std::endl;
     } catch(const std::runtime_error &e) {
       std::cerr << e.what() << std::endl;
-      return;
+      break;
+    } catch(const thread_interrupted&) {
+      std::cerr << "interrupted" << std::endl;
+      break;
     }
   }
+  std::cout << "end" << std::endl;
 }
 
 void workerFunc() {
   Channel::ptr_t channel = Channel::Create();
   channel->BindQueue("sound", "amq.direct", "sound.key");
   std::string tag = channel->BasicConsume("sound", "", true, true, false, 1);
-  // boost::thread *sounderThread = NULL;
+  thread *sounderThread = NULL;
   while (true) {
     Envelope::ptr_t env = channel->BasicConsumeMessage(tag);
     BasicMessage::ptr_t request = env->Message();
     std::string body = request->Body();
     std::string replyTo = request->ReplyTo();
-    int frequency = boost::lexical_cast<int>(body);
-
-    // if (sounderThread == NULL) sounderThread = new boost::thread(sounder, channel, request->ReplyTo(), frequency);
-    boost::thread s(sounder, channel, replyTo, frequency);
-    std::cout << "changing frequency to " << frequency << std::endl;
+    int frequency = lexical_cast<int>(body);
+    
+    if (sounderThread != NULL) {
+      sounderThread->interrupt();
+      sounderThread->join();
+      delete sounderThread;
+    }
+    sounderThread = new thread(sounder, replyTo, frequency);
   }
-  // if (sounderThread != NULL) delete sounderThread;
+  if (sounderThread != NULL) delete sounderThread;
 } 
 
 int main() {
   int count = 16;
   try {
-    for (int i = 0; i < count; i++) boost::thread workerThread(workerFunc);
+    thread_group group;
+    for (int i = 0; i < count; i++) group.add_thread(new thread(workerFunc));
 
     std::cout << "Quit?" << std::endl;
-    int x;
-    std::cin >> x;
+    group.join_all();
   } catch (std::runtime_error &e) {
     std::cout << "Error " << e.what() << std::endl;
   }
