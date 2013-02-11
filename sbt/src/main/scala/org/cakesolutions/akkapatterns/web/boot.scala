@@ -17,7 +17,7 @@ trait Web extends HttpIO {
   // create and start the spray-can HttpServer, telling it that
   // we want requests to be handled by our singleton service actor
   val httpServer = actorSystem.actorOf(
-    Props(new HttpServer(ioBridge, SingletonHandler(rootService))),
+    Props(new HttpServer(SingletonHandler(rootService))),
     name = "http-server"
   )
 

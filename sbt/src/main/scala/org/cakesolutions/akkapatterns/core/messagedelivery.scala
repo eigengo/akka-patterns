@@ -1,9 +1,9 @@
 package org.cakesolutions.akkapatterns.core
 
-import spray.client.HttpConduit
 import spray.http.HttpRequest
 import com.typesafe.config.Config
 import org.cakesolutions.akkapatterns.domain._
+import spray.client.pipelining._
 import java.util.Properties
 import akka.actor.Actor
 import org.cakesolutions.akkapatterns.{ActorHttpIO, HttpIO}
@@ -56,9 +56,9 @@ trait NexmoTextMessageDelivery {
    */
   def apiSecret: String
 
-  private val pipeline = HttpConduit.sendReceive(makeConduit("rest.nexmo.com"))
-
   import scala.concurrent.ExecutionContext.Implicits.global
+
+  private val pipeline = sendReceive(httpClient) // makeConduit("rest.nexmo.com"))
 
   /**
    * Delivers the text message ``secret`` to the phone number ``mobileNumber``. The ``mobileNumber`` needs to be in

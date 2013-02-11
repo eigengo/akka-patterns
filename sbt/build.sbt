@@ -19,6 +19,8 @@ resolvers += "snapshots-repo" at "http://scala-tools.org/repo-snapshots"
 
 resolvers += "spray repo" at "http://repo.spray.io"
 
+resolvers += "spray nightlies" at "http://nightlies.spray.io"
+
 resolvers += "Typesafe Repository" at "http://repo.typesafe.com/typesafe/releases/"
 
 resolvers += "Sonatype OSS Releases" at "http://oss.sonatype.org/content/repositories/releases/"
@@ -30,7 +32,7 @@ resolvers += "neo4j repo" at "http://m2.neo4j.org/content/repositories/releases/
 resolvers += "neo4j snapshot repo" at "http://m2.neo4j.org/content/groups/public/"
 
 libraryDependencies <<= scalaVersion { scala_version => 
-    val sprayVersion = "1.1-M7"
+    val sprayVersion = "1.1-20130207"
     val akkaVersion  = "2.1.0"
     val scalazVersion = "7.0.0-M7"
     Seq(
