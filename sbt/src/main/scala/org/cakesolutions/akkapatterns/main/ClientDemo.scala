@@ -43,13 +43,14 @@ object ClientDemo {
 
     // make a client actor
     // val client = ConnectionOwner.createChildActor(connection, Props(new RpcClient()))
-    val streamingClient = ConnectionOwner.createChildActor(connection, Props(new RpcStreamingClient()))
 
     Thread.sleep(1000)
 
-    streamingClient ! Request(Publish("amq.direct", "sound.key", "/Users/janmachacek/Desktop/x.jpg".getBytes) :: Nil)
+    val count = 16
+    val clients = (0 until count).map(_ => ConnectionOwner.createChildActor(connection, Props(new RpcStreamingClient())))
+    clients.foreach(_ ! Request(Publish("amq.direct", "sound.key", "/Users/janmachacek/Desktop/x.jpg".getBytes) :: Nil))
     Thread.sleep(100000)
-    streamingClient ! Stop
+    clients.foreach(_ ! Stop)
 
     // publish a request
     val os = new ByteArrayOutputStream()
@@ -112,7 +113,7 @@ object ClientDemo {
       }
       case Event(delivery@Delivery(consumerTag: String, envelope: Envelope, properties: BasicProperties, body: Array[Byte]), ChannelOwner.Connected(channel)) => {
         channel.basicAck(envelope.getDeliveryTag, false)
-        println("Received message")
+        print(".")
         stay()
       }
       case Event(msg@ReturnedMessage(replyCode, replyText, exchange, routingKey, properties, body), ChannelOwner.Connected(channel)) => {

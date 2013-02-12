@@ -38,18 +38,24 @@ void worker() {
 		std::string replyTo = request->ReplyTo();
 		
 		// do the processing
-		while (true) {
+    Mat srcHost = cv::imread(fileName, CV_LOAD_IMAGE_GRAYSCALE);
+    gpu::GpuMat *srcGpu = NULL;
+    if (gpu::getCudaEnabledDeviceCount() > 0) {
+      srcGpu = new gpu::GpuMat();
+      srcGpu->upload(srcHost);
+      std::cout << "CUDA" << std::endl;
+//      srcGpu = NULL;
+    }
+    while (true) {
 			try {
-				Mat src_host = cv::imread(fileName);
-				if (gpu::getCudaEnabledDeviceCount() > 0) {
+				if (srcGpu != NULL) {
 					// we're CUDA
-					gpu::GpuMat dst, src;
-					src.upload(src_host);
-					gpu::threshold(src, dst, 128.0, 255.0, CV_THRESH_BINARY);
+          gpu::GpuMat dst;
+          cv::gpu::threshold(*srcGpu, dst, 128.0, 255.0, CV_THRESH_BINARY);
 				} else {
 					// we're on CPU
 					Mat dst;
-					threshold(src_host, dst, 128.0, 255.0, CV_THRESH_BINARY);
+          cv::threshold(srcHost, dst, 128.0, 255.0, CV_THRESH_BINARY);
 				}
 
 				BasicMessage::ptr_t response = BasicMessage::Create();
@@ -69,7 +75,7 @@ void worker() {
 }
 
 int main() {
-  int count = 16;
+  int count = 96;
   try {
     thread_group group;
     for (int i = 0; i < count; i++) group.create_thread(worker);
