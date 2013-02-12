@@ -20,6 +20,7 @@
 using namespace AmqpClient;
 using namespace akkapatterns::daemon;
 using namespace boost;
+using namespace cv;
 
 void worker() {
 	// create the channel and then...
@@ -39,11 +40,17 @@ void worker() {
 		// do the processing
 		while (true) {
 			try {
-				cv::Mat src_host = cv::imread(fileName);
-				std::cout << "img" << std::endl;
-        cv::gpu::GpuMat dst, src;
-        src.upload(src_host);
-        cv::gpu::threshold(src, dst, 128.0, 255.0, CV_THRESH_BINARY);
+				Mat src_host = cv::imread(fileName);
+				if (gpu::getCudaEnabledDeviceCount() > 0) {
+					// we're CUDA
+					gpu::GpuMat dst, src;
+					src.upload(src_host);
+					gpu::threshold(src, dst, 128.0, 255.0, CV_THRESH_BINARY);
+				} else {
+					// we're on CPU
+					Mat dst;
+					threshold(src_host, dst, 128.0, 255.0, CV_THRESH_BINARY);
+				}
 
 				BasicMessage::ptr_t response = BasicMessage::Create();
 				response->Body("123");
@@ -52,6 +59,9 @@ void worker() {
 				// The reply queue is gone.
 				// The server has disconnected. We stop sending and go back to waiting for a new request.
 				std::cout << "Disconnected" << std::endl;
+				break;
+			} catch (const cv::Exception &e) {
+				std::cerr << e.what() << std::endl;
 				break;
 			}
 		}
