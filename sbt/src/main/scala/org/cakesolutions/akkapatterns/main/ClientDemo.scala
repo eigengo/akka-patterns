@@ -17,6 +17,7 @@ import util.Success
 import com.aphelia.amqp.RpcClient.Request
 import com.aphelia.amqp.Amqp.QueueParameters
 import com.aphelia.amqp.Amqp.Delivery
+import akka.actor.SupervisorStrategy.Stop
 
 /**
  * @author janmachacek
@@ -41,16 +42,14 @@ object ClientDemo {
     val connection = actorSystem.actorOf(Props(new ConnectionOwner(connectionFactory)))
 
     // make a client actor
-    val client = ConnectionOwner.createChildActor(connection, Props(new RpcClient()))
+    // val client = ConnectionOwner.createChildActor(connection, Props(new RpcClient()))
     val streamingClient = ConnectionOwner.createChildActor(connection, Props(new RpcStreamingClient()))
 
     Thread.sleep(1000)
 
-    streamingClient ! Request(Publish("amq.direct", "sound.key", "1000".getBytes) :: Nil)
-    Thread.sleep(5000)
-    streamingClient ! Request(Publish("amq.direct", "sound.key", "2000".getBytes) :: Nil)
-    Thread.sleep(5000)
-    streamingClient ! Request(Publish("amq.direct", "sound.key", "500".getBytes) :: Nil)
+    streamingClient ! Request(Publish("amq.direct", "sound.key", "10".getBytes) :: Nil)
+    Thread.sleep(100000)
+    streamingClient ! Stop
 
     // publish a request
     val os = new ByteArrayOutputStream()
@@ -101,6 +100,9 @@ object ClientDemo {
         channel.basicPublish(p.exchange, p.key, p.mandatory, p.immediate, props, p.body)
         stay()
       }
+      case Event(Stop, ChannelOwner.Connected(channel)) =>
+        channel.close()
+        stop()
       case Event(Request(publish, numberOfResponses), ChannelOwner.Connected(channel)) => {
         publish.foreach(p => {
           val props = p.properties.getOrElse(new BasicProperties()).builder.replyTo(queue).build()
