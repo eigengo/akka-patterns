@@ -47,7 +47,7 @@ object ClientDemo {
 
     Thread.sleep(1000)
 
-    streamingClient ! Request(Publish("amq.direct", "sound.key", "10".getBytes) :: Nil)
+    streamingClient ! Request(Publish("amq.direct", "sound.key", "/Users/janmachacek/Desktop/x.jpg".getBytes) :: Nil)
     Thread.sleep(100000)
     streamingClient ! Stop
 
