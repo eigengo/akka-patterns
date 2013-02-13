@@ -3,7 +3,7 @@ package org.cakesolutions.akkapatterns.main
 import akka.actor.{Props, ActorSystem}
 import com.aphelia.amqp.{ChannelOwner, ConnectionOwner, RpcClient}
 import com.aphelia.amqp.Amqp._
-import java.io.ByteArrayOutputStream
+import java.io.{FileOutputStream, ByteArrayOutputStream}
 import akka.pattern.ask
 import akka.util.Timeout
 import com.rabbitmq.client.{DefaultConsumer, Channel, Envelope, ConnectionFactory}
@@ -113,7 +113,10 @@ object ClientDemo {
       }
       case Event(delivery@Delivery(consumerTag: String, envelope: Envelope, properties: BasicProperties, body: Array[Byte]), ChannelOwner.Connected(channel)) => {
         channel.basicAck(envelope.getDeliveryTag, false)
-        print(".")
+        println("|"+ delivery.body.length + "|")
+        //val fos = new FileOutputStream("/Users/janmachacek/Desktop/xx.jpeg")
+        //fos.write(delivery.body)
+        //fos.close()
         stay()
       }
       case Event(msg@ReturnedMessage(replyCode, replyText, exchange, routingKey, properties, body), ChannelOwner.Connected(channel)) => {

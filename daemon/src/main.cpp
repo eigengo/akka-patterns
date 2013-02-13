@@ -48,18 +48,35 @@ void worker() {
     }
     while (true) {
       try {
+        Mat dstHost;
+        Mat kernel;
+        Size thumbnail;
+
+        thumbnail.height = 32;
+        thumbnail.width = 32;
+        
         if (srcGpu != NULL) {
           // we're CUDA
           gpu::GpuMat dst;
           cv::gpu::threshold(*srcGpu, dst, 128.0, 255.0, CV_THRESH_BINARY);
+          cv::gpu::resize(dst, dst, thumbnail);
+          dst.download(dstHost);
         } else {
           // we're on CPU
-          Mat dst;
-          cv::threshold(srcHost, dst, 128.0, 255.0, CV_THRESH_BINARY);
+          cv::threshold(srcHost, dstHost, 128.0, 255.0, CV_THRESH_BINARY);
+          cv::resize(dstHost, dstHost, thumbnail);
         }
+        
+        vector<uchar> buf;
+        cv::imencode(".jpeg", dstHost, buf);
 
-        BasicMessage::ptr_t response = BasicMessage::Create();
-        response->Body("123");
+        amqp_bytes_t body;
+        amqp_basic_properties_t properties;
+        body.len = buf.size();
+        body.bytes = new uchar[body.len];
+        memcpy(body.bytes, buf.data(), body.len);
+        
+        BasicMessage::ptr_t response = BasicMessage::Create(body, &properties);
         channel->BasicPublish("", replyTo, response, true);
       } catch (const std::runtime_error&) {
         // The reply queue is gone.
