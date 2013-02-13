@@ -1,19 +1,15 @@
 package org.cakesolutions.akkapatterns.main
 
 import akka.actor.{Props, ActorSystem}
-import com.aphelia.amqp.{ChannelOwner, ConnectionOwner, RpcClient}
+import com.aphelia.amqp.{ChannelOwner, ConnectionOwner}
 import com.aphelia.amqp.Amqp._
-import java.io.{FileOutputStream, ByteArrayOutputStream}
-import akka.pattern.ask
 import akka.util.Timeout
 import com.rabbitmq.client.{DefaultConsumer, Channel, Envelope, ConnectionFactory}
 import com.rabbitmq.client.AMQP.BasicProperties
 import com.aphelia.amqp.Amqp.ReturnedMessage
 import com.aphelia.amqp.Amqp.Publish
 import com.aphelia.amqp.Amqp.ChannelParameters
-import com.aphelia.amqp.RpcClient.Response
 import scala.Some
-import util.Success
 import com.aphelia.amqp.RpcClient.Request
 import com.aphelia.amqp.Amqp.QueueParameters
 import com.aphelia.amqp.Amqp.Delivery
@@ -35,49 +31,18 @@ object ClientDemo {
     val connectionFactory = new ConnectionFactory()
     connectionFactory.setHost("localhost")
     connectionFactory.setVirtualHost("/")
-    //val exchange = ExchangeParameters(name = "amq.direct", exchangeType = "", passive = true)
-    //val queue = QueueParameters(name = UUID.randomUUID().toString, passive = true, exclusive = true, autodelete = true)
 
     // create a "connection owner" actor, which will try and reconnect automatically if the connection is lost
     val connection = actorSystem.actorOf(Props(new ConnectionOwner(connectionFactory)))
 
-    // make a client actor
-    // val client = ConnectionOwner.createChildActor(connection, Props(new RpcClient()))
-
+    val madhouse = ClientDemo.getClass.getResource("/madouse.jpg").getPath
     Thread.sleep(1000)
 
     val count = 16
     val clients = (0 until count).map(_ => ConnectionOwner.createChildActor(connection, Props(new RpcStreamingClient())))
-    clients.foreach(_ ! Request(Publish("amq.direct", "sound.key", "/Users/janmachacek/Desktop/x.jpg".getBytes) :: Nil))
+    clients.foreach(_ ! Request(Publish("amq.direct", "sound.key", madhouse.getBytes) :: Nil))
     Thread.sleep(100000)
     clients.foreach(_ ! Stop)
-
-    // publish a request
-    val os = new ByteArrayOutputStream()
-    // header
-    os.write(0xca)
-    os.write(0xac)
-    os.write(0x00)
-    os.write(0x10)
-
-    // len 1
-    os.write(0x00)
-    os.write(0x00)
-    os.write(0x00)
-    os.write(0x00)
-
-    // len 2
-    os.write(0x00)
-    os.write(0x00)
-    os.write(0x00)
-    os.write(0x00)
-
-    /*val publish = Publish("amq.direct", "demo.key", os.toByteArray)
-    client ? Request(publish :: Nil) onComplete {
-      case Success(response: Response) => println(response)
-      case x => println("Bantha poodoo!" + x)
-    }
-    */
   }
 
   class RpcStreamingClient(channelParams: Option[ChannelParameters] = None) extends ChannelOwner(channelParams) {
@@ -114,7 +79,7 @@ object ClientDemo {
       case Event(delivery@Delivery(consumerTag: String, envelope: Envelope, properties: BasicProperties, body: Array[Byte]), ChannelOwner.Connected(channel)) => {
         channel.basicAck(envelope.getDeliveryTag, false)
         println("|"+ delivery.body.length + "|")
-        //val fos = new FileOutputStream("/Users/janmachacek/Desktop/xx.jpeg")
+        //val fos = new FileOutputStream("x.jpeg")
         //fos.write(delivery.body)
         //fos.close()
         stay()
