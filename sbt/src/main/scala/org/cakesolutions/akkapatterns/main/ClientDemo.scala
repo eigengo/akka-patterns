@@ -40,7 +40,7 @@ object ClientDemo {
 
     val count = 16
     val clients = (0 until count).map(_ => ConnectionOwner.createChildActor(connection, Props(new RpcStreamingClient())))
-    clients.foreach(_ ! Request(Publish("amq.direct", "sound.key", madhouse.getBytes) :: Nil))
+    clients.foreach(_ ! Request(Publish("amq.direct", "image.key", madhouse.getBytes) :: Nil))
     Thread.sleep(100000)
     clients.foreach(_ ! Stop)
   }

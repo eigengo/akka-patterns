@@ -27,8 +27,8 @@ void worker() {
   while (true) {
     // create a channel and bind it to a queue
     Channel::ptr_t channel = Channel::Create();
-    channel->BindQueue("sound", "amq.direct", "sound.key");
-    std::string tag = channel->BasicConsume("sound", "", true, true, false, 1);
+    channel->BindQueue("image", "amq.direct", "image.key");
+    std::string tag = channel->BasicConsume("image", "", true, true, false, 1);
     
     // consume the request message
     std::cout << "Waiting..." << std::endl;
