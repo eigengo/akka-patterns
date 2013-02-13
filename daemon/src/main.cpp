@@ -23,21 +23,21 @@ using namespace boost;
 using namespace cv;
 
 void worker() {
-	// create the channel and then...
-	while (true) {
-		// create a channel and bind it to a queue
-		Channel::ptr_t channel = Channel::Create();
-		channel->BindQueue("sound", "amq.direct", "sound.key");
-		std::string tag = channel->BasicConsume("sound", "", true, true, false, 1);
-		
-		// consume the request message
-		std::cout << "Waiting..." << std::endl;
-		Envelope::ptr_t env = channel->BasicConsumeMessage(tag);
-		BasicMessage::ptr_t request = env->Message();
-		std::string fileName = request->Body();
-		std::string replyTo = request->ReplyTo();
-		
-		// do the processing
+  // create the channel and then...
+  while (true) {
+    // create a channel and bind it to a queue
+    Channel::ptr_t channel = Channel::Create();
+    channel->BindQueue("sound", "amq.direct", "sound.key");
+    std::string tag = channel->BasicConsume("sound", "", true, true, false, 1);
+    
+    // consume the request message
+    std::cout << "Waiting..." << std::endl;
+    Envelope::ptr_t env = channel->BasicConsumeMessage(tag);
+    BasicMessage::ptr_t request = env->Message();
+    std::string fileName = request->Body();
+    std::string replyTo = request->ReplyTo();
+    
+    // do the processing
     Mat srcHost = cv::imread(fileName, CV_LOAD_IMAGE_GRAYSCALE);
     gpu::GpuMat *srcGpu = NULL;
     if (gpu::getCudaEnabledDeviceCount() > 0) {
@@ -47,31 +47,31 @@ void worker() {
 //      srcGpu = NULL;
     }
     while (true) {
-			try {
-				if (srcGpu != NULL) {
-					// we're CUDA
+      try {
+        if (srcGpu != NULL) {
+          // we're CUDA
           gpu::GpuMat dst;
           cv::gpu::threshold(*srcGpu, dst, 128.0, 255.0, CV_THRESH_BINARY);
-				} else {
-					// we're on CPU
-					Mat dst;
+        } else {
+          // we're on CPU
+          Mat dst;
           cv::threshold(srcHost, dst, 128.0, 255.0, CV_THRESH_BINARY);
-				}
+        }
 
-				BasicMessage::ptr_t response = BasicMessage::Create();
-				response->Body("123");
-				channel->BasicPublish("", replyTo, response, true);
-			} catch (const std::runtime_error&) {
-				// The reply queue is gone.
-				// The server has disconnected. We stop sending and go back to waiting for a new request.
-				std::cout << "Disconnected" << std::endl;
-				break;
-			} catch (const cv::Exception &e) {
-				std::cerr << e.what() << std::endl;
-				break;
-			}
-		}
-	}
+        BasicMessage::ptr_t response = BasicMessage::Create();
+        response->Body("123");
+        channel->BasicPublish("", replyTo, response, true);
+      } catch (const std::runtime_error&) {
+        // The reply queue is gone.
+        // The server has disconnected. We stop sending and go back to waiting for a new request.
+        std::cout << "Disconnected" << std::endl;
+        break;
+      } catch (const cv::Exception &e) {
+        std::cerr << e.what() << std::endl;
+        break;
+      }
+    }
+  }
 }
 
 int main() {
