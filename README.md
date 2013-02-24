@@ -18,4 +18,4 @@ The topics I shall cover include:
 * [Comparison with Spring Framework](akka-patterns/wiki/Spring)
 * Data access--the "old school" in Scala 2.9.2 and the slick new one in 2.10 in #Slick
 
-See the [Wiki](akka-patterns/wiki/Home) for documentation of the various patterns; and please do share your ideas!
+See the [Wiki](akka-patterns/wiki) for documentation of the various patterns; and please do share your ideas!
