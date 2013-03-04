@@ -79,3 +79,4 @@ testOptions := Seq(Tests.Filter(s =>
 /** Console */
 initialCommands in console := "import org.cakesolutions.akkapatterns._"
 
+seq(ScctPlugin.instrumentSettings : _*)
