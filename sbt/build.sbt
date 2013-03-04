@@ -34,7 +34,7 @@ resolvers += "neo4j snapshot repo" at "http://m2.neo4j.org/content/groups/public
 libraryDependencies <<= scalaVersion { scala_version => 
     val sprayVersion = "1.1-20130207"
     val akkaVersion  = "2.1.0"
-    val scalazVersion = "7.0.0-M7"
+    val scalazVersion = "7.0.0-M8"
     Seq(
         "com.typesafe.akka"   %% "akka-kernel"         % akkaVersion,
         "com.typesafe.akka"   %% "akka-actor"          % akkaVersion,
@@ -47,6 +47,7 @@ libraryDependencies <<= scalaVersion { scala_version =>
         "com.rabbitmq"         % "amqp-client"         % "2.8.1",
         "org.neo4j"            % "neo4j"               % "1.9-M02",
         "org.scalaz"          %% "scalaz-effect"       % scalazVersion,
+        "org.scalaz"          %% "scalaz-core"         % scalazVersion,
         "org.cakesolutions"    % "scalad_2.10"         % "1.0",
         "io.spray"            %% "spray-json"          % "1.2.3",
         "javax.mail"           % "mail"                % "1.4.2",
@@ -73,7 +74,7 @@ testOptions := Seq(Tests.Filter(s =>
   Seq("Spec", "Suite", "Unit", "all").exists(s.endsWith(_)) &&
     !s.endsWith("FeaturesSpec") ||
     s.contains("UserGuide") || 
-  	s.contains("index") ||
+    s.contains("index") ||
     s.matches("org.specs2.guide.*")))
 
 /** Console */
