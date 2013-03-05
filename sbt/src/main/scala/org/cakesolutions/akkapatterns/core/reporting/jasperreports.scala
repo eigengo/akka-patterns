@@ -121,6 +121,8 @@ trait ReportCompiler {
   def compileReport(in: In): ReportT[JasperReport]
 }
 
+case class NullInputStreamException() extends RuntimeException
+
 /**
  * Pass-through loader that simply takes the given ``InputStream`` as its output
  */
@@ -128,7 +130,10 @@ trait InputStreamReportLoader extends ReportLoader {
   type In = InputStream
   import scalaz.syntax.monad._
 
-  def load(in: InputStream) = in.point[ReportT]
+  def load(in: InputStream) =
+    if (in == null) EitherT.left[Id, Throwable, InputStream](NullInputStreamException())
+    else in.point[ReportT]
+
 }
 
 case class MissingClasspathResourceException(resourceName: String) extends RuntimeException
