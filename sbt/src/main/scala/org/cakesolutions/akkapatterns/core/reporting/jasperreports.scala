@@ -70,7 +70,6 @@ case class ProductListParameterExpression[A <: Product](value: List[A], name: Op
  *
  * @param value the JavaBean instance
  * @param name optionally, the name
- * @tparam A the value type
  */
 case class JavaBeanParameterExpression(value: AnyRef, name: Option[String]) extends DataSourceExpression
 
