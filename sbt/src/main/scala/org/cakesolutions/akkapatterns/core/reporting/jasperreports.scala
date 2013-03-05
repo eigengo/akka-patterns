@@ -8,6 +8,11 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader
 import net.sf.jasperreports.engine.data.JRBeanArrayDataSource
 import java.util
 
+/**
+ * Report expressions are evaluated and put into the parameters for the report execution. There is a special-case
+ * ``EmptyExpression`` that means _no expression_. We then have the sub-report expression and parameter expression
+ * to allow us to pass _products_ as well as old-school _Java Beans_ from our Scala code to the JasperReport.
+ */
 sealed trait Expression
 case object EmptyExpression extends Expression
 case class ReportExpression[A](name: String, subreport: A, expressions: List[Expression]) extends Expression
@@ -17,6 +22,10 @@ case class ProductParameterExpression[A <: Product](name: String, value: A) exte
 case class ProductListParameterExpression[A <: Product](name: String, value: List[A]) extends Expression
 case class JavaBeanParameterExpression(name: String, value: AnyRef) extends Expression
 
+/**
+ * When evaluated, the ``Expressions`` become one of the ``ExpressionValue``s. The expression values match the expressions
+ * defined above.
+ */
 sealed trait ExpressionValue
 case object EmptyExpressionValue extends ExpressionValue
 case class ReportExpressionValue(name: String, subreport: JasperReport, expressionValues: List[ExpressionValue]) extends ExpressionValue
@@ -26,16 +35,31 @@ case class ProductParameterExpressionValue[A <: Product](name: String, value: A)
 case class ProductListParameterExpressionValue[A <: Product](name: String, value: List[A]) extends ExpressionValue
 case class JavaBeanParameterExpressionValue(name: String, value: AnyRef) extends ExpressionValue
 
+/**
+ * Loads the report from some input ``In`` and produces the report's ``InputStream``
+ */
+trait ReportLoader {
+  /**
+   * The type of input
+   */
+  type In
+
+  /**
+   * Loads the report from the input ``in`` and produces ``InputStream``
+   *
+   * @param in the input
+   * @return the ReportT holding the ``InputStream`` for the given ``in``
+   */
+  def load(in: In): ReportT[InputStream]
+}
+
+/**
+ * Compiles the report
+ */
 trait ReportCompiler {
   this: ReportLoader =>
 
   def compileReport(in: In): ReportT[JasperReport]
-}
-
-trait ReportLoader {
-  type In
-
-  def load(in: In): ReportT[InputStream]
 }
 
 trait InputStreamReportLoader extends ReportLoader {
@@ -56,6 +80,9 @@ trait JRXmlReportCompiler extends ReportCompiler {
   }
 }
 
+/**
+ * Runs the report by first loading it, then compiling it, evaluating the report expression and then executing it.
+ */
 class ReportRunner {
   this: ReportCompiler with ReportLoader =>
 
@@ -104,6 +131,13 @@ class ReportRunner {
     }
   }
 
+  /**
+   * Runs the report from the input ``in`` with the evaluated ``expression``, giving the container of ``Array[Byte]``
+   *
+   * @param in the input (defined in the ``ReportLoader``)
+   * @param expression the expression to be evaluated
+   * @return the container of ``Array[Byte]`` of the output
+   */
   def runReport(in: In)(expression: Expression): EitherT[Id, Throwable, Array[Byte]] = {
     for {
       root   <- compileReport(in)
