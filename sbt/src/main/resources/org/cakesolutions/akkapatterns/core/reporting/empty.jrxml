@@ -12,7 +12,7 @@
 	<title>
 		<band height="79" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="5d08259d-f54e-4ecf-bc8e-5a5b99818b5f" x="157" y="26" width="188" height="30"/>
+				<reportElement uuid="5d08259d-f54e-4ecf-bc8e-5a5b99818b5f" x="47" y="17" width="188" height="30"/>
 				<textElement>
 					<font size="20"/>
 				</textElement>
