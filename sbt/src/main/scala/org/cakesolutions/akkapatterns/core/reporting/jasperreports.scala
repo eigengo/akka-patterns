@@ -1,6 +1,6 @@
 package org.cakesolutions.akkapatterns.core.reporting
 
-import net.sf.jasperreports.engine.{JasperRunManager, JasperCompileManager, JasperReport}
+import net.sf.jasperreports.engine._
 import scalaz.EitherT
 import scalaz.Id._
 import java.io.InputStream
@@ -18,9 +18,11 @@ case object EmptyExpression extends Expression
 case class ReportExpression[A](name: String, subreport: A, expressions: List[Expression]) extends Expression
 case class ParametersExpression(expressions: List[Expression]) extends Expression
 
-case class ProductParameterExpression[A <: Product](name: String, value: A) extends Expression
-case class ProductListParameterExpression[A <: Product](name: String, value: List[A]) extends Expression
-case class JavaBeanParameterExpression(name: String, value: AnyRef) extends Expression
+sealed trait DataSourceExpression extends Expression
+case object EmptyDataSourceExpression extends DataSourceExpression
+case class ProductParameterExpression[A <: Product](value: A, name: Option[String] = None) extends DataSourceExpression
+case class ProductListParameterExpression[A <: Product](value: List[A], name: Option[String] = None) extends DataSourceExpression
+case class JavaBeanParameterExpression(value: AnyRef, name: Option[String]) extends DataSourceExpression
 
 /**
  * When evaluated, the ``Expressions`` become one of the ``ExpressionValue``s. The expression values match the expressions
@@ -31,9 +33,11 @@ case object EmptyExpressionValue extends ExpressionValue
 case class ReportExpressionValue(name: String, subreport: JasperReport, expressionValues: List[ExpressionValue]) extends ExpressionValue
 case class ParametersExpressionValue(value: List[ExpressionValue]) extends ExpressionValue
 
-case class ProductParameterExpressionValue[A <: Product](name: String, value: A) extends ExpressionValue
-case class ProductListParameterExpressionValue[A <: Product](name: String, value: List[A]) extends ExpressionValue
-case class JavaBeanParameterExpressionValue(name: String, value: AnyRef) extends ExpressionValue
+sealed trait DataSourceExpressionValue extends ExpressionValue
+case object EmptyDataSourceExpressionValue extends DataSourceExpressionValue
+case class ProductParameterExpressionValue[A <: Product](value: A, name: Option[String]) extends DataSourceExpressionValue
+case class ProductListParameterExpressionValue[A <: Product](value: List[A], name: Option[String]) extends DataSourceExpressionValue
+case class JavaBeanParameterExpressionValue(value: AnyRef, name: Option[String]) extends DataSourceExpressionValue
 
 /**
  * Loads the report from some input ``In`` and produces the report's ``InputStream``
@@ -90,14 +94,22 @@ class ReportRunner {
 
   import scalaz.syntax.monad._
 
+  private def toDataSource(value: ExpressionValue): JRDataSource = value match {
+    case ProductParameterExpressionValue(product, _)      => new JRProductListDataSource(product :: Nil)
+    case ProductListParameterExpressionValue(products, _) => new JRProductListDataSource(products)
+    case JavaBeanParameterExpressionValue(bean, _)        => new JRBeanArrayDataSource(Array(bean))
+    case EmptyDataSourceExpressionValue                   => new JREmptyDataSource()
+  }
+
   private def toMap(value: ExpressionValue): java.util.Map[String, AnyRef] = {
     def toMap0(value: ExpressionValue): Map[String, AnyRef] = value match {
-      case ReportExpressionValue(name, subreport, values)      => Map(name -> subreport) ++ values.flatMap(toMap0)
-      case ParametersExpressionValue(values)                   => values.flatMap(toMap0).toMap
-      case ProductParameterExpressionValue(name, product)      => Map(name -> new JRProductListDataSource(product :: Nil))
-      case ProductListParameterExpressionValue(name, products) => Map(name -> new JRProductListDataSource(products))
-      case JavaBeanParameterExpressionValue(name, bean)        => Map(name -> new JRBeanArrayDataSource(Array(bean)))
-      case EmptyExpressionValue                                => Map.empty
+      case ReportExpressionValue(name, subreport, values)            => Map(name -> subreport) ++ values.flatMap(toMap0)
+      case ParametersExpressionValue(values)                         => values.flatMap(toMap0).toMap
+      case ProductParameterExpressionValue(product, Some(name))      => Map(name -> new JRProductListDataSource(product :: Nil))
+      case ProductListParameterExpressionValue(products, Some(name)) => Map(name -> new JRProductListDataSource(products))
+      case JavaBeanParameterExpressionValue(bean, Some(name))        => Map(name -> new JRBeanArrayDataSource(Array(bean)))
+      case EmptyExpressionValue                                      => Map.empty
+      case _                                                         => Map.empty
     }
     val map = toMap0(value)
     val result = new util.HashMap[String, AnyRef](map.size)
@@ -120,14 +132,14 @@ class ReportRunner {
           report <- compileReport(subreport)
           values <- evalList(expressions)
         } yield ReportExpressionValue(name, report, values)
-      case ParametersExpression(expressions)           =>
+      case ParametersExpression(expressions)                  =>
         for {
           values <- evalList(expressions)
         } yield ParametersExpressionValue(values)
-      case ProductParameterExpression(name, value)     => ProductParameterExpressionValue(name, value).point[ReportT]
-      case ProductListParameterExpression(name, value) => ProductListParameterExpressionValue(name, value).point[ReportT]
-      case JavaBeanParameterExpression(name, value)    => JavaBeanParameterExpressionValue(name, value).point[ReportT]
-      case EmptyExpression                             => EmptyExpressionValue.point[ReportT]
+      case ProductParameterExpression(value, name)            => ProductParameterExpressionValue(value, name).point[ReportT]
+      case ProductListParameterExpression(value, name)        => ProductListParameterExpressionValue(value, name).point[ReportT]
+      case JavaBeanParameterExpression(value, name)           => JavaBeanParameterExpressionValue(value, name).point[ReportT]
+      case EmptyExpression                                    => EmptyExpressionValue.point[ReportT]
     }
   }
 
@@ -135,15 +147,19 @@ class ReportRunner {
    * Runs the report from the input ``in`` with the evaluated ``expression``, giving the container of ``Array[Byte]``
    *
    * @param in the input (defined in the ``ReportLoader``)
-   * @param expression the expression to be evaluated
+   * @param parametersExpression the report parameters to be used
+   * @param dataSourceExpression the data source to be used
    * @return the container of ``Array[Byte]`` of the output
    */
-  def runReport(in: In)(expression: Expression): EitherT[Id, Throwable, Array[Byte]] = {
+  def runReport(in: In)(parametersExpression: Expression = EmptyExpression,
+                        dataSourceExpression: DataSourceExpression = EmptyDataSourceExpression): EitherT[Id, Throwable, Array[Byte]] = {
     for {
-      root   <- compileReport(in)
-      values <- eval(expression)
-      params =  toMap(values)
-    } yield JasperRunManager.runReportToPdf(root, params)
+      root             <- compileReport(in)
+      parametersValues <- eval(parametersExpression)
+      parameters       =  toMap(parametersValues)
+      dataSourceValue  <- eval(dataSourceExpression)
+      dataSource       =  toDataSource(dataSourceValue)
+    } yield JasperRunManager.runReportToPdf(root, parameters, dataSource)
   }
 
 }

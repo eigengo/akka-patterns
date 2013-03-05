@@ -3,6 +3,9 @@
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
+	<field name="username" class="java.lang.String"/>
+	<field name="firstName" class="java.lang.String"/>
+	<field name="lastName" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -21,10 +24,52 @@
 		<band height="35" splitType="Stretch"/>
 	</pageHeader>
 	<columnHeader>
-		<band height="61" splitType="Stretch"/>
+		<band height="24" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="f386392c-3f1b-4be0-9b9b-1c17c436f35b" x="0" y="0" width="47" height="20"/>
+				<textElement/>
+				<text><![CDATA[Id]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="331c87a2-dc14-4f35-bb17-4425fd38ae2b" x="47" y="0" width="87" height="20"/>
+				<textElement/>
+				<text><![CDATA[Username]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e2051f70-1224-44a2-b268-2f9de7924c80" x="221" y="0" width="87" height="20"/>
+				<textElement/>
+				<text><![CDATA[First name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4ff0e300-9466-4f86-9abf-201c23ca5066" x="308" y="0" width="87" height="20"/>
+				<textElement/>
+				<text><![CDATA[Last name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="dc31bad6-1d27-4765-ad3b-b9dada9dd0f2" x="134" y="0" width="87" height="20"/>
+				<textElement/>
+				<text><![CDATA[Email]]></text>
+			</staticText>
+		</band>
 	</columnHeader>
 	<detail>
-		<band height="125" splitType="Stretch"/>
+		<band height="29" splitType="Stretch">
+			<textField>
+				<reportElement uuid="dff882e3-ef2e-4670-bde5-f55820efb13c" x="47" y="0" width="87" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{username}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="79ba9ebd-f34b-4645-aa47-ba758c0631d2" x="221" y="0" width="87" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{firstName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="a570c644-0fac-4e38-ad20-9f7573cf3ff8" x="308" y="0" width="87" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{lastName}]]></textFieldExpression>
+			</textField>
+		</band>
 	</detail>
 	<columnFooter>
 		<band height="45" splitType="Stretch"/>
