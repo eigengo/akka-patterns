@@ -143,6 +143,10 @@ class ReportRunner {
     }
   }
 
+  def runReport(in: In)(parametersExpression: Expression = EmptyExpression,
+                        dataSourceExpression: DataSourceExpression = EmptyDataSourceExpression): Either[Throwable, Array[Byte]] =
+    runReportT(in)(parametersExpression, dataSourceExpression).run.toEither
+
   /**
    * Runs the report from the input ``in`` with the evaluated ``expression``, giving the container of ``Array[Byte]``
    *
@@ -151,15 +155,16 @@ class ReportRunner {
    * @param dataSourceExpression the data source to be used
    * @return the container of ``Array[Byte]`` of the output
    */
-  def runReport(in: In)(parametersExpression: Expression = EmptyExpression,
-                        dataSourceExpression: DataSourceExpression = EmptyDataSourceExpression): EitherT[Id, Throwable, Array[Byte]] = {
+  def runReportT(in: In)(parametersExpression: Expression = EmptyExpression,
+                         dataSourceExpression: DataSourceExpression = EmptyDataSourceExpression): EitherT[Id, Throwable, Array[Byte]] = {
     for {
       root             <- compileReport(in)
       parametersValues <- eval(parametersExpression)
       parameters       =  toMap(parametersValues)
       dataSourceValue  <- eval(dataSourceExpression)
       dataSource       =  toDataSource(dataSourceValue)
-    } yield JasperRunManager.runReportToPdf(root, parameters, dataSource)
+      out              <- EitherT.fromTryCatch[Id, Array[Byte]] { JasperRunManager.runReportToPdf(root, parameters, dataSource) }
+    } yield out
   }
 
 }

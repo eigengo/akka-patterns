@@ -31,7 +31,7 @@ class ReportRunnerSpec extends Specification with TestData {
   }
 
   def runReport(source: String, parametersExpression: Expression, dataSourceExpression: DataSourceExpression): Result = {
-    runner.runReport(source)(parametersExpression, dataSourceExpression).run.toEither match {
+    runner.runReportT(source)(parametersExpression, dataSourceExpression).run.toEither match {
       case Left(e)    => failure(e.getMessage)
       case Right(pdf) =>
         val fos = new FileOutputStream("/Users/janmachacek/x.pdf")
