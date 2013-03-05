@@ -23,6 +23,8 @@ resolvers += "spray nightlies" at "http://nightlies.spray.io"
 
 resolvers += "Typesafe Repository" at "http://repo.typesafe.com/typesafe/releases/"
 
+resolvers += "Jasper Community" at "http://jasperreports.sourceforge.net/maven2"
+
 resolvers += "Sonatype OSS Releases" at "http://oss.sonatype.org/content/repositories/releases/"
 
 resolvers += "Sonatype OSS Snapshots" at "http://oss.sonatype.org/content/repositories/snapshots/"
@@ -49,6 +51,7 @@ libraryDependencies <<= scalaVersion { scala_version =>
         "org.scalaz"          %% "scalaz-effect"       % scalazVersion,
         "org.scalaz"          %% "scalaz-core"         % scalazVersion,
         "org.cakesolutions"    % "scalad_2.10"         % "1.0",
+        "net.sf.jasperreports" % "jasperreports"       % "5.0.1",
         "io.spray"            %% "spray-json"          % "1.2.3",
         "javax.mail"           % "mail"                % "1.4.2",
         "org.specs2"           % "classycle"           % "1.4.1" % "test",
