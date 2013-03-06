@@ -3,6 +3,7 @@ package org.cakesolutions.akkapatterns.core
 import scalaz.EitherT
 import scalaz.Id._
 import net.sf.jasperreports.engine.{JRDataSource, JasperReport}
+import java.sql.Connection
 
 /**
  * @author janmachacek
@@ -22,6 +23,13 @@ package object reporting {
    * It may throw any exception, which will be caught by ``EitherT.fromException``
    */
   type FormatDS = (JasperReport, ReportParameters, JRDataSource) => Array[Byte]
+
+  /**
+   * Report formatting function that operates on a ``Connection``, taking the compiled and prepared
+   * ``JasperReport``, the report parameters and the data in the connection; it returns the bytes.
+   * It may throw any exception, which will be caught by ``EitherT.fromException``
+   */
+  type FormatC  = (JasperReport, ReportParameters, Connection) => Array[Byte]
 
   /**
    * Alias for the pesky j.u.Map

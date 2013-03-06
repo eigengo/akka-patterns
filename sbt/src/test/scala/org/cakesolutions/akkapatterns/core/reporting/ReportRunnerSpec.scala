@@ -14,11 +14,11 @@ class ReportRunnerSpec extends Specification with TestData with ReportFormats {
 
   "failure collection" should {
     "report errors in loader" in {
-      runner.runReportT("foo")(Pdf).run.isLeft mustEqual true
+      runner.runReportT("foo")(PdfDS).run.isLeft mustEqual true
     }
 
     "report errors in compiler" in {
-      runner.runReportT("broken.jrxml")(Pdf).run.isLeft mustEqual true
+      runner.runReportT("broken.jrxml")(PdfDS).run.isLeft mustEqual true
     }
   }
 
@@ -27,7 +27,7 @@ class ReportRunnerSpec extends Specification with TestData with ReportFormats {
   }
 
   def runReport(source: String, parametersExpression: Expression, dataSourceExpression: DataSourceExpression): Result = {
-    runner.runReportT(source)(Pdf, parametersExpression, dataSourceExpression).run.toEither match {
+    runner.runReportT(source)(PdfDS, parametersExpression, dataSourceExpression).run.toEither match {
       case Left(e)    => failure(e.getMessage)
       case Right(pdf) =>
         val fos = new FileOutputStream("/Users/janmachacek/x.pdf")

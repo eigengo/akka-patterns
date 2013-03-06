@@ -180,6 +180,13 @@ trait ReportRunnerVirtualizer {
 }
 
 /**
+ * Expression could not be evaluated
+ *
+ * @param e the failing expression
+ */
+case class BadExpressionException(e: Expression) extends RuntimeException
+
+/**
  * Runs the report by first loading it, then compiling it, evaluating the report expression and then executing it.
  */
 trait ReportRunner {
@@ -192,6 +199,7 @@ trait ReportRunner {
     case ProductListParameterExpressionValue(products, _) => new JRProductListDataSource(products)
     case JavaBeanParameterExpressionValue(bean, _)        => new JRBeanArrayDataSource(Array(bean))
     case EmptyDataSourceExpressionValue                   => new JREmptyDataSource()
+    case _                                                => sys.error("Bad match") // OK
   }
 
   private def toMap(value: ExpressionValue): ReportParameters = {
@@ -239,6 +247,7 @@ trait ReportRunner {
       case ProductListParameterExpression(value, name)        => ProductListParameterExpressionValue(value, name).point[ReportT]
       case JavaBeanParameterExpression(value, name)           => JavaBeanParameterExpressionValue(value, name).point[ReportT]
       case EmptyExpression                                    => EmptyExpressionValue.point[ReportT]
+      case e                                                  => EitherT.left[Id, Throwable, ExpressionValue](BadExpressionException(e))
     }
   }
 
@@ -291,9 +300,7 @@ trait ReportRunner {
  */
 trait ExcelReportFormat {
 
-  val Excel: FormatDS = (report, parameters, dataSource) => {
-    val print = JasperFillManager.fillReport(report, parameters, dataSource)
-
+  private def fill(print: JasperPrint): Array[Byte] = {
     val output = new ByteArrayOutputStream()
     val exporter = new JRXlsExporter
     exporter.setParameter(JRExporterParameter.JASPER_PRINT, print)
@@ -303,6 +310,14 @@ trait ExcelReportFormat {
     output.toByteArray
   }
 
+  val ExcelDS: FormatDS = (report, parameters, dataSource) =>
+    fill(JasperFillManager.fillReport(report, parameters, dataSource))
+
+  val ExcelC: FormatC = (report, parameters, connection) =>
+    fill(JasperFillManager.fillReport(report, parameters, connection))
+
+
+
 }
 
 /**
@@ -310,12 +325,7 @@ trait ExcelReportFormat {
  */
 trait PdfReportFormat {
 
-  /**
-   * The PDF format that outputs the report as PDFs
-   */
-  val Pdf: FormatDS = (report, parameters, dataSource) => {
-    val print = JasperFillManager.fillReport(report, parameters, dataSource)
-
+  private def fill(print: JasperPrint): Array[Byte] = {
     val output = new ByteArrayOutputStream()
     val exporter = new JRPdfExporter()
     exporter.setParameter(JRExporterParameter.JASPER_PRINT, print)
@@ -324,6 +334,15 @@ trait PdfReportFormat {
 
     output.toByteArray
   }
+
+  val PdfC: FormatC = (report, parameters, connection) =>
+    fill(JasperFillManager.fillReport(report, parameters, connection))
+
+  /**
+   * The PDF format that outputs the report as PDFs
+   */
+  val PdfDS: FormatDS = (report, parameters, dataSource) =>
+    fill(JasperFillManager.fillReport(report, parameters, dataSource))
 
 }
 
