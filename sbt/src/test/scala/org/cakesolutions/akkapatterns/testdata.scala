@@ -10,7 +10,7 @@ trait TestData {
 
   object Users {
 
-    def newUser(username: String): User = User(UUID.randomUUID(), username, "", "janm@cakesolutions.net", None, "Jan", "Machacek", SuperuserKind).resetPassword("password")
+    def newUser(username: String): User = User(UUID.randomUUID(), username, "", "janm@cakesolutions.net", None, "F" + username, "L" + username, SuperuserKind).resetPassword("password")
   }
 
 }

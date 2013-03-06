@@ -171,7 +171,7 @@ trait JRXmlReportCompiler extends ReportCompiler {
 /**
  * Runs the report by first loading it, then compiling it, evaluating the report expression and then executing it.
  */
-class ReportRunner {
+trait ReportRunner {
   this: ReportCompiler with ReportLoader =>
 
   private type ReportParameters = java.util.Map[String, AnyRef]
@@ -238,13 +238,16 @@ class ReportRunner {
    * make up the output; throws the error in case of failures
    *
    * @param in the input (defined in ``ReportLoader``)
+   * @param format the report output format
    * @param parametersExpression the report parameters to be used
    * @param dataSourceExpression the data source to be used
    * @return the ``Array[Byte]`` of the output
    */
-  def runReport(in: In)(parametersExpression: Expression = EmptyExpression,
-                        dataSourceExpression: DataSourceExpression = EmptyDataSourceExpression): Array[Byte] =
-    runReportT(in)(parametersExpression, dataSourceExpression).run.toEither match {
+  def runReport(in: In)
+               (format: FormatDS,
+                parametersExpression: Expression = EmptyExpression,
+                dataSourceExpression: DataSourceExpression = EmptyDataSourceExpression): Array[Byte] =
+    runReportT(in)(format, parametersExpression, dataSourceExpression).run.toEither match {
       case Left(ex)   => throw ex
       case Right(out) => out
     }
@@ -253,20 +256,37 @@ class ReportRunner {
    * Runs the report from the input ``in`` with the evaluated ``expression``, giving the container of ``Array[Byte]``
    *
    * @param in the input (defined in the ``ReportLoader``)
+   * @param format the report output format
    * @param parametersExpression the report parameters to be used
    * @param dataSourceExpression the data source to be used
    * @return the container of ``Array[Byte]`` of the output
    */
-  def runReportT(in: In)(parametersExpression: Expression = EmptyExpression,
-                         dataSourceExpression: DataSourceExpression = EmptyDataSourceExpression): EitherT[Id, Throwable, Array[Byte]] = {
+  def runReportT(in: In)
+                (format: FormatDS,
+                 parametersExpression: Expression = EmptyExpression,
+                 dataSourceExpression: DataSourceExpression = EmptyDataSourceExpression): EitherT[Id, Throwable, Array[Byte]] = {
     for {
       root             <- compileReport(in)
       parametersValues <- eval(parametersExpression)
       parameters       =  toMap(parametersValues)
       dataSourceValue  <- eval(dataSourceExpression)
       dataSource       =  toDataSource(dataSourceValue)
-      out              <- EitherT.fromTryCatch[Id, Array[Byte]] { JasperRunManager.runReportToPdf(root, parameters, dataSource) }
+      out              <- EitherT.fromTryCatch[Id, Array[Byte]] { format(root, parameters, dataSource) }
     } yield out
   }
+
+}
+
+/**
+ * Holds the various report formats that are ultimately responsible for taking the report, the parameters and the
+ * data source to ultimately produce the array of bytes that represents the desired output.
+ */
+trait ReportFormats {
+
+  /**
+   * The PDF format that outputs the report as PDFs
+   */
+  val Pdf: FormatDS = (report, parameters, dataSource) => JasperRunManager.runReportToPdf(report, parameters, dataSource)
+
 
 }
