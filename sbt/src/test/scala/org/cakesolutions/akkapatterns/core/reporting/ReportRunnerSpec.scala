@@ -3,6 +3,7 @@ package org.cakesolutions.akkapatterns.core.reporting
 import org.specs2.mutable.Specification
 import org.specs2.execute.Result
 import org.cakesolutions.akkapatterns.TestData
+import java.io.FileOutputStream
 
 /**
  * @author janmachacek
@@ -29,9 +30,9 @@ class ReportRunnerSpec extends Specification with TestData with ReportFormats {
     runner.runReportT(source)(Pdf, parametersExpression, dataSourceExpression).run.toEither match {
       case Left(e)    => failure(e.getMessage)
       case Right(pdf) =>
-        //val fos = new FileOutputStream("/Users/janmachacek/x.pdf")
-        //fos.write(pdf)
-        //fos.close()
+        val fos = new FileOutputStream("/Users/janmachacek/x.pdf")
+        fos.write(pdf)
+        fos.close()
         success
     }
   }

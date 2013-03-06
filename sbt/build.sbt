@@ -52,6 +52,7 @@ libraryDependencies <<= scalaVersion { scala_version =>
         "org.scalaz"          %% "scalaz-core"         % scalazVersion,
         "org.cakesolutions"    % "scalad_2.10"         % "1.0",
         "net.sf.jasperreports" % "jasperreports"       % "5.0.1",
+        "org.apache.poi"       % "poi"                 % "3.9",
         "io.spray"            %% "spray-json"          % "1.2.3",
         "javax.mail"           % "mail"                % "1.4.2",
         "org.specs2"           % "classycle"           % "1.4.1" % "test",

@@ -2,9 +2,10 @@ package org.cakesolutions.akkapatterns.core.reporting
 
 import net.sf.jasperreports.engine._
 import design.JasperDesign
+import export.{JRXlsExporter, JRPdfExporter}
 import scalaz.EitherT
 import scalaz.Id._
-import java.io.InputStream
+import java.io.{ByteArrayOutputStream, InputStream}
 import net.sf.jasperreports.engine.xml.JRXmlLoader
 import net.sf.jasperreports.engine.data.JRBeanArrayDataSource
 import java.util
@@ -168,13 +169,21 @@ trait JRXmlReportCompiler extends ReportCompiler {
   }
 }
 
+trait ReportRunnerVirtualizer {
+
+  /*
+  final JRVirtualizer virtualizer = new JRSwapFileVirtualizer(10000, new JRConcurrentSwapFile("/tmp", 1024, 1024));
+  Map<String, Object> paramMap = buildInitialPramMap();
+  paramMap.put(JRParameter.REPORT_VIRTUALIZER, virtualizer);
+   */
+
+}
+
 /**
  * Runs the report by first loading it, then compiling it, evaluating the report expression and then executing it.
  */
 trait ReportRunner {
   this: ReportCompiler with ReportLoader =>
-
-  private type ReportParameters = java.util.Map[String, AnyRef]
 
   import scalaz.syntax.monad._
 
@@ -185,7 +194,7 @@ trait ReportRunner {
     case EmptyDataSourceExpressionValue                   => new JREmptyDataSource()
   }
 
-  private def toMap(value: ExpressionValue): java.util.Map[String, AnyRef] = {
+  private def toMap(value: ExpressionValue): ReportParameters = {
     def toMap0(value: ExpressionValue): Map[String, AnyRef] = value match {
       case ReportExpressionValue(name, subreport, values)            => Map(name -> subreport) ++ values.flatMap(toMap0)
       case ParametersExpressionValue(values)                         => values.flatMap(toMap0).toMap
@@ -278,15 +287,48 @@ trait ReportRunner {
 }
 
 /**
- * Holds the various report formats that are ultimately responsible for taking the report, the parameters and the
- * data source to ultimately produce the array of bytes that represents the desired output.
+ * Excel report format
  */
-trait ReportFormats {
+trait ExcelReportFormat {
+
+  val Excel: FormatDS = (report, parameters, dataSource) => {
+    val print = JasperFillManager.fillReport(report, parameters, dataSource)
+
+    val output = new ByteArrayOutputStream()
+    val exporter = new JRXlsExporter
+    exporter.setParameter(JRExporterParameter.JASPER_PRINT, print)
+    exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, output)
+    exporter.exportReport()
+
+    output.toByteArray
+  }
+
+}
+
+/**
+ * PDF report format
+ */
+trait PdfReportFormat {
 
   /**
    * The PDF format that outputs the report as PDFs
    */
-  val Pdf: FormatDS = (report, parameters, dataSource) => JasperRunManager.runReportToPdf(report, parameters, dataSource)
+  val Pdf: FormatDS = (report, parameters, dataSource) => {
+    val print = JasperFillManager.fillReport(report, parameters, dataSource)
 
+    val output = new ByteArrayOutputStream()
+    val exporter = new JRPdfExporter()
+    exporter.setParameter(JRExporterParameter.JASPER_PRINT, print)
+    exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, output)
+    exporter.exportReport()
+
+    output.toByteArray
+  }
 
 }
+
+/**
+ * Holds the various report formats that are ultimately responsible for taking the report, the parameters and the
+ * data source to ultimately produce the array of bytes that represents the desired output.
+ */
+trait ReportFormats extends PdfReportFormat with ExcelReportFormat

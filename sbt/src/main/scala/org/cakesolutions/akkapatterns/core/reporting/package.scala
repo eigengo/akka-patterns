@@ -21,6 +21,11 @@ package object reporting {
    * ``JasperReport``, the report parameters and the data source; it returns the bytes.
    * It may throw any exception, which will be caught by ``EitherT.fromException``
    */
-  type FormatDS = (JasperReport, java.util.Map[String, AnyRef], JRDataSource) => Array[Byte]
+  type FormatDS = (JasperReport, ReportParameters, JRDataSource) => Array[Byte]
+
+  /**
+   * Alias for the pesky j.u.Map
+   */
+  type ReportParameters = java.util.Map[String, AnyRef]
 
 }
