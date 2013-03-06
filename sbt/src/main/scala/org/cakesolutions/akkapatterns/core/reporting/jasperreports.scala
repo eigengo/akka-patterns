@@ -9,6 +9,7 @@ import java.io.{ByteArrayOutputStream, InputStream}
 import net.sf.jasperreports.engine.xml.JRXmlLoader
 import net.sf.jasperreports.engine.data.JRBeanArrayDataSource
 import java.util
+import java.sql.Connection
 
 /**
  * Report expressions are evaluated and put into the parameters for the report execution. There is a special-case
@@ -72,7 +73,16 @@ case class ProductListParameterExpression[A <: Product](value: List[A], name: Op
  * @param value the JavaBean instance
  * @param name optionally, the name
  */
-case class JavaBeanParameterExpression(value: AnyRef, name: Option[String]) extends DataSourceExpression
+case class JavaBeanParameterExpression(value: AnyRef, name: Option[String] = None) extends DataSourceExpression
+
+/*
+ * Data source holding an (open) ``Connection``
+ *
+ * @param value the live connection
+ * @param name optionally, the name
+ *
+case class ConnectionParameterExpression(value: Connection, name: Option[String] = None) extends DataSourceExpression
+*/
 
 /**
  * When evaluated, the ``Expressions`` become one of the ``ExpressionValue``s. The expression values match the expressions
@@ -88,6 +98,7 @@ private[reporting] case object EmptyDataSourceExpressionValue extends DataSource
 private[reporting] case class ProductParameterExpressionValue[A <: Product](value: A, name: Option[String]) extends DataSourceExpressionValue
 private[reporting] case class ProductListParameterExpressionValue[A <: Product](value: List[A], name: Option[String]) extends DataSourceExpressionValue
 private[reporting] case class JavaBeanParameterExpressionValue(value: AnyRef, name: Option[String]) extends DataSourceExpressionValue
+//private[reporting] case class ConnectionParameterExpressionValue(value: Connection, name: Option[String]) extends DataSourceExpressionValue
 
 /**
  * Loads the report from some input ``In`` and produces the report's ``InputStream``
