@@ -9,7 +9,6 @@ import java.io.{ByteArrayOutputStream, InputStream}
 import net.sf.jasperreports.engine.xml.JRXmlLoader
 import net.sf.jasperreports.engine.data.JRBeanArrayDataSource
 import java.util
-import java.sql.Connection
 
 /**
  * Report expressions are evaluated and put into the parameters for the report execution. There is a special-case
