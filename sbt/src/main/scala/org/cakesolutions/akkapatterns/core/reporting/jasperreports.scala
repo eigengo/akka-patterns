@@ -310,13 +310,15 @@ trait ExcelReportFormat {
     output.toByteArray
   }
 
-  val ExcelDS: FormatDS = (report, parameters, dataSource) =>
-    fill(JasperFillManager.fillReport(report, parameters, dataSource))
+  /**
+   * The binary Microsoct Excel format that outputs the report as XLSs from ``JRDataSource``
+   */
+  val ExcelDS: FormatDS = (report, parameters, dataSource) => fill(JasperFillManager.fillReport(report, parameters, dataSource))
 
-  val ExcelC: FormatC = (report, parameters, connection) =>
-    fill(JasperFillManager.fillReport(report, parameters, connection))
-
-
+  /**
+   * The binary Microsoct Excel format that outputs the report as XLSs from ``java.sql.Connection``
+   */
+  val ExcelC: FormatC = (report, parameters, connection) => fill(JasperFillManager.fillReport(report, parameters, connection))
 
 }
 
@@ -335,14 +337,15 @@ trait PdfReportFormat {
     output.toByteArray
   }
 
-  val PdfC: FormatC = (report, parameters, connection) =>
-    fill(JasperFillManager.fillReport(report, parameters, connection))
+  /**
+   * The PDF format that outputs the report as PDFs from ``java.sql.Connection``
+   */
+  val PdfC: FormatC = (report, parameters, connection) => fill(JasperFillManager.fillReport(report, parameters, connection))
 
   /**
-   * The PDF format that outputs the report as PDFs
+   * The PDF format that outputs the report as PDFs from ``JRDataSource``
    */
-  val PdfDS: FormatDS = (report, parameters, dataSource) =>
-    fill(JasperFillManager.fillReport(report, parameters, dataSource))
+  val PdfDS: FormatDS = (report, parameters, dataSource) => fill(JasperFillManager.fillReport(report, parameters, dataSource))
 
 }
 
