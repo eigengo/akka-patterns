@@ -1,9 +1,17 @@
-resolvers += "Sonatype snapshots" at "http://oss.sonatype.org/content/repositories/snapshots/"
+resolvers += "Sonatype snapshots" at "http://oss.sonatype.org/content/repositories/releases/"
 
-resolvers += "scct-github-repository" at "http://mtkopone.github.com/scct/maven-repo"
+addSbtPlugin("com.github.mpeltonen" % "sbt-idea" % "1.2.0")
 
-addSbtPlugin("com.github.mpeltonen" % "sbt-idea" % "1.2.0-SNAPSHOT")
+addSbtPlugin("org.scalaxb" % "sbt-scalaxb" % "1.0.1")
 
-addSbtPlugin("com.github.gseitz" % "sbt-release" % "0.6")
+//addSbtPlugin("com.typesafe.sbt" % "sbt-scalariform" % "1.0.0")
+
+addSbtPlugin("net.virtual-void" % "sbt-dependency-graph" % "0.7.1")
+
+resolvers += "SCCT Snapshots" at "http://mtkopone.github.com/scct/maven-repo"
 
 addSbtPlugin("reaktor" % "sbt-scct" % "0.2-SNAPSHOT")
+
+addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "0.2.0")
+
+addSbtPlugin("com.typesafe.sbt" % "sbt-start-script" % "0.7.0")
