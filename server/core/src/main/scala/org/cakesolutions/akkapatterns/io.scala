@@ -3,10 +3,10 @@ package org.cakesolutions.akkapatterns
 import akka.actor.{Props, Actor, ActorSystem}
 import spray.io.IOExtension
 import com.typesafe.config.ConfigFactory
-import spray.client.HttpClient
-import com.aphelia.amqp.ConnectionOwner
-import com.aphelia.amqp.Amqp.ExchangeParameters
+import com.github.sstone.amqp.ConnectionOwner
+import com.github.sstone.amqp.Amqp.ExchangeParameters
 import com.rabbitmq.client.ConnectionFactory
+import spray.can.client.HttpClient
 
 /**
  * Instantiates & provides access to Spray's ``IOBridge``.
@@ -19,7 +19,9 @@ trait HttpIO {
   lazy val ioBridge = IOExtension(actorSystem).ioBridge() // new IOBridge(actorSystem).start()
 
   lazy val httpClient = actorSystem.actorOf(
-    Props(new HttpClient(ConfigFactory.parseString("spray.can.client.ssl-encryption = on")))
+  // TODO https://github.com/janm399/akka-patterns/issues/30
+    ???
+//    Props(new HttpClient(ConfigFactory.parseString("spray.can.client.ssl-encryption = on")))
   )
 
 }

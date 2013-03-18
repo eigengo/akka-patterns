@@ -1,15 +1,15 @@
 package org.cakesolutions.akkapatterns.core
 
-import spray.http.HttpRequest
+import spray.http.{HttpResponse, HttpRequest}
 import com.typesafe.config.Config
 import org.cakesolutions.akkapatterns.domain._
-import spray.client.pipelining._
 import java.util.Properties
 import akka.actor.Actor
 import org.cakesolutions.akkapatterns.{ActorHttpIO, HttpIO}
 import javax.mail.internet.{MimeMessage, InternetAddress}
 import javax.mail._
 import scala.Some
+import scala.concurrent.Future
 
 /**
  * The address where the message should be delivered to. We currently support emailing the message or sending it
@@ -58,7 +58,8 @@ trait NexmoTextMessageDelivery {
 
   import scala.concurrent.ExecutionContext.Implicits.global
 
-  private val pipeline = sendReceive(httpClient) // makeConduit("rest.nexmo.com"))
+  // TODO https://github.com/janm399/akka-patterns/issues/30
+  private def pipeline(request: HttpRequest): Future[HttpResponse] = ??? //sendReceive(httpClient) // makeConduit("rest.nexmo.com"))
 
   /**
    * Delivers the text message ``secret`` to the phone number ``mobileNumber``. The ``mobileNumber`` needs to be in

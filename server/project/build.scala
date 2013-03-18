@@ -69,11 +69,11 @@ object PatternsBuild extends Build {
     )
 
   lazy val core = module("core") dependsOn(domain, test % "test") settings (
-    libraryDependencies ++= Seq(spring_core, guava, jsr305)
+    libraryDependencies ++= Seq(spring_core, spray_client, amqp, rabbitmq, mail, neo4j)
     )
 
   lazy val api = module("api") dependsOn(core, test % "test") settings(
-    libraryDependencies ++= Seq(spray_routing, spray_client),
+    libraryDependencies ++= Seq(spray_routing),
     libraryDependencies += spray_testkit % "test"
     )
 
@@ -119,9 +119,9 @@ object Dependencies {
   val spray_testkit = "io.spray" % "spray-testkit" % spray_version
   val cassandra_unit = "org.cassandraunit" % "cassandra-unit" % "1.1.2.1" excludeAll (bad: _*)
   val specs2 = "org.specs2" %% "specs2" % "1.13"
-  val amqp = "com.aphelia" %% "amqp-client" % "1.0"
+  val amqp = "com.github.sstone" %% "amqp-client" % "1.1"
   val rabbitmq = "com.rabbitmq" % "amqp-client" % "2.8.1"
-  val neo4j = "org.neo4j" % "neo4j" % "1.9-M02"
+  val neo4j = "org.neo4j" % "neo4j" % "1.9.M05"
   val jasperreports = "net.sf.jasperreports" % "jasperreports" % "5.0.1"
   val poi = "org.apache.poi" % "poi" % "3.9"
   val mail = "javax.mail" % "mail" % "1.4.2"
