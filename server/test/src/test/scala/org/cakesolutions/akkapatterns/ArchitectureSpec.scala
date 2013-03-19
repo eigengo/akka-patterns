@@ -1,10 +1,10 @@
 package org.cakesolutions.akkapatterns
 
-import org.specs2.mutable.Specification
 import org.specs2.specification.Analysis
 import org.specs2.analysis.ClassycleDependencyFinder
+import com.mongodb.DB
 
-class ArchitectureSpec extends Specification with Analysis with ClassycleDependencyFinder {
+class ArchitectureSpec extends NoActorSpecs with Analysis with ClassycleDependencyFinder with TestMongo {
 
   "The architecture" should {
     "Have properly defined layers" in {
@@ -17,6 +17,12 @@ class ArchitectureSpec extends Specification with Analysis with ClassycleDepende
       ).withPrefix("org.cakesolutions.akkapatterns").inTargetDir("target/scala-2.10")
 
       ls must beRespected
+    }
+  }
+
+  "The mongo database" should {
+    "be configured" in {
+      configured[DB] must not beNull
     }
   }
 

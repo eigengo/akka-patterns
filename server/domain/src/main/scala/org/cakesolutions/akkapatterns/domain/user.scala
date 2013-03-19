@@ -4,7 +4,7 @@ import spray.json._
 import org.cakesolutions.scalad.mongo.UuidMarshalling
 
 /**
- * The user record, which stores the identtiy, the username and the password
+ * The user record, which stores the identity, the username and the password
  *
  * @author janmachacek
  */
@@ -29,7 +29,7 @@ case class CustomerUserKind(customerReference: CustomerReference) extends UserKi
 case object GuestUserKind extends UserKind
 
 /**
- * The user detail about an authenticated user. It contains the user ``id`` and the detailm which further refines
+ * The user detail about an authenticated user. It contains the user ``id`` and the details which further refines
  * the kind of user we're dealing with.
  *
  * @param userReference the identity of the authenticated user
@@ -38,10 +38,8 @@ case object GuestUserKind extends UserKind
  */
 case class UserDetailT[A <: UserKind](userReference: UserReference, kind: A)
 
-/**
- * Trait that contains the [[spray.json.JsonFormat]] instances for the user
- * management
- */
+
+// Spray JSON marshalling for the User hierarchy
 trait UserFormats extends DefaultJsonProtocol with UuidMarshalling {
 
   // the penalty we pay for a type hierarchy is an overly complex

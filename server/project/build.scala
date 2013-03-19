@@ -63,7 +63,8 @@ object PatternsBuild extends Build {
 	libraryDependencies += akka_contrib,
 	libraryDependencies += akka,
 	libraryDependencies += scalad,
-	libraryDependencies += hector, 
+	libraryDependencies += hector,
+	libraryDependencies += spring_core,
 	libraryDependencies += specs2 % "test",
     packageName in scalaxb in Compile := "org.cakesolutions.patterns.domain.soap",
     sourceGenerators in Compile <+= scalaxb in Compile
@@ -76,7 +77,6 @@ object PatternsBuild extends Build {
   )
 
   lazy val core = module("core") dependsOn(domain, test % "test") settings (
-    libraryDependencies += spring_core,
 	libraryDependencies += spray_client,
 	libraryDependencies += amqp,
 	libraryDependencies += rabbitmq,

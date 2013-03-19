@@ -2,6 +2,8 @@ package org.cakesolutions.akkapatterns.domain
 
 import collection.mutable
 import reflect.{ClassTag, classTag}
+import io.{Codec, Source}
+import org.springframework.core.io.DefaultResourceLoader
 
 /**
  * Stores the configuration
@@ -44,4 +46,13 @@ trait Configuration {
     a
   }
 
+}
+
+trait Resources {
+
+  def readResource(resource: String): String = {
+    val stream = new DefaultResourceLoader().getResource(resource).getInputStream
+    try Source.fromInputStream(stream)(Codec.UTF8).mkString
+    finally stream.close()
+  }
 }
