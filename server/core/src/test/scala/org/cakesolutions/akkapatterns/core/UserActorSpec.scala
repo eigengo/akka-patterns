@@ -1,6 +1,5 @@
-package org.cakesolutions.akkapatterns
+package org.cakesolutions.akkapatterns.core
 
-import core.{GetUserByUsername, UserActor, SanityChecks}
 import org.specs2.mutable.Specification
 import akka.actor.ActorSystem
 import akka.testkit.{ImplicitSender, TestActorRef, TestKit}
