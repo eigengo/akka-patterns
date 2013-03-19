@@ -47,8 +47,8 @@ object PatternsBuild extends Build {
       Resolver.typesafeRepo("releases"),
       "Spray Releases" at "http://repo.spray.io",
       Resolver.typesafeRepo("snapshots"),
-      Resolver.sonatypeRepo("snapshots")  
-	  // resolvers += "Jasper Community" at "http://jasperreports.sourceforge.net/maven2"
+      Resolver.sonatypeRepo("snapshots"),
+	  "Jasper Community" at "http://jasperreports.sourceforge.net/maven2"
 	  // resolvers += "neo4j repo" at "http://m2.neo4j.org/content/repositories/releases/"  
     ),
     parallelExecution in Test := false
@@ -59,21 +59,36 @@ object PatternsBuild extends Build {
 
   // https://github.com/eed3si9n/scalaxb/issues/199
   lazy val domain = module("domain") settings(
-    libraryDependencies ++= Seq(java_logging, scalaz, akka, akka_contrib, scalad, hector, specs2 % "test"),
+    libraryDependencies += java_logging, // will upgrade to scala_logging when released
+	libraryDependencies += akka_contrib,
+	libraryDependencies += akka,
+	libraryDependencies += scalad,
+	libraryDependencies += hector, 
+	libraryDependencies += specs2 % "test",
     packageName in scalaxb in Compile := "org.cakesolutions.patterns.domain.soap",
     sourceGenerators in Compile <+= scalaxb in Compile
     )
 
   lazy val test = module("test") dependsOn (domain) settings (
-    libraryDependencies ++= Seq(specs2 % "compile", cassandra_unit, akka, akka_contrib, akka_testkit % "compile")
-    )
+    libraryDependencies += specs2 % "compile",
+	libraryDependencies += cassandra_unit,
+	libraryDependencies += akka_testkit % "compile"
+  )
 
   lazy val core = module("core") dependsOn(domain, test % "test") settings (
-    libraryDependencies ++= Seq(spring_core, spray_client, amqp, rabbitmq, mail, neo4j)
-    )
+    libraryDependencies += spring_core,
+	libraryDependencies += spray_client,
+	libraryDependencies += amqp,
+	libraryDependencies += rabbitmq,
+	libraryDependencies += mail,
+	libraryDependencies += neo4j,
+	libraryDependencies += scalaz_effect,
+	libraryDependencies += jasperreports,
+    libraryDependencies += poi
+  )
 
   lazy val api = module("api") dependsOn(core, test % "test") settings(
-    libraryDependencies ++= Seq(spray_routing),
+    libraryDependencies += spray_routing,
     libraryDependencies += spray_testkit % "test"
     )
 
@@ -108,7 +123,7 @@ object Dependencies {
   val akka = "com.typesafe.akka" %% "akka-actor" % akka_version
   val akka_contrib = "com.typesafe.akka" %% "akka-contrib" % akka_version intransitive()// JUL only
   val akka_testkit = "com.typesafe.akka" %% "akka-testkit" % akka_version
-  val scalaz = "org.scalaz" %% "scalaz" % "7.0.0-M9"
+  val scalaz_effect = "org.scalaz" %% "scalaz-effect" % "7.0.0-M9"
   val spring_core = "org.springframework" % "spring-core" % "3.1.4.RELEASE" excludeAll (bad: _*)
   // beware Hector 1.1-2 and Guava 14: https://github.com/hector-client/hector/pull/591
   val guava = "com.google.guava" % "guava" % "13.0.1" // includes Cache
@@ -122,7 +137,7 @@ object Dependencies {
   val amqp = "com.github.sstone" %% "amqp-client" % "1.1"
   val rabbitmq = "com.rabbitmq" % "amqp-client" % "2.8.1"
   val neo4j = "org.neo4j" % "neo4j" % "1.9.M05"
-  val jasperreports = "net.sf.jasperreports" % "jasperreports" % "5.0.1"
+  val jasperreports = "net.sf.jasperreports" % "jasperreports" % "5.0.1" excludeAll (bad: _*)
   val poi = "org.apache.poi" % "poi" % "3.9"
   val mail = "javax.mail" % "mail" % "1.4.2"
 }
