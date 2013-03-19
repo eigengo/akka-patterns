@@ -1,7 +1,7 @@
 package org.cakesolutions.akkapatterns.domain
 
 import spray.json.DefaultJsonProtocol
-import org.cakesolutions.akkapatterns.UuidFormats
+import org.cakesolutions.scalad.mongo.UuidMarshalling
 
 case class Customer(id: CustomerReference,
                     firstName: String, lastName: String,
@@ -9,7 +9,7 @@ case class Customer(id: CustomerReference,
 
 case class Address(line1: String, line2: String, line3: String)
 
-trait CustomerFormats extends DefaultJsonProtocol with UuidFormats {
+trait CustomerFormats extends DefaultJsonProtocol with UuidMarshalling {
 
   implicit val AddressFormat = jsonFormat3(Address)
   implicit val CustomerFormat = jsonFormat5(Customer)

@@ -1,19 +1,13 @@
 package org.cakesolutions.akkapatterns.main
 
 import akka.actor.{Props, ActorSystem}
-import com.aphelia.amqp.{ChannelOwner, ConnectionOwner}
-import com.aphelia.amqp.Amqp._
 import akka.util.Timeout
 import com.rabbitmq.client.{DefaultConsumer, Channel, Envelope, ConnectionFactory}
 import com.rabbitmq.client.AMQP.BasicProperties
-import com.aphelia.amqp.Amqp.ReturnedMessage
-import com.aphelia.amqp.Amqp.Publish
-import com.aphelia.amqp.Amqp.ChannelParameters
-import scala.Some
-import com.aphelia.amqp.RpcClient.Request
-import com.aphelia.amqp.Amqp.QueueParameters
-import com.aphelia.amqp.Amqp.Delivery
 import akka.actor.SupervisorStrategy.Stop
+import com.github.sstone.amqp._
+import com.github.sstone.amqp.RpcClient._
+import com.github.sstone.amqp.Amqp._
 
 /**
  * @author janmachacek

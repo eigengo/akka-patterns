@@ -1,11 +1,17 @@
 package org.cakesolutions.akkapatterns.core
 
-import akka.actor.{Props, Actor}
+import akka.actor.{ActorLogging, Props, Actor}
 
 case class GetImplementation()
 case class Implementation(title: String, version: String, build: String)
 
-class ApplicationActor extends Actor {
+object ApplicationActor {
+  case class Start()
+  case class Stop()
+}
+
+class ApplicationActor extends Actor with ActorLogging {
+  import ApplicationActor._
 
   def receive = {
     case GetImplementation() =>
@@ -20,16 +26,9 @@ class ApplicationActor extends Actor {
       context.actorOf(Props(new CustomerActor(messageDelivery)), "customer")
       context.actorOf(Props(new UserActor(messageDelivery)),     "user")
 
-      new SanityChecks {
-        sender ! (if (ensureSanity) Started() else InmatesAreRunningTheAsylum)
-      }
 
-    /*
-     * Stops this actor and all the child actors.
-     */
     case Stop() =>
       context.children.foreach(context.stop _)
 
   }
-
 }

@@ -11,7 +11,7 @@ object Main {
   def main(args: Array[String]) {
     implicit val system = ActorSystem("AkkaPatterns")
 
-    class Application(val actorSystem: ActorSystem) extends ServerCore with Configuration with Api with Web
+    class Application(val actorSystem: ActorSystem) extends ServerCore with Configuration with Web
 
     new Application(system)
 

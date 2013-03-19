@@ -4,13 +4,8 @@ import akka.actor.{Props, ActorSystem}
 import akka.pattern.ask
 import akka.util.Timeout
 import concurrent.Await
+import org.cakesolutions.akkapatterns.core.ApplicationActor.Start
 
-case class Start()
-
-case object InmatesAreRunningTheAsylum
-case class Started()
-
-case class Stop()
 
 trait ServerCore {
   implicit def actorSystem: ActorSystem
@@ -21,6 +16,6 @@ trait ServerCore {
     name = "application"
   )
 
-  Await.ready(application ? Start(), timeout.duration)
+  application ! Start()
 
 }

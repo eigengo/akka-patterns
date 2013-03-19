@@ -1,12 +1,13 @@
 package org.cakesolutions.akkapatterns.api
 
-import spray.routing.{RequestContext, AuthenticationFailedRejection, AuthenticationRequiredRejection}
+import spray.routing.{HttpService, RequestContext, AuthenticationFailedRejection, AuthenticationRequiredRejection}
 import concurrent.Future
 import spray.routing.authentication.Authentication
 import java.util.UUID
-import akka.actor.ActorSystem
+import akka.actor.ActorRef
 import org.cakesolutions.akkapatterns.domain._
 import org.cakesolutions.akkapatterns.core.authentication.TokenCheck
+import akka.util.Timeout
 
 /**
  * Mix in this trait to get the authentication directive. The ``validUser`` function can be used in Spray's
@@ -30,8 +31,7 @@ import org.cakesolutions.akkapatterns.core.authentication.TokenCheck
  * @author janmachacek
  */
 trait AuthenticationDirectives {
-
-  import concurrent.ExecutionContext.Implicits.global
+  this: HttpService =>
 
   /**
    * @return a `User` that has been previously identified with the `Token` we have been given.
@@ -44,13 +44,30 @@ trait AuthenticationDirectives {
    */
   private def doValidUser[A <: UserKind](map: UserDetailT[_] => Authentication[UserDetailT[A]]): RequestContext => Future[Authentication[UserDetailT[A]]] = {
     ctx: RequestContext =>
-      val header = ctx.request.headers.find(_.name == "x-token")
-      if (header.isEmpty)
-        Future(Left(AuthenticationRequiredRejection("https", "zoetic")))
-      else doAuthenticate(UUID.fromString(header.get.value)).map {
-        case Some(user) => map(user)
-        case None       => Left(AuthenticationFailedRejection("Zoetic"))
+      getToken(ctx) match {
+        case None => Future(Left(AuthenticationRequiredRejection("https", "patterns")))
+        case Some(token) => doAuthenticate(token) .map {
+          case Some(user) => map(user)
+          case None       => Left(AuthenticationFailedRejection("Patterns"))
+        }
       }
+  }
+
+  // http://en.wikipedia.org/wiki/Universally_unique_identifier
+  val uuidRegex = """^\p{XDigit}{8}(-\p{XDigit}{4}){3}-\p{XDigit}{12}$""".r
+  def isUuid(token: String) = token.length == 36 && uuidRegex.findPrefixOf(token).isDefined
+
+  def getToken(ctx: RequestContext): Option[UUID] = {
+    val query = ctx.request.queryParams.get("token")
+    if (query.isDefined && isUuid(query.get))
+      Some(UUID.fromString(query.get))
+    else {
+      val header = ctx.request.headers.find(_.name == "x-token")
+      if (header.isDefined && isUuid(header.get.value))
+        Some(UUID.fromString(header.get.value))
+      else
+        None
+    }
   }
 
   /**
@@ -88,16 +105,13 @@ trait AuthenticationDirectives {
   }
 }
 
-/**
- * provides a default implementation for Authentication Directives
- */
-trait DefaultAuthenticationDirectives extends AuthenticationDirectives with DefaultTimeout {
-  this: { def actorSystem: ActorSystem } =>
 
-  import concurrent.ExecutionContext.Implicits.global
+trait DefaultAuthenticationDirectives extends AuthenticationDirectives {
+  this: HttpService =>
+
   import akka.pattern.ask
-
-  def loginActor = actorSystem.actorFor("/user/application/authentication/login")
+  implicit val timeout: Timeout
+  def loginActor: ActorRef
 
   override def doAuthenticate(token: UUID) = (loginActor ? TokenCheck(token)).mapTo[Option[UserDetailT[_]]]
 

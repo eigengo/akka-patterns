@@ -1,7 +1,7 @@
 package org.cakesolutions.akkapatterns.domain
 
 import spray.json._
-import org.cakesolutions.akkapatterns.UuidFormats
+import org.cakesolutions.scalad.mongo.UuidMarshalling
 
 /**
  * The user record, which stores the identtiy, the username and the password
@@ -42,8 +42,11 @@ case class UserDetailT[A <: UserKind](userReference: UserReference, kind: A)
  * Trait that contains the [[spray.json.JsonFormat]] instances for the user
  * management
  */
-trait UserFormats extends DefaultJsonProtocol with UuidFormats {
+trait UserFormats extends DefaultJsonProtocol with UuidMarshalling {
 
+  // the penalty we pay for a type hierarchy is an overly complex
+  // marshalling format. It is often worth considering a data
+  // model that does not enforce a hierarchy.
   implicit object UserKindFormat extends JsonFormat[UserKind] {
     private val Superuser = JsString("superuser")
     private val Customer  = JsString("customer")

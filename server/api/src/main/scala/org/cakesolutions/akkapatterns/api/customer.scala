@@ -1,23 +1,19 @@
 package org.cakesolutions.akkapatterns.api
 
-import akka.actor.ActorSystem
-import spray.routing.Directives
-import spray.httpx.marshalling.MetaMarshallers
-import org.cakesolutions.akkapatterns.domain.{CustomerFormats, Customer}
+import spray.routing.HttpService
+import org.cakesolutions.akkapatterns.domain.Customer
 import org.cakesolutions.akkapatterns.core.UpdateCustomer
-import spray.httpx.SprayJsonSupport
+import akka.util.Timeout
+import akka.actor.ActorRef
 
-/**
- * @author janmachacek
- */
-class CustomerService(implicit val actorSystem: ActorSystem) extends Directives with MetaMarshallers with DefaultTimeout
-  with DefaultAuthenticationDirectives with CustomerFormats with SprayJsonSupport {
+trait CustomerService extends HttpService {
+  this: EndpointMarshalling with AuthenticationDirectives =>
+
   import akka.pattern.ask
-  import concurrent.ExecutionContext.Implicits.global
+  implicit val timeout: Timeout
+  def customerActor: ActorRef
 
-  def customerActor = actorSystem.actorFor("/user/application/customer")
-
-  val route =
+  val customerRoute =
     path("customers" / JavaUUID) { id =>
       get {
         complete {

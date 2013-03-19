@@ -1,28 +1,39 @@
 package org.cakesolutions.akkapatterns.api
 
-import akka.actor.{ActorRef, Props}
+import akka.actor.Actor
 import spray._
 import routing._
-import http.{StatusCodes, HttpResponse}
-import org.cakesolutions.akkapatterns.core.ServerCore
+import org.cakesolutions.akkapatterns.core.CoreActorRefs
 import akka.util.Timeout
 
-trait Api extends RouteConcatenation {
-  this: ServerCore =>
+class Api extends Actor with HttpServiceActor
+  with CoreActorRefs
+  with FailureHandling
+  with EndpointMarshalling
+  with DefaultAuthenticationDirectives
+  with CustomerService
+  with HomeService
+  with UserService
+  {
 
-  val routes =
-    new HomeService().route ~
-    new CustomerService().route
+    // used by the Akka ask pattern
+    implicit val timeout = Timeout(10000)
 
-  def rejectionHandler: PartialFunction[scala.List[Rejection], HttpResponse] = {
-    case (rejections: List[Rejection]) => HttpResponse(StatusCodes.BadRequest)
-  }
+    // lets the CoreActorRef find the actor system used by Spray
+    // (this could potentially be a separate system)
+    def system = actorSystem
 
-  val rootService = actorSystem.actorOf(Props(new RoutedHttpService(routes)))
+    val routes =
+      customerRoute ~
+      homeRoute ~
+      userRoute
 
-}
-
-trait DefaultTimeout {
-  final implicit val timeout = Timeout(3000)
+    def receive = runRoute (
+      handleRejections(rejectionHandler)(
+        handleExceptions(exceptionHandler)(
+          routes
+        )
+      )
+    )
 
 }

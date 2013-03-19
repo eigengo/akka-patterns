@@ -1,26 +1,25 @@
 package org.cakesolutions.akkapatterns.api
 
-import akka.actor.ActorSystem
-import spray.httpx.marshalling.MetaMarshallers
-import spray.routing.Directives
-import org.cakesolutions.akkapatterns.domain.{UserFormats, User}
-import spray.httpx.SprayJsonSupport
+import org.cakesolutions.akkapatterns.domain.User
+import akka.util.Timeout
+import spray.routing.HttpService
+import akka.actor.ActorRef
 
-/**
- * @author janmachacek
- */
-class UserService(implicit val actorSystem: ActorSystem) extends Directives with DefaultTimeout with UserFormats with MetaMarshallers with SprayJsonSupport {
-  def userActor = actorSystem.actorFor("/user/application/user")
 
-  val route =
+trait UserService extends HttpService {
+  this: EndpointMarshalling with AuthenticationDirectives =>
+
+  import akka.pattern.ask
+  implicit val timeout: Timeout
+  def userActor: ActorRef
+
+  val userRoute =
     path("user" / "register") {
       post {
-        entity(as[User]) { user =>
-          complete {
+          handleWith {user: User =>
             // (userActor ? RegisteredUser(user)).mapTo[Either[NotRegisteredUser, RegisteredUser]]
             "Wait a bit!"
           }
-        }
       }
     }
 
