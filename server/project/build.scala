@@ -62,6 +62,8 @@ object PatternsBuild extends Build {
     libraryDependencies += java_logging, // will upgrade to scala_logging when released
 	libraryDependencies += akka_contrib,
 	libraryDependencies += akka,
+	libraryDependencies += scala_io_core,
+	libraryDependencies += scala_io_file,
 	libraryDependencies += scalad,
 	libraryDependencies += hector,
 	libraryDependencies += spring_core,
@@ -140,4 +142,6 @@ object Dependencies {
   val jasperreports = "net.sf.jasperreports" % "jasperreports" % "5.0.1" excludeAll (bad: _*)
   val poi = "org.apache.poi" % "poi" % "3.9"
   val mail = "javax.mail" % "mail" % "1.4.2"
+  val scala_io_core = "com.github.scala-incubator.io" %% "scala-io-core" % "0.4.2"
+  val scala_io_file = "com.github.scala-incubator.io" %% "scala-io-file" % "0.4.2"
 }

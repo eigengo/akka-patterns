@@ -50,9 +50,14 @@ trait Configuration {
 
 trait Resources {
 
-  def readResource(resource: String): String = {
-    val stream = new DefaultResourceLoader().getResource(resource).getInputStream
-    try Source.fromInputStream(stream)(Codec.UTF8).mkString
-    finally stream.close()
+  protected def readResource(resource: String) = new DefaultResourceLoader().getResource(resource).getInputStream
+
+  protected implicit class StreamString(stream: InputStream) {
+	  @deprecated("use Scala IO")
+    def mkString =
+      try Source.fromInputStream(stream)(Codec.UTF8).mkString
+      finally stream.close()
   }
+
 }
+
