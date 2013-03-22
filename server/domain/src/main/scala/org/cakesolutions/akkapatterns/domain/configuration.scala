@@ -4,6 +4,7 @@ import collection.mutable
 import reflect.{ClassTag, classTag}
 import io.{Codec, Source}
 import org.springframework.core.io.DefaultResourceLoader
+import java.io.InputStream
 
 /**
  * Stores the configuration
@@ -58,6 +59,8 @@ trait Resources {
       try Source.fromInputStream(stream)(Codec.UTF8).mkString
       finally stream.close()
   }
+
+//  PathMatchingResourcePatternResolver
 
 }
 

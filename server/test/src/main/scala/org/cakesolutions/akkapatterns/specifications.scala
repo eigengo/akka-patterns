@@ -7,12 +7,13 @@ import com.mongodb.DB
 import me.prettyprint.hector.api.Cluster
 import org.specs2.mutable.Specification
 import collection.JavaConversions._
-import org.specs2.specification.{Step, Fragments}
+import org.specs2.specification.{SpecificationStructure, Step, Fragments}
 import akka.contrib.jul.JavaLogging
 import org.specs2.control.StackTraceFilter
 import akka.testkit.TestKit
 import akka.actor.ActorSystem
 import akka.util.Timeout
+import org.cakesolutions.scalad.mongo.sprayjson.SprayMongo
 
 
 /** Convenient parent for all Specs, ensuring that exceptions are (mostly) correctly
@@ -52,21 +53,30 @@ abstract class ActorSpecs extends TestKit(ActorSystem()) with Specification with
 }
 
 
-/** Convenient mixin that provides access to a cleanly prepared (before any spec is run) MongoDB.
+/** Provides access to a test MongoDB instance.
   */
 trait TestMongo extends Configuration with Configured with NoSqlConfig with Resources {
   this: Specification with JavaLogging =>
 
-  // https://groups.google.com/d/topic/specs2-users/PdCeX4zxc0A/discussion
-  override def map(fs: => Fragments) = Step(resetMongo()) ^ fs
-
   configure(mongo(Settings.test.db.mongo))
 
+  val mongo = new SprayMongo
+
   def resetMongo() {
-    val mongo = configured[DB]
-    log.info(s"resetting ${mongo.getName}")
-    mongo.eval(readResource("classpath:org/cakesolutions/akkapatterns/test/mongodb-base.js"))
+    val db = configured[DB]
+    log.debug(s"resetting ${db.getName}")
+    db.dropDatabase()
   }
+}
+
+/** Provides access to a test MongoDB instance that is cleaned up before any specs are run.
+  * Note that Specs will break if SBT runs them in parallel, so ensure `parallelExecution in Test := false`.
+  */
+trait CleanMongo extends TestMongo {
+  this: Specification with JavaLogging =>
+
+  // https://groups.google.com/d/topic/specs2-users/PdCeX4zxc0A/discussion
+  override def map(fs: => Fragments) = Step(resetMongo()) ^ fs
 }
 
 
@@ -74,9 +84,6 @@ trait TestMongo extends Configuration with Configured with NoSqlConfig with Reso
   */
 trait TestCassandra extends SpecificationStructure with Configuration with Configured with NoSqlConfig with Resources {
   this: Specification with JavaLogging =>
-
-  // https://groups.google.com/d/topic/specs2-users/PdCeX4zxc0A/discussion
-  override def map(fs: => Fragments) = super.map(fs) ^ Step(resetCassandra())
 
   configure(cassandra(Settings.test.db.cassandra))
 
@@ -88,6 +95,12 @@ trait TestCassandra extends SpecificationStructure with Configuration with Confi
     val host = cluster.getKnownPoolHosts(false).head.getHost
     new DataLoader(name, host).load(cassandraBase)
   }
+}
+
+trait CleanCassandra extends TestCassandra {
+  this: Specification with JavaLogging =>
+
+  override def map(fs: => Fragments) = super.map(fs) ^ Step(resetCassandra())
 }
 
 // from com.github.fommil.scala-logging

@@ -23,7 +23,10 @@ class ReportRunnerSpec extends Specification with TestData with ReportFormats {
   }
 
   "simple report" in {
-    runReport("empty.jrxml", EmptyExpression, ProductListParameterExpression(Users.newUser("janm") :: Users.newUser("anirvanc") :: Nil))
+    runReport("empty.jrxml", EmptyExpression, ProductListParameterExpression(
+//      Users.newUser("janm") :: Users.newUser("anirvanc") :: Nil
+      Nil
+    ))
   }
 
   def runReport(source: String, parametersExpression: Expression, dataSourceExpression: DataSourceExpression): Result = {

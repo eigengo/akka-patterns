@@ -121,7 +121,7 @@ object Dependencies {
   val spray_version = "1.1-M7"
 
   val java_logging = "com.github.fommil" % "java-logging" % "1.0"
-  val scalad = "org.cakesolutions" %% "scalad" % "1.2.0-SNAPSHOT" // https://github.com/janm399/scalad/issues/7
+  val scalad = "org.cakesolutions" %% "scalad" % "1.3.0-SNAPSHOT" // https://github.com/janm399/scalad/issues/7
   val akka = "com.typesafe.akka" %% "akka-actor" % akka_version
   val akka_contrib = "com.typesafe.akka" %% "akka-contrib" % akka_version intransitive()// JUL only
   val akka_testkit = "com.typesafe.akka" %% "akka-testkit" % akka_version

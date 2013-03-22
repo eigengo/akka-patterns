@@ -1,7 +1,8 @@
 package org.cakesolutions.akkapatterns.domain
 
 import spray.json._
-import org.cakesolutions.scalad.mongo.UuidMarshalling
+import com.mongodb.DB
+import org.cakesolutions.scalad.mongo.sprayjson.UuidMarshalling
 
 /**
  * The user record, which stores the identity, the username and the password
@@ -71,4 +72,11 @@ trait UserFormats extends DefaultJsonProtocol with UuidMarshalling {
 
   implicit val UserFormat = jsonFormat8(User)
 
+}
+
+trait UserMongo extends UserFormats {
+  this: Configured =>
+  import org.cakesolutions.scalad.mongo.sprayjson._
+
+  protected implicit val UserProvider = new SprayMongoCollection[User](configured[DB], "users", "id":>1, "username":> 1)
 }

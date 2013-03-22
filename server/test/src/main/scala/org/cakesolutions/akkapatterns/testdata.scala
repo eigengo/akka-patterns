@@ -1,48 +1,46 @@
 package org.cakesolutions.akkapatterns
 
 import domain._
+import org.specs2.mutable.Before
+import com.mongodb.{BasicDBList, DBObject, DB}
+import com.mongodb.util.JSON
+import scala.collection.JavaConversions._
+import akka.contrib.jul.JavaLogging
 import java.util.UUID
 
-/**
- * The general idea is to have (verbose) mirroring of the data stored in the various database
- * "base" scripts, but in Scala land.
+/*
+ * The idea with test data is to provide
  *
- * It is also convenient to define additional data (somewhere else) and then persist it to the database,
- * but here we are essentially testing the mapping between the raw form and the Scala form.
+ * 1. Fixtures - can be attached to specs (individual or for a whole file)
+ *               which define the state of the database at the beginning
+ *               of the spec examples. Typically these are loaded per example.
+ * 2. Identifiers - can be used to lookup data that is inserted into the DB
+ *               by the fixtures. Typically these are mixed in to specs.
+ * 3. Data Instances - which is suitable for programmatically inserting into
+ *               the database. Typically these are mixed in to specs.
  */
-trait TestData {
 
-  val UserGuest = User(
-    UUID.fromString("994fc1f0-90a9-11e2-9e96-0800200c9a66"),
-    "guest",
-    "",
-    "johndoe@example.com",
-    None,
-    "John",
-    "Doe",
-    GuestUserKind
-  )
 
-  val UserCustomer = User(
-    UUID.fromString("7370f980-90aa-11e2-9e96-0800200c9a66"),
-    "customer",
-    "",
-    "johndoe@example.com",
-    Some("07777777777"),
-    "John",
-    "Doe",
-    CustomerUserKind(UUID.fromString("82c6e890-90aa-11e2-9e96-0800200c9a66"))
-  )
+/**
+ * Fixture that evaluates named files (in Mongo Javascript format) from the classpath.
+ *
+ * @param names
+ */
+class MongoCollectionFixture(names: String*) extends Configured with Resources with JavaLogging with Before {
+  override def before() {
+    val header = readResource(s"classpath:/org/cakesolutions/akkapatterns/testdata/common.js").mkString
+    names.foreach {
+      name =>
+        configured[DB].eval(
+          header +
+          readResource(s"classpath:/org/cakesolutions/akkapatterns/testdata/${name}.js").mkString
+        )
+    }
+  }
+}
 
-  val UserAdmin = User(
-    UUID.fromString("c0a93190-90aa-11e2-9e96-0800200c9a66"),
-    "root",
-    "",
-    "johndoe@example.com",
-    None,
-    "John",
-    "Doe",
-    UserAdmin
-  )
-
+trait TestUserData {
+  val TestGuestUserId = UUID.fromString("994fc1f0-90a9-11e2-9e96-0800200c9a66")
+  val TestCustomerUserId = UUID.fromString("7370f980-90aa-11e2-9e96-0800200c9a66")
+  val TestAdminUserId = UUID.fromString("c0a93190-90aa-11e2-9e96-0800200c9a66")
 }
