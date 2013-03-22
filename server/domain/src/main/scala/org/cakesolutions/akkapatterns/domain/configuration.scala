@@ -54,7 +54,7 @@ trait Resources {
   protected def readResource(resource: String) = new DefaultResourceLoader().getResource(resource).getInputStream
 
   protected implicit class StreamString(stream: InputStream) {
-	  @deprecated("use Scala IO")
+	  @deprecated("use Scala IO", "HEAD")
     def mkString =
       try Source.fromInputStream(stream)(Codec.UTF8).mkString
       finally stream.close()

@@ -24,7 +24,7 @@ class CustomerController extends CustomerMongo with Configured {
    * @param user the user
    */
   def register(customer: Customer, user: User) {
-    mongo.create(customer)
+    mongo.insert(customer)
     ??? // still need to register the user in neo4j... I don't really get the whole user/customer distinction...
   }
 

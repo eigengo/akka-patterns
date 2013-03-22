@@ -5,6 +5,7 @@ import org.cakesolutions.akkapatterns.domain.Customer
 import org.cakesolutions.akkapatterns.core.CustomerController
 import akka.util.Timeout
 import scala.concurrent.Future
+import java.util.Date
 
 trait CustomerService extends HttpService {
   this: EndpointMarshalling with AuthenticationDirectives =>
@@ -18,7 +19,7 @@ trait CustomerService extends HttpService {
           // when using controllers, we have to explicitly create the Future here
           // it is not necessary to add the T information, but it helps with API documentation.
           Future[Customer] {
-             customerController.get(id)
+            customerController.get(id)
           }
         }
       } ~

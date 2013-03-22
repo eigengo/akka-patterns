@@ -22,6 +22,7 @@ import akka.testkit.TestKit
 import org.specs2.specification.{Step, Fragments}
 import spray.util.LoggingContext
 import spray.http.StatusCodes._
+import org.cakesolutions.akkapatterns.domain.Configured
 
 case class Token(token: UUID)
 
@@ -112,9 +113,9 @@ trait RouteTestNiceness {
 
 
 trait TestFailureHandling {
-  this: HttpService =>
+  this: HttpService with Tracking =>
 
-  def handled(route: Route) = handleRejections(testRejectionHandler)(handleExceptions(testExceptionHandler)(route))
+  def handled(route: Route) = handleRejections(testRejectionHandler)(handleExceptions(testExceptionHandler)(trackRequestResponse(route)))
 
   @volatile private var suppressed = false
 
@@ -150,7 +151,7 @@ with JavaLogging
 with DefaultAuthenticationDirectives
 with AuthenticatedTestkit
 with TestFailureHandling
-with ServerCore with CoreActorRefs with CleanMongo {
+with ServerCore with CoreActorRefs with CleanMongo with Tracking {
   this: HttpService =>
 
   def actorSystem = system // for ServerCore

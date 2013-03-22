@@ -5,10 +5,12 @@ import spray._
 import routing._
 import org.cakesolutions.akkapatterns.core.CoreActorRefs
 import akka.util.Timeout
+import org.cakesolutions.akkapatterns.domain.Configured
 
 class Api extends Actor with HttpServiceActor
   with CoreActorRefs
   with FailureHandling
+  with Tracking with Configured
   with EndpointMarshalling
   with DefaultAuthenticationDirectives
   with CustomerService
@@ -31,7 +33,7 @@ class Api extends Actor with HttpServiceActor
     def receive = runRoute (
       handleRejections(rejectionHandler)(
         handleExceptions(exceptionHandler)(
-          routes
+          trackRequestResponse(routes)
         )
       )
     )

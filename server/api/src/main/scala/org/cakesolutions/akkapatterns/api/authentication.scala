@@ -8,6 +8,7 @@ import akka.actor.ActorRef
 import org.cakesolutions.akkapatterns.domain._
 import org.cakesolutions.akkapatterns.core.authentication.TokenCheck
 import akka.util.Timeout
+import spray.http.HttpRequest
 
 /**
  * Mix in this trait to get the authentication directive. The ``validUser`` function can be used in Spray's
@@ -44,7 +45,7 @@ trait AuthenticationDirectives {
    */
   private def doValidUser[A <: UserKind](map: UserDetailT[_] => Authentication[UserDetailT[A]]): RequestContext => Future[Authentication[UserDetailT[A]]] = {
     ctx: RequestContext =>
-      getToken(ctx) match {
+      getToken(ctx.request) match {
         case None => Future(Left(AuthenticationRequiredRejection("https", "patterns")))
         case Some(token) => doAuthenticate(token) .map {
           case Some(user) => map(user)
@@ -57,12 +58,12 @@ trait AuthenticationDirectives {
   val uuidRegex = """^\p{XDigit}{8}(-\p{XDigit}{4}){3}-\p{XDigit}{12}$""".r
   def isUuid(token: String) = token.length == 36 && uuidRegex.findPrefixOf(token).isDefined
 
-  def getToken(ctx: RequestContext): Option[UUID] = {
-    val query = ctx.request.queryParams.get("token")
+  def getToken(request: HttpRequest): Option[UUID] = {
+    val query = request.queryParams.get("token")
     if (query.isDefined && isUuid(query.get))
       Some(UUID.fromString(query.get))
     else {
-      val header = ctx.request.headers.find(_.name == "x-token")
+      val header = request.headers.find(_.name == "x-token")
       if (header.isDefined && isUuid(header.get.value))
         Some(UUID.fromString(header.get.value))
       else
