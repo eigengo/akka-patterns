@@ -2,30 +2,33 @@ package org.cakesolutions.akkapatterns.api
 
 import spray.routing.HttpService
 import org.cakesolutions.akkapatterns.domain.Customer
-import org.cakesolutions.akkapatterns.core.UpdateCustomer
+import org.cakesolutions.akkapatterns.core.CustomerController
 import akka.util.Timeout
-import akka.actor.ActorRef
+import scala.concurrent.Future
 
 trait CustomerService extends HttpService {
   this: EndpointMarshalling with AuthenticationDirectives =>
 
-  import akka.pattern.ask
-  implicit val timeout: Timeout
-  def customerActor: ActorRef
+  private val customerController = new CustomerController
 
   val customerRoute =
     path("customers" / JavaUUID) { id =>
       get {
         complete {
-          "Just you wait"
+          // when using controllers, we have to explicitly create the Future here
+          // it is not necessary to add the T information, but it helps with API documentation.
+          Future[Customer] {
+             customerController.get(id)
+          }
         }
       } ~
       post {
         authenticate(validCustomer) { ud =>
           // if we authenticated only validUser or validSuperuser
           handleWith { customer: Customer =>
-            (customerActor ? UpdateCustomer(ud, customer)).mapTo[Customer]
-            // then this call would not type-check!
+            Future[Customer] {
+              customerController.update(ud, customer)
+            }
           }
         }
       }

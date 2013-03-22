@@ -6,7 +6,7 @@ import spray.json.DefaultJsonProtocol
 import spray.httpx.SprayJsonSupport
 import spray.httpx.marshalling.{CollectingMarshallingContext, MetaMarshallers, Marshaller}
 import spray.http.{HttpEntity, StatusCode}
-import org.cakesolutions.scalad.mongo.{DateMarshalling, UuidMarshalling}
+import org.cakesolutions.scalad.mongo.sprayjson.{DateMarshalling, UuidMarshalling}
 
 // Pure boilerplate - please create a code generator (I'll be your *best* friend!)
 trait ApiMarshalling extends DefaultJsonProtocol

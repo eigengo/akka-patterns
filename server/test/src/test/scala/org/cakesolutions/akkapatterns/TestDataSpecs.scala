@@ -1,31 +1,24 @@
 package org.cakesolutions.akkapatterns
 
-import org.cakesolutions.akkapatterns.domain.{User, UserMongo}
+import org.cakesolutions.akkapatterns.domain._
 import com.mongodb.DB
 import org.cakesolutions.scalad.mongo.sprayjson._
 import java.util.UUID
+import org.cakesolutions.akkapatterns.MongoCollectionFixture._
 
-class TestDataSpecs extends NoActorSpecs with CleanMongo with UserMongo {
+class TestDataSpecs extends NoActorSpecs with CleanMongo with CustomerMongo with TestCustomerData {
 
   "Mongo Test Data" should {
     "be clean at the beginning" in {
-        configured[DB].getCollectionNames.size === 0
+      configured[DB].getCollectionNames.size === 0
     }
 
-    "users fixture should attach" in new MongoCollectionFixture("users") with TestUserData {
-      mongo.count[User]() must beGreaterThan(0L)
-      mongo.searchFirst[User]("id":>TestGuestUserId) must beLike {
-        case Some(user) if user.username == "guest" => ok
+    "customers fixture should attach" in new Fix("customers") {
+      mongo.count[Customer]() must beGreaterThan(0L)
+      mongo.findOne[Customer]("id" :> TestCustomerJanId) must beLike {
+        case Some(customer) if customer.firstName == "Jan" => ok
       }
-      mongo.searchFirst[User]("id":>TestCustomerUserId) must beLike {
-        case Some(user) if user.username == "customer" => ok
-      }
-      mongo.searchFirst[User]("id":>TestAdminUserId) must beLike {
-        case Some(user) if user.username == "root" => ok
-      }
-      mongo.searchFirst[User]("id":>UUID.randomUUID()) must beLike {
-        case None => ok
-      }
+      mongo.findOne[Customer]("id" :> UUID.randomUUID()) === None
     }
   }
 }

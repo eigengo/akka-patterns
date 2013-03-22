@@ -20,6 +20,11 @@ import java.util.UUID
  *               the database. Typically these are mixed in to specs.
  */
 
+object MongoCollectionFixture {
+  class Fix(names: String*) extends MongoCollectionFixture(true, names:_*)
+
+  class ContinueFix(names: String*) extends MongoCollectionFixture(false, names:_*)
+}
 
 /**
  * Fixture that evaluates named files (in Mongo Javascript format) from the classpath.
@@ -27,7 +32,7 @@ import java.util.UUID
  * @param clean if true, will drop the database before running the fixture
  * @param names
  */
-class MongoCollectionFixture(clean: Boolean = true, names: String*) extends Configured with Resources with JavaLogging with Before {
+class MongoCollectionFixture(clean: Boolean, names: String*) extends Configured with Resources with JavaLogging with Before {
   override def before() {
     if (clean)
       configured[DB].dropDatabase()
@@ -43,8 +48,14 @@ class MongoCollectionFixture(clean: Boolean = true, names: String*) extends Conf
   }
 }
 
-trait TestUserData {
-  val TestGuestUserId = UUID.fromString("994fc1f0-90a9-11e2-9e96-0800200c9a66")
-  val TestCustomerUserId = UUID.fromString("7370f980-90aa-11e2-9e96-0800200c9a66")
-  val TestAdminUserId = UUID.fromString("c0a93190-90aa-11e2-9e96-0800200c9a66")
+
+//trait TestUserData {
+//  val TestGuestUserId = UUID.fromString("994fc1f0-90a9-11e2-9e96-0800200c9a66")
+//  val TestCustomerUserId = UUID.fromString("7370f980-90aa-11e2-9e96-0800200c9a66")
+//  val TestAdminUserId = UUID.fromString("c0a93190-90aa-11e2-9e96-0800200c9a66")
+//}
+
+trait TestCustomerData {
+  val TestCustomerJanId = UUID.fromString("122fa630-92fd-11e2-9e96-0800200c9a66")
+
 }

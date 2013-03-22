@@ -74,9 +74,10 @@ trait UserFormats extends DefaultJsonProtocol with UuidMarshalling {
 
 }
 
-trait UserMongo extends UserFormats {
-  this: Configured =>
-  import org.cakesolutions.scalad.mongo.sprayjson._
-
-  protected implicit val UserProvider = new SprayMongoCollection[User](configured[DB], "users", "id":>1, "username":> 1)
-}
+// this is how we would use scalad for the user database, but we're actually using Neo4J
+//trait UserMongo extends UserFormats {
+//  this: Configured =>
+//  import org.cakesolutions.scalad.mongo.sprayjson._
+//
+//  protected implicit val UserProvider = new SprayMongoCollection[User](configured[DB], "users", "id":>1, "username":> 1)
+//}

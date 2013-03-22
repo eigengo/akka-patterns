@@ -75,6 +75,7 @@ object PatternsBuild extends Build {
   lazy val test = module("test") dependsOn (domain) settings (
     libraryDependencies += specs2 % "compile",
 	libraryDependencies += cassandra_unit,
+    libraryDependencies += neo4j,
 	libraryDependencies += akka_testkit % "compile"
   )
 

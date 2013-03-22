@@ -24,11 +24,10 @@ class ApplicationActor extends Actor with ActorLogging {
 
     case Start() =>
       val messageDelivery = context.actorOf(
-        Props[MessageDeliveryActor].withRouter(FromConfig()).withDispatcher("low-priority-dispatcher")
-        , "messageDelivery"
+        Props[MessageDeliveryActor].withRouter(FromConfig()).withDispatcher("low-priority-dispatcher"),
+        "messageDelivery"
       )
-      context.actorOf(Props(new CustomerActor(messageDelivery)).withRouter(FromConfig()), "customer")
-      context.actorOf(Props(new UserActor(messageDelivery)).withRouter(FromConfig()),     "user")
+      context.actorOf(Props(new UserActor(messageDelivery)).withRouter(FromConfig()), "user")
 
 
     case Stop() =>

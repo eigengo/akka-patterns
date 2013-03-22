@@ -8,7 +8,6 @@ trait CoreActorRefs {
   def system: ActorSystem
 
   def applicationActor = system.actorFor("/user/application")
-  def customerActor = system.actorFor("/user/application/customer")
   def userActor = system.actorFor("/user/application/user")
   def loginActor = system.actorFor("/user/application/authentication/login")
 

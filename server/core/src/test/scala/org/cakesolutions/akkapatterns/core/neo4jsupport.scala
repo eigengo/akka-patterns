@@ -3,11 +3,8 @@ package org.cakesolutions.akkapatterns.core
 import org.cakesolutions.akkapatterns.domain.{SuperuserKind, User, UserFormats}
 import java.util.UUID
 
-/**
- * Initial system sanity checks
- */
-trait SanityChecks extends TypedGraphDatabase with UserFormats with SprayJsonNodeMarshalling
-  with UserGraphDatabaseIndexes {
+// TODO https://github.com/janm399/akka-patterns/issues/35
+trait Neo4JFixtures extends TypedGraphDatabase with UserFormats with SprayJsonNodeMarshalling with UserGraphDatabaseIndexes {
 
   val RootUserPassword = "*******"
   val RootUser = User(UUID.fromString("a3372060-2b3b-11e2-81c1-0800200c9a66"), "root", "", "janm@cakesolutions.net", None, "Jan", "Machacek", SuperuserKind).resetPassword(RootUserPassword)
@@ -27,7 +24,7 @@ trait SanityChecks extends TypedGraphDatabase with UserFormats with SprayJsonNod
     }
   }
 
-  def ensureSanity: Boolean = synchronized {
+  def neo4jFixtures: Boolean = synchronized {
     ensureUserSanity
   }
 

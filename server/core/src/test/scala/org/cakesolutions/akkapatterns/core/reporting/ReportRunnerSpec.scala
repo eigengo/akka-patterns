@@ -2,13 +2,12 @@ package org.cakesolutions.akkapatterns.core.reporting
 
 import org.specs2.mutable.Specification
 import org.specs2.execute.Result
-import org.cakesolutions.akkapatterns.TestData
 import java.io.FileOutputStream
 
 /**
  * @author janmachacek
  */
-class ReportRunnerSpec extends Specification with TestData with ReportFormats {
+class ReportRunnerSpec extends Specification with ReportFormats {
 
   val runner = new ReportRunner with JRXmlReportCompiler with ClasspathResourceReportLoader
 

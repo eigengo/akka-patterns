@@ -1,65 +1,53 @@
 package org.cakesolutions.akkapatterns.core
 
-import akka.actor.{ActorRef, Actor}
 import org.cakesolutions.akkapatterns.domain._
+import org.cakesolutions.scalad.mongo.sprayjson._
 
 /**
- * Registers a customer and a user. After registering, we have a user account for the given customer.
+ * An alternative to using Actors (see UserActor) is to have traditional controllers.
  *
- * @param customer the customer
- * @param user the user
- */
-case class RegisterCustomer(customer: Customer, user: User)
-
-/**
- * Reply to successful customer registration
- * @param customer the newly registered customer
- * @param user the newly registered user
- */
-case class RegisteredCustomer(customer: Customer, user: User)
-
-/**
- * Reply to unsuccessful customer registration
- * @param code the error code for the failure reason
- */
-case class NotRegisteredCustomer(code: String) extends ApplicationFailure
-
-/**
- * Update the customer details
+ * The advantage is clear: much simpler code that remains typesafe vs akka.ask.
  *
- * @param userDetail the user making the call
- * @param customer the customer to be updated
+ * The disadvantage is that controllers cannot be distributed as easily as actors.
+ * However, it is possible to refactor the internals of a controller to use an
+ * Actor implementation if that is needed. And fire and forget tasks that are done as
+ * part of a controller are most certainly prime candidates as Actor actions.
  */
-case class UpdateCustomer(userDetail: UserDetailT[CustomerUserKind], customer: Customer)
+class CustomerController extends CustomerMongo with Configured {
 
-/**
- * CRUD operations for the [[org.cakesolutions.akkapatterns.domain.Customer]]s
- */
-trait CustomerOperations {
-  // def customers: MongoCollection
+  val mongo = new SprayMongo
 
-  def getCustomer(id: CustomerReference): Option[Customer] = None
-
-  def findAllCustomers(): List[Customer] = List()
-
-  def insertCustomer(customer: Customer): Customer = {
-    //customers += serialize(customer)
-    customer
+  /**
+   * Registers a customer and a user. After registering, we have a user account for the given customer.
+   *
+   * @param customer the customer
+   * @param user the user
+   */
+  def register(customer: Customer, user: User) {
+    mongo.create(customer)
+    ??? // still need to register the user in neo4j... I don't really get the whole user/customer distinction...
   }
 
-  def registerCustomer(customer: Customer)(ru: RegisteredUser): Either[ApplicationFailure, RegisteredCustomer] = {
-    //customers += serialize(customer)
-    Right(RegisteredCustomer(customer, ru.user))
+  // it is better to unwrap the Option here, as Option[T] endpoints are awful ... it
+  // is much better to catch NoElementExceptions in the FailureHandler and return an
+  // appropriately formatted status response.
+  def get(id: CustomerReference) = mongo.findOne[Customer]("id" :> id).get
+
+  /**
+   * @param userDetail the user making the call
+   * @param customer the customer to be updated
+   */
+  def update(userDetail: UserDetailT[CustomerUserKind], customer: Customer) = userDetail.kind match {
+    // this api design means that the admin user can't update customers... intentional?
+    case CustomerUserKind(`customer`.id) =>
+        mongo.findAndReplace("id" :> customer.id, customer)
+        customer
+
+    // this defensive coding may be unnecessary due to the way we are always called from the API
+    // to avoid this form of work duplication, ensure that your codebase has a clear and well documented
+    // policy for authentication and access checks. Indeed, the UserDetailT should not be passed around
+    // if authentication checks have already been performed.
+    case _ => throw new IllegalArgumentException(s"${userDetail.userReference} does not have access rights to any customers.")
   }
 
-}
-
-/**
- * Performs the customer operations
- */
-class CustomerActor(messageDelivery: ActorRef) extends Actor with CustomerOperations with UserOperations {
-
-  def receive = {
-    case _ => // TODO: complete me by moving me to Scalad
-  }
 }

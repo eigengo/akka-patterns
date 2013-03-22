@@ -42,7 +42,9 @@ case class DeliverActivationCode(address: DeliveryAddress, userReference: UserRe
  * ``IOBridge`` and other Spray components.
  */
 trait NexmoTextMessageDelivery {
-  this: HttpIO =>
+  this: HttpIO with Actor =>
+
+  import context.dispatcher
 
   /**
    * Returns the API key for Nexmo.

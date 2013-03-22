@@ -1,3 +1,5 @@
+// we're using Neo4J for the users. but if we wanted to use Mongo instead, this is some useful test data
+
 db.users.drop();
 db.users.save([
 {
