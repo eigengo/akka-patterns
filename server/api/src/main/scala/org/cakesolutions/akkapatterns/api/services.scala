@@ -31,7 +31,8 @@ trait FailureHandling {
         error = NotFound)
 
     case t: Throwable => ctx =>
-      loggedFailureResponse(ctx, t, t.toString)
+      // note that toString here may expose information and cause a security leak, so don't do it.
+      loggedFailureResponse(ctx, t)
   }
 
   private def loggedFailureResponse(ctx: RequestContext,

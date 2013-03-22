@@ -9,7 +9,7 @@ import scala.concurrent.Future
 trait CustomerService extends HttpService {
   this: EndpointMarshalling with AuthenticationDirectives =>
 
-  private val customerController = new CustomerController
+  protected val customerController = new CustomerController
 
   val customerRoute =
     path("customers" / JavaUUID) { id =>
@@ -22,10 +22,10 @@ trait CustomerService extends HttpService {
           }
         }
       } ~
-      post {
-        authenticate(validCustomer) { ud =>
-          // if we authenticated only validUser or validSuperuser
+      authenticate(validCustomer) { ud =>
+        post {
           handleWith { customer: Customer =>
+          // if we authenticated only validUser or validSuperuser
             Future[Customer] {
               customerController.update(ud, customer)
             }

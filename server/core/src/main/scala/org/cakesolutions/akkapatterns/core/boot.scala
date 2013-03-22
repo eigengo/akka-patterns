@@ -9,7 +9,7 @@ import org.cakesolutions.akkapatterns.core.ApplicationActor.Start
 
 trait ServerCore {
   implicit def actorSystem: ActorSystem
-  implicit val timeout = Timeout(30000)
+  implicit val timeout: Timeout
 
   val application = actorSystem.actorOf(
     props = Props[ApplicationActor],
