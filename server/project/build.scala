@@ -102,7 +102,7 @@ object PatternsBuild extends Build {
 	) settings (
 	  SbtStartScript.startScriptForClassesSettings: _*
   	) settings (
-	  mainClass in (Compile, run) := Some("org.cakesolutions.patterns.main.Main")
+	  mainClass in (Compile, run) := Some("org.cakesolutions.akkapatterns.main.Main")
 	) aggregate (
       domain, test, core, api, main
     ) dependsOn (main) // yuck
