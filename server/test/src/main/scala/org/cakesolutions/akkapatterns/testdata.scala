@@ -24,10 +24,14 @@ import java.util.UUID
 /**
  * Fixture that evaluates named files (in Mongo Javascript format) from the classpath.
  *
+ * @param clean if true, will drop the database before running the fixture
  * @param names
  */
-class MongoCollectionFixture(names: String*) extends Configured with Resources with JavaLogging with Before {
+class MongoCollectionFixture(clean: Boolean = true, names: String*) extends Configured with Resources with JavaLogging with Before {
   override def before() {
+    if (clean)
+      configured[DB].dropDatabase()
+
     val header = readResource(s"classpath:/org/cakesolutions/akkapatterns/testdata/common.js").mkString
     names.foreach {
       name =>
