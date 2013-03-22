@@ -56,8 +56,6 @@ trait NexmoTextMessageDelivery {
    */
   def apiSecret: String
 
-  import scala.concurrent.ExecutionContext.Implicits.global
-
   // TODO https://github.com/janm399/akka-patterns/issues/30
   private def pipeline(request: HttpRequest): Future[HttpResponse] = ??? //sendReceive(httpClient) // makeConduit("rest.nexmo.com"))
 
