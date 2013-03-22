@@ -7,33 +7,39 @@ import com.github.sstone.amqp.ConnectionOwner
 import com.github.sstone.amqp.Amqp.ExchangeParameters
 import com.rabbitmq.client.ConnectionFactory
 import spray.can.client.HttpClient
+import akka.actor._
+import spray.client.HttpConduit
+import spray.can.client.DefaultHttpClient
+import akka.spray.ExtensionActorRef
 
-/**
- * Instantiates & provides access to Spray's ``IOBridge``.
- *
- * @author janmachacek
- */
-trait HttpIO {
-  implicit def actorSystem: ActorSystem
-  
-  lazy val ioBridge = IOExtension(actorSystem).ioBridge() // new IOBridge(actorSystem).start()
+abstract class SendReceive(server: String, port: Int = 443, sslEnabled: Boolean = true) extends ExtensionId[ExtensionActorRef] {
 
-  lazy val httpClient = actorSystem.actorOf(
-  // TODO https://github.com/janm399/akka-patterns/issues/30
-    ???
-//    Props(new HttpClient(ConfigFactory.parseString("spray.can.client.ssl-encryption = on")))
-  )
+  def createExtension(system: ExtendedActorSystem) = {
+    val client = DefaultHttpClient(system)
+    val conduitName = "http-conduit-" + port + "-" +
+      (if (sslEnabled) "ssl" else "plain") +
+      "-" + server
+    val conduit = system.actorOf(
+      props = Props(
+        new HttpConduit(client, server, port = port, sslEnabled = sslEnabled)
+      ),
+      name = conduitName
+    )
+    new ExtensionActorRef(conduit)
+  }
+
+  def sendReceive(system: ActorSystem) = HttpConduit.sendReceive(get(system))
 
 }
 
-/**
- * Convenience ``HttpIO`` implementation that can be mixed in to actors.
- */
-trait ActorHttpIO extends HttpIO {
-  this: Actor =>
+object Foursquare extends SendReceive("api.foursquare.com")
+object ITunes extends SendReceive("buy.itunes.apple.com")
+object ITunesSandbox extends SendReceive("sandbox.itunes.apple.com")
+object Facebook extends SendReceive("graph.facebook.com")
+object Twitter extends SendReceive("api.twitter.com")
+object Nexmo extends SendReceive("rest.nexmo.com")
 
-  final implicit def actorSystem = context.system
-}
+
 
 /**
  * Provides connection & access to the AMQP broker

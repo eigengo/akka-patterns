@@ -5,7 +5,7 @@ import com.typesafe.config.Config
 import org.cakesolutions.akkapatterns.domain._
 import java.util.Properties
 import akka.actor.Actor
-import org.cakesolutions.akkapatterns.{ActorHttpIO, HttpIO}
+import org.cakesolutions.akkapatterns.Nexmo
 import javax.mail.internet.{MimeMessage, InternetAddress}
 import javax.mail._
 import scala.Some
@@ -42,7 +42,7 @@ case class DeliverActivationCode(address: DeliveryAddress, userReference: UserRe
  * ``IOBridge`` and other Spray components.
  */
 trait NexmoTextMessageDelivery {
-  this: HttpIO with Actor =>
+  this: Actor =>
 
   import context.dispatcher
 
@@ -58,9 +58,6 @@ trait NexmoTextMessageDelivery {
    */
   def apiSecret: String
 
-  // TODO https://github.com/janm399/akka-patterns/issues/30
-  private def pipeline(request: HttpRequest): Future[HttpResponse] = ??? //sendReceive(httpClient) // makeConduit("rest.nexmo.com"))
-
   /**
    * Delivers the text message ``secret`` to the phone number ``mobileNumber``. The ``mobileNumber`` needs to be in
    * full international format, without spaces, but without the leading "+", for example ``4477712345678`` for
@@ -73,7 +70,7 @@ trait NexmoTextMessageDelivery {
     // http://rest.nexmo.com/sms/json?api_key=3e08b948&api_secret=584f23de&from=Cake&to=*********&text=Hello
     val url = "/sms/json?api_key=%s&api_secret=%s&from=Zoetic&to=%s&text=%s" format (apiKey, apiSecret, mobileNumber, secret)
     val request = HttpRequest(spray.http.HttpMethods.POST, url)
-    pipeline(request) onSuccess  {
+    Nexmo.sendReceive(context.system)(request) onSuccess  {
       case response =>
       // Sort out the response. Maybe bang to health agent if we're out of credits or some such
     }
@@ -168,7 +165,7 @@ trait SimpleEmailMessageDelivery {
 /**
  * Delivers the secret to the address
  */
-class MessageDeliveryActor extends Actor with ActorHttpIO with NexmoTextMessageDelivery with SimpleEmailMessageDelivery
+class MessageDeliveryActor extends Actor with NexmoTextMessageDelivery with SimpleEmailMessageDelivery
   with ConfigEmailConfiguration {
 
   def config = context.system.settings.config
