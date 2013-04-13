@@ -45,3 +45,5 @@ provisioning/*/*.known
 /sbt/akka-patterns-store/
 /daemon/src/build/
 *.lock
+log/
+tmp/
