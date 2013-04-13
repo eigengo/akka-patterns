@@ -47,3 +47,4 @@ provisioning/*/*.known
 *.lock
 log/
 tmp/
+build/
