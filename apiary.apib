@@ -1,0 +1,55 @@
+HOST: http://akkapatterns.eigengo.com/
+
+--- Akka Patterns ---
+---
+The Akka Patterns API
+---
+
+--
+Recognition resources
+Akka Patterns can perform computer vision operation to recognise images being presented to it using this API. There is the future streaming API, which
+will handle video streams. 
+The processing begins by POST to ``/recog/image/begin``, which obtains a session identifier. You then submit individual images to the ``/recog/image/{id}`` 
+endpoint and receive either HTTP statuses:
+* ``200`` if the recognition has complete; there are no more images to send,
+* ``202`` if the image is OK, but there are more images to send,
+* ``400`` if the submitted image has not passed its checks
+--
+Begins the recognition session, returns the session identifier. The session expires in 300 seconds.
+POST /recog/image/begin
+> Accept: application/json
+< 200
+< Content-Type: application/json
+"a00ad7ef-99a3-4a6f-a2fb-571f4ce96978"
+
+Submit the last accepted image to the recogniser core
+POST /recog/image/{id}
+> Accept: application/base64
+"AAASBF="
+< 200
+< Content-Type: application/json
+{ "token": "de0ad7ef-99a3-4a6f-a2fb-571f4ce96978" }
+
+Submit an intermediate accepted image to the recogniser core
+POST /recog/image/{id}
+> Accept: application/base64
+"AAASBF="
+< 202
+< Content-Type: application/json
+{ 
+    "histogram":{"tooLight":false, "tooDark":false, "tooSaturated":false, "tooUnsaturated":false},
+    "focus":{"notInFocus":false},
+    "recog":{"notRecognised":false}  
+}
+
+Submit an unacceptable image to the recogniser core
+POST /recog/image/{id}
+> Accept: application/base64
+"AAASBF="
+< 400
+< Content-Type: application/json
+{ 
+    "histogram":{"tooLight":false, "tooDark":true, "tooSaturated":false, "tooUnsaturated":false},
+    "focus":{"notInFocus":true},
+    "recog":{"notRecognised":false}  
+}
