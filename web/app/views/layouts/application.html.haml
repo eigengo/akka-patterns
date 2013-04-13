@@ -1,0 +1,46 @@
+!!!doctype html
+%html
+  %head
+    <meta charset="utf-8">
+    %meta{name: 'viewport', content:'width=device-width, initial-scale=1.0'}
+    %title
+      = content_for?(:title) ? yield(:title) : 'Eigengo Akka Patterns'
+    %meta{name:'description', content:""}
+    %meta{name:'author', content:""}
+    = stylesheet_link_tag    'application', media:'all'
+    = javascript_include_tag 'application'
+    = javascript_include_tag 'scriptcam'
+    = javascript_include_tag 'scan'
+    = javascript_include_tag 'qrcode'
+    = csrf_meta_tags
+    = yield(:head)
+  %body
+    %header.navbar.navbar-fixed-top
+      %nav.navbar-inner
+        %div.container
+          %div#navigation.clearfix
+            = render 'layouts/navigation/default'
+    %div{id:'main', role:'main', class:"#{controller.controller_name}"}
+      %div.container
+        %div.content
+          %div.row
+            %div.span12
+              %div#flash-messages
+                = render 'layouts/messages'
+              = yield
+              %hr
+          %footer
+            %div.container
+              %p.pull-left
+                © Eigengo 2013 and beyond
+              %p.pull-right
+                %a
+                  Privacy Policy
+
+    %div#modal.modal.fade.hide
+      %div.modal-header
+        %a{href:'#', 'data-dismiss'=>'modal', class:'close'}
+          ×
+        %h3
+          Eigengo
+      %div.modal-body

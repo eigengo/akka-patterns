@@ -1,0 +1,106 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the top of the
+ * compiled file, but it's generally better to create a new file per style scope.
+ *
+ *= require_self
+ *= require_tree .
+ */
+
+#image_container,
+#camera_container {
+  float: left;
+  width: 650px;
+  min-width: 650px;
+  min-height: 200px;
+}
+#image_container {
+  display: none;
+}
+#feedback_container {
+  wdith: 800px;
+  float: left;
+}
+
+#feeedback {
+  float: left;
+  width: 80pt;
+}
+
+#feedback p {
+  padding: 0;
+  margin: 0;
+}
+
+p.fail {
+  color: red;
+  font-weight: bold;
+}
+
+p.ok {
+  color: green;
+  font-weight: bold;
+}
+
+p.checking {
+  color: inherit;
+  font-weight: normal;
+}
+
+p.not_checked {
+  color: gray;
+  font-weight: normal;
+}
+
+#image {
+  float: left;
+}
+
+#verification_result {
+  display: none;
+}
+
+#barcode_zone,
+#drop_zone {
+  width: 100%;
+  height: 185px;
+  vertical-align: middle;
+  border: 2px dashed #bbb;
+  line-height: 185px;
+  padding: 10pt;
+  border-radius: 5px;
+  text-align: center;
+  -webkit-border-radius: 5px;
+  font-size: 18pt;
+  font-weight: bold;
+  color: #bbb;
+}
+
+#barcode_zone {
+  height: 270px;
+}
+
+table.qr {
+  float: left;
+  border-width: 0;
+  border-style: none;
+  border-color: #0000ff;
+  border-collapse: collapse;
+}
+table.qr td {
+  border-width: 0;
+  border-style: none;
+  border-color: #0000ff;
+  border-collapse: collapse;
+  padding: 0;
+  margin: 0;
+  width: 5px;
+  height: 5px;
+}
+table.qr td.b { background-color: #000; }
+table.qr td.w { background-color: #fff; }

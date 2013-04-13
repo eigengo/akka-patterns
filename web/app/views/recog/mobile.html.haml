@@ -1,0 +1,16 @@
+%h1 Mobile recogniser
+%p To successfully log-in, use your mobile and show it a circle, rectangle and then your face
+%div
+  %div#barcode_zone
+    %table#qr.qr
+    =raw "Run the mobile app, scan the barcode and scan the required images"
+%div#image_container
+  %img#image.thumb
+%div.clearfix
+:javascript
+  $('#qr').qrcode({
+    render: "table",
+    width:  270,
+    height: 250,
+    text: "#{@qr_code}"
+  });
