@@ -2,7 +2,9 @@
 
 This repository contains code that demonstrates large-scale Akka applications. My aim is to share my experience & the pains so that you don't have to re-invent the wheel yourself.
 
-Follow me on Twitter [@honzam399](https://twitter.com/#/honzam399); submit your requests for the next topic to cover by adding an issue [Issues](https://github.com/janm399/akka-patterns/issues).
+Check out the API in the application at [Akka Patterns API](http://docs.akkapatterns.apiary.io/).
+
+Follow me on Twitter [@honzam399](https://twitter.com/#/honzam399); submit your requests for the next topic to cover by adding an issue [Issues](https://github.com/eigengo/akka-patterns/issues).
 
 The topics I shall cover include:
 
