@@ -1,8 +1,8 @@
-package org.cakesolutions.akkapatterns.core
+package org.eigengo.akkapatterns.core
 
-import org.cakesolutions.akkapatterns.{TestCustomerData, NoActorSpecs, CleanMongo, ActorSpecs}
-import org.cakesolutions.akkapatterns.domain.{CustomerUserKind, UserDetailT, CustomerMongo}
-import org.cakesolutions.akkapatterns.MongoCollectionFixture.Fix
+import org.eigengo.akkapatterns.{TestCustomerData, NoActorSpecs, CleanMongo, ActorSpecs}
+import org.eigengo.akkapatterns.domain.{CustomerUserKind, UserDetailT, CustomerMongo}
+import org.eigengo.akkapatterns.MongoCollectionFixture.Fix
 import java.util.UUID
 
 

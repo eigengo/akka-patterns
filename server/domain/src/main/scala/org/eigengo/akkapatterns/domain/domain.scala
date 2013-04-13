@@ -1,4 +1,4 @@
-package org.cakesolutions.akkapatterns
+package org.eigengo.akkapatterns
 
 import java.util.UUID
 

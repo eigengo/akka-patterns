@@ -1,11 +1,11 @@
-package org.cakesolutions.akkapatterns.api
+package org.eigengo.akkapatterns.api
 
 import akka.actor.Actor
 import spray._
 import routing._
-import org.cakesolutions.akkapatterns.core.CoreActorRefs
+import org.eigengo.akkapatterns.core.CoreActorRefs
 import akka.util.Timeout
-import org.cakesolutions.akkapatterns.domain.Configured
+import org.eigengo.akkapatterns.domain.Configured
 
 class Api extends Actor with HttpServiceActor
   with CoreActorRefs

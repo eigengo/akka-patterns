@@ -1,12 +1,12 @@
-package org.cakesolutions.akkapatterns.api
+package org.eigengo.akkapatterns.api
 
 import spray.routing.{HttpService, RequestContext, AuthenticationFailedRejection, AuthenticationRequiredRejection}
 import concurrent.Future
 import spray.routing.authentication.Authentication
 import java.util.UUID
 import akka.actor.ActorRef
-import org.cakesolutions.akkapatterns.domain._
-import org.cakesolutions.akkapatterns.core.authentication.TokenCheck
+import org.eigengo.akkapatterns.domain._
+import org.eigengo.akkapatterns.core.authentication.TokenCheck
 import akka.util.Timeout
 import spray.http.HttpRequest
 

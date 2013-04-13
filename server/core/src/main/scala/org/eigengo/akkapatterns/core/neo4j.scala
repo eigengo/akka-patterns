@@ -1,4 +1,4 @@
-package org.cakesolutions.akkapatterns.core
+package org.eigengo.akkapatterns.core
 
 import org.neo4j.graphdb.factory.GraphDatabaseFactory
 import org.neo4j.graphdb.{ GraphDatabaseService, Node }
@@ -7,7 +7,7 @@ import org.neo4j.graphdb.RelationshipType
 import org.neo4j.graphdb.Relationship
 import org.neo4j.graphdb.index.{IndexHits, Index}
 import spray.json.{JsonParser, JsonFormat}
-import org.cakesolutions.akkapatterns.domain.ApplicationFailure
+import org.eigengo.akkapatterns.domain.ApplicationFailure
 
 case class Neo4jOperationFailure(cause: String) extends ApplicationFailure
 
@@ -250,7 +250,7 @@ trait SprayJsonNodeMarshalling {
 
   /**
    * Uses `spray-json` to serialise instances into JSON strings and set in Neo4j. Its dual is
-   * [[org.cakesolutions.akkapatterns.core.SprayJsonNodeMarshalling.SprayJsonStringNodeUnmarshaller]]
+   * [[org.eigengo.akkapatterns.core.SprayJsonNodeMarshalling.SprayJsonStringNodeUnmarshaller]]
    */
   class SprayJsonStringNodeMarshaller[A : JsonFormat] extends NodeMarshaller[A] {
 
@@ -265,7 +265,7 @@ trait SprayJsonNodeMarshalling {
 
   /**
    * Uses `spray-json` to deserialise JSON strings in Neo4j. It is the dual of
-   * [[org.cakesolutions.akkapatterns.core.SprayJsonNodeMarshalling.SprayJsonStringNodeMarshaller]]
+   * [[org.eigengo.akkapatterns.core.SprayJsonNodeMarshalling.SprayJsonStringNodeMarshaller]]
    */
   class SprayJsonStringNodeUnmarshaller[A : JsonFormat] extends NodeUnmarshaller[A] {
 

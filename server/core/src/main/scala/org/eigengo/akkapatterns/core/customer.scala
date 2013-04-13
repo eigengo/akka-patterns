@@ -1,7 +1,7 @@
-package org.cakesolutions.akkapatterns.core
+package org.eigengo.akkapatterns.core
 
-import org.cakesolutions.akkapatterns.domain._
-import org.cakesolutions.scalad.mongo.sprayjson._
+import org.eigengo.akkapatterns.domain._
+import org.eigengo.scalad.mongo.sprayjson._
 
 /**
  * An alternative to using Actors (see UserActor) is to have traditional controllers.

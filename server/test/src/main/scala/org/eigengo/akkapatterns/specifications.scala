@@ -1,4 +1,4 @@
-package org.cakesolutions.akkapatterns
+package org.eigengo.akkapatterns
 
 import domain._
 import org.cassandraunit.DataLoader
@@ -13,7 +13,7 @@ import org.specs2.control.StackTraceFilter
 import akka.testkit.TestKit
 import akka.actor.ActorSystem
 import akka.util.Timeout
-import org.cakesolutions.scalad.mongo.sprayjson.SprayMongo
+import org.eigengo.scalad.mongo.sprayjson.SprayMongo
 
 
 /** Convenient parent for all Specs, ensuring that exceptions are (mostly) correctly
@@ -89,7 +89,7 @@ trait TestCassandra extends SpecificationStructure with Configuration with Confi
 
   def resetCassandra() {
     log.info("resetting cassandra")
-    val cassandraBase = new ClassPathYamlDataSet("org/cakesolutions/akkapatterns/test/cassandra-base.yaml")
+    val cassandraBase = new ClassPathYamlDataSet("org/eigengo/akkapatterns/test/cassandra-base.yaml")
     val cluster = configured[Cluster]
     val name = cluster.describeClusterName()
     val host = cluster.getKnownPoolHosts(false).head.getHost

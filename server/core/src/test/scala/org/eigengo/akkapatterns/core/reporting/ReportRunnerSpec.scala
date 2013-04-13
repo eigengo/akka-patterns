@@ -1,4 +1,4 @@
-package org.cakesolutions.akkapatterns.core.reporting
+package org.eigengo.akkapatterns.core.reporting
 
 import org.specs2.mutable.Specification
 import org.specs2.execute.Result

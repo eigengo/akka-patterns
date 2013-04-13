@@ -1,4 +1,4 @@
-package org.cakesolutions.akkapatterns.core
+package org.eigengo.akkapatterns.core
 
 import scalaz.EitherT
 import scalaz.Id._

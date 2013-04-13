@@ -1,11 +1,11 @@
-package org.cakesolutions.akkapatterns.core
+package org.eigengo.akkapatterns.core
 
 import spray.http.{HttpResponse, HttpRequest}
 import com.typesafe.config.Config
-import org.cakesolutions.akkapatterns.domain._
+import org.eigengo.akkapatterns.domain._
 import java.util.Properties
 import akka.actor.Actor
-import org.cakesolutions.akkapatterns.Nexmo
+import org.eigengo.akkapatterns.Nexmo
 import javax.mail.internet.{MimeMessage, InternetAddress}
 import javax.mail._
 import scala.Some
@@ -110,7 +110,7 @@ trait ConfigEmailConfiguration extends EmailConfiguration {
 
   def getMailSession = {
     val props = getMailProperties
-    val username = config.getString("server.email.username") // "auto@cakesolutions.net"
+    val username = config.getString("server.email.username") // "auto@eigengo.net"
     val password = config.getString("server.email.password") //"dFvJGY86"
 
     Session.getInstance(props, new Authenticator {

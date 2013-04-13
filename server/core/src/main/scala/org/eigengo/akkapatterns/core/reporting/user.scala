@@ -1,4 +1,4 @@
-package org.cakesolutions.akkapatterns.core.reporting
+package org.eigengo.akkapatterns.core.reporting
 
 import akka.actor.Actor
 

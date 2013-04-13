@@ -1,4 +1,4 @@
-package org.cakesolutions.akkapatterns.api
+package org.eigengo.akkapatterns.api
 
 import java.util.UUID
 import spray.testkit.Specs2RouteTest
@@ -12,8 +12,8 @@ import org.specs2.mutable.Specification
 import akka.contrib.jul.JavaLogging
 import spray.routing.{HttpService, Rejection}
 import scala.reflect.ClassTag
-import org.cakesolutions.akkapatterns.{NoActorSpecs, CleanMongo, ActorSpecs}
-import org.cakesolutions.akkapatterns.core.{ServerCore, CoreActorRefs}
+import org.eigengo.akkapatterns.{NoActorSpecs, CleanMongo, ActorSpecs}
+import org.eigengo.akkapatterns.core.{ServerCore, CoreActorRefs}
 import akka.actor.ActorSystem
 import scala.concurrent.duration.Duration
 import java.util.concurrent.TimeUnit
@@ -22,12 +22,12 @@ import akka.testkit.TestKit
 import org.specs2.specification.{Step, Fragments}
 import spray.util.LoggingContext
 import spray.http.StatusCodes._
-import org.cakesolutions.akkapatterns.domain.Configured
+import org.eigengo.akkapatterns.domain.Configured
 
 case class Token(token: UUID)
 
 /** Provides default and easy authentication in testkit specs
-  * on endpoints that use [[org.cakesolutions.akkapatterns.api.AuthenticationDirectives]]
+  * on endpoints that use [[org.eigengo.akkapatterns.api.AuthenticationDirectives]]
   * for authentication.
   *
   * implicit AuthenticationToken doesn't work because of clashes with Spray :-(

@@ -1,7 +1,7 @@
-package org.cakesolutions.akkapatterns.domain
+package org.eigengo.akkapatterns.domain
 
 import spray.json.DefaultJsonProtocol
-import org.cakesolutions.scalad.mongo.sprayjson.{SprayMongoCollection, UuidMarshalling}
+import org.eigengo.scalad.mongo.sprayjson.{SprayMongoCollection, UuidMarshalling}
 import com.mongodb.DB
 
 case class Customer(id: CustomerReference,
@@ -19,7 +19,7 @@ trait CustomerFormats extends DefaultJsonProtocol with UuidMarshalling {
 
 trait CustomerMongo extends CustomerFormats {
   this: Configured =>
-  import org.cakesolutions.scalad.mongo.sprayjson._
+  import org.eigengo.scalad.mongo.sprayjson._
 
   protected implicit val CustomerProvider = new SprayMongoCollection[Customer](configured[DB], "customers", "id":>1)
 }

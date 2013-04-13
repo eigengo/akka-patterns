@@ -1,4 +1,4 @@
-package org.cakesolutions.akkapatterns
+package org.eigengo.akkapatterns
 
 import akka.actor.{Props, Actor, ActorSystem}
 import spray.io.IOExtension

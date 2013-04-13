@@ -1,14 +1,14 @@
-package org.cakesolutions.akkapatterns.core.authentication
+package org.eigengo.akkapatterns.core.authentication
 
 import akka.actor.{ ActorRef, Actor }
 import java.util.{ Date, UUID }
 import collection.mutable.ArrayBuffer
 import scalaz.effect.IO
-import org.cakesolutions.akkapatterns.core._
-import org.cakesolutions.akkapatterns.core.DeliveryAddress
+import org.eigengo.akkapatterns.core._
+import org.eigengo.akkapatterns.core.DeliveryAddress
 import scala.Some
-import org.cakesolutions.akkapatterns.domain.{UserFormats, UserDetailT, User}
-import org.cakesolutions.akkapatterns.core.DeliverSecret
+import org.eigengo.akkapatterns.domain.{UserFormats, UserDetailT, User}
+import org.eigengo.akkapatterns.core.DeliverSecret
 import org.neo4j.graphdb.GraphDatabaseService
 
 /**
@@ -72,7 +72,7 @@ private[authentication] trait TokenOperations {
   }
 
   /**
-   * Finds existing [[org.cakesolutions.akkapatterns.core.authentication.AuthenticationToken]]
+   * Finds existing [[org.eigengo.akkapatterns.core.authentication.AuthenticationToken]]
    * whose ``token`` field matches the parameter
    * @param token the token to find
    * @return Some(AuthencationToken) whose token matches the parameter
@@ -80,7 +80,7 @@ private[authentication] trait TokenOperations {
   def find(token: UUID): Option[AuthenticationToken] = tokens.find(_.token == token)
 
   /**
-   * Remove the [[org.cakesolutions.akkapatterns.core.authentication.AuthenticationToken]] whose ``token`` field matches
+   * Remove the [[org.eigengo.akkapatterns.core.authentication.AuthenticationToken]] whose ``token`` field matches
    * the parameter
    *
    * @param token the token to remove

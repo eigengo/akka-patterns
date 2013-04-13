@@ -1,4 +1,4 @@
-package org.cakesolutions.akkapatterns.main
+package org.eigengo.akkapatterns.main
 
 import akka.actor.{Props, ActorSystem}
 import akka.util.Timeout

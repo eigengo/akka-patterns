@@ -1,12 +1,12 @@
-package org.cakesolutions.akkapatterns.api
+package org.eigengo.akkapatterns.api
 
-import org.cakesolutions.akkapatterns.domain._
-import org.cakesolutions.akkapatterns.core._
+import org.eigengo.akkapatterns.domain._
+import org.eigengo.akkapatterns.core._
 import spray.json.DefaultJsonProtocol
 import spray.httpx.SprayJsonSupport
 import spray.httpx.marshalling.{CollectingMarshallingContext, MetaMarshallers, Marshaller}
 import spray.http.{HttpEntity, StatusCode}
-import org.cakesolutions.scalad.mongo.sprayjson.{DateMarshalling, UuidMarshalling}
+import org.eigengo.scalad.mongo.sprayjson.{DateMarshalling, UuidMarshalling}
 
 // Pure boilerplate - please create a code generator (I'll be your *best* friend!)
 trait ApiMarshalling extends DefaultJsonProtocol

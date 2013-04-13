@@ -1,7 +1,7 @@
-package org.cakesolutions.akkapatterns.api
+package org.eigengo.akkapatterns.api
 
 import java.net.InetAddress
-import org.cakesolutions.akkapatterns.core.{GetImplementation, Implementation}
+import org.eigengo.akkapatterns.core.{GetImplementation, Implementation}
 import java.util.Date
 import spray.routing.HttpService
 import akka.util.Timeout

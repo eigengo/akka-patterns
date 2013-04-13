@@ -1,4 +1,4 @@
-package org.cakesolutions.akkapatterns.core.reporting
+package org.eigengo.akkapatterns.core.reporting
 
 import net.sf.jasperreports.engine._
 import design.JasperDesign

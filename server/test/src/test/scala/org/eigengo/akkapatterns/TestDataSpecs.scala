@@ -1,10 +1,10 @@
-package org.cakesolutions.akkapatterns
+package org.eigengo.akkapatterns
 
-import org.cakesolutions.akkapatterns.domain._
+import org.eigengo.akkapatterns.domain._
 import com.mongodb.DB
-import org.cakesolutions.scalad.mongo.sprayjson._
+import org.eigengo.scalad.mongo.sprayjson._
 import java.util.UUID
-import org.cakesolutions.akkapatterns.MongoCollectionFixture._
+import org.eigengo.akkapatterns.MongoCollectionFixture._
 
 class TestDataSpecs extends NoActorSpecs with CleanMongo with CustomerMongo with TestCustomerData {
 

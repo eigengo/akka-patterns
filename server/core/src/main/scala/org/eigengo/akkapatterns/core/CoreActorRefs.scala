@@ -1,4 +1,4 @@
-package org.cakesolutions.akkapatterns.core
+package org.eigengo.akkapatterns.core
 
 import akka.actor.ActorSystem
 

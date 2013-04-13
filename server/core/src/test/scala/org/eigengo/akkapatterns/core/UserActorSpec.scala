@@ -1,9 +1,9 @@
-package org.cakesolutions.akkapatterns.core
+package org.eigengo.akkapatterns.core
 
 import akka.testkit.TestActorRef
-import org.cakesolutions.akkapatterns.{MongoCollectionFixture, TestMongo, ActorSpecs}
-import org.cakesolutions.akkapatterns.domain.{SuperuserKind, User}
-import org.cakesolutions.akkapatterns.MongoCollectionFixture.Fix
+import org.eigengo.akkapatterns.{MongoCollectionFixture, TestMongo, ActorSpecs}
+import org.eigengo.akkapatterns.domain.{SuperuserKind, User}
+import org.eigengo.akkapatterns.MongoCollectionFixture.Fix
 
 class UserActorSpec extends ActorSpecs with Neo4JFixtures {
 

@@ -1,6 +1,6 @@
-package org.cakesolutions.akkapatterns.core.authentication
+package org.eigengo.akkapatterns.core.authentication
 
-import org.cakesolutions.akkapatterns.domain._
+import org.eigengo.akkapatterns.domain._
 import java.util.UUID
 import akka.actor.{ActorRef, Props, Actor}
 

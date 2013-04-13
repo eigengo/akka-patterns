@@ -1,4 +1,4 @@
-package org.cakesolutions.akkapatterns.domain
+package org.eigengo.akkapatterns.domain
 
 import collection.mutable
 import reflect.{ClassTag, classTag}

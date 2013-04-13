@@ -1,7 +1,7 @@
-package org.cakesolutions.akkapatterns.core
+package org.eigengo.akkapatterns.core
 
 import akka.actor.{ActorRef, Actor}
-import org.cakesolutions.akkapatterns.domain
+import org.eigengo.akkapatterns.domain
 import domain.{UserFormats, ApplicationFailure, User}
 import org.neo4j.graphdb.GraphDatabaseService
 

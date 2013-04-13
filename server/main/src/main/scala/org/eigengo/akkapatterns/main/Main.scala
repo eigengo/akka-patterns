@@ -1,10 +1,10 @@
-package org.cakesolutions.akkapatterns.main
+package org.eigengo.akkapatterns.main
 
 import akka.actor.ActorSystem
-import org.cakesolutions.akkapatterns.domain.{Settings, NoSqlConfig, Configuration}
-import org.cakesolutions.akkapatterns.core.ServerCore
-import org.cakesolutions.akkapatterns.web.Web
-import org.cakesolutions.akkapatterns.api.Api
+import org.eigengo.akkapatterns.domain.{Settings, NoSqlConfig, Configuration}
+import org.eigengo.akkapatterns.core.ServerCore
+import org.eigengo.akkapatterns.web.Web
+import org.eigengo.akkapatterns.api.Api
 import akka.util.Timeout
 
 object Main {

@@ -1,4 +1,4 @@
-package org.cakesolutions.akkapatterns
+package org.eigengo.akkapatterns
 
 import domain._
 import org.specs2.mutable.Before
@@ -37,12 +37,12 @@ class MongoCollectionFixture(clean: Boolean, names: String*) extends Configured 
     if (clean)
       configured[DB].dropDatabase()
 
-    val header = readResource(s"classpath:/org/cakesolutions/akkapatterns/testdata/common.js").mkString
+    val header = readResource(s"classpath:/org/eigengo/akkapatterns/testdata/common.js").mkString
     names.foreach {
       name =>
         configured[DB].eval(
           header +
-          readResource(s"classpath:/org/cakesolutions/akkapatterns/testdata/${name}.js").mkString
+          readResource(s"classpath:/org/eigengo/akkapatterns/testdata/${name}.js").mkString
         )
     }
   }

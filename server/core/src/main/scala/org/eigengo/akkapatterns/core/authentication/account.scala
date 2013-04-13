@@ -1,7 +1,7 @@
-package org.cakesolutions.akkapatterns.core.authentication
+package org.eigengo.akkapatterns.core.authentication
 
 import akka.actor.Actor
-import org.cakesolutions.akkapatterns.domain._
+import org.eigengo.akkapatterns.domain._
 
 
 /**

@@ -1,4 +1,4 @@
-package org.cakesolutions.akkapatterns.domain
+package org.eigengo.akkapatterns.domain
 
 import _root_.me.prettyprint.hector.api.{HConsistencyLevel, ConsistencyLevelPolicy}
 import com.mongodb.MongoOptions

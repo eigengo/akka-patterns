@@ -1,8 +1,8 @@
-package org.cakesolutions.akkapatterns.api
+package org.eigengo.akkapatterns.api
 
 import spray.routing.HttpService
-import org.cakesolutions.akkapatterns.domain.Customer
-import org.cakesolutions.akkapatterns.core.CustomerController
+import org.eigengo.akkapatterns.domain.Customer
+import org.eigengo.akkapatterns.core.CustomerController
 import akka.util.Timeout
 import scala.concurrent.Future
 import java.util.Date

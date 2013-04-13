@@ -1,10 +1,10 @@
-package org.cakesolutions.akkapatterns.api
+package org.eigengo.akkapatterns.api
 
-import org.cakesolutions.akkapatterns.domain.User
+import org.eigengo.akkapatterns.domain.User
 import akka.util.Timeout
 import spray.routing.HttpService
 import akka.actor.ActorRef
-import org.cakesolutions.akkapatterns.core.{NotRegisteredUser, RegisteredUser}
+import org.eigengo.akkapatterns.core.{NotRegisteredUser, RegisteredUser}
 
 
 trait UserService extends HttpService {

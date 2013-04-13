@@ -1,4 +1,4 @@
-package org.cakesolutions.akkapatterns.api
+package org.eigengo.akkapatterns.api
 
 import spray.http.StatusCodes._
 import spray.http._

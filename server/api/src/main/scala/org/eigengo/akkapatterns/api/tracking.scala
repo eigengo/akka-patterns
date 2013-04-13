@@ -1,9 +1,9 @@
-package org.cakesolutions.akkapatterns.api
+package org.eigengo.akkapatterns.api
 
 import java.util.{UUID, Date}
 import spray.json.DefaultJsonProtocol
-import org.cakesolutions.scalad.mongo.sprayjson.{SprayMongo, SprayMongoCollection, DateMarshalling, UuidMarshalling}
-import org.cakesolutions.akkapatterns.domain.Configured
+import org.eigengo.scalad.mongo.sprayjson.{SprayMongo, SprayMongoCollection, DateMarshalling, UuidMarshalling}
+import org.eigengo.akkapatterns.domain.Configured
 import com.mongodb.DB
 import spray.http._
 import spray.routing._

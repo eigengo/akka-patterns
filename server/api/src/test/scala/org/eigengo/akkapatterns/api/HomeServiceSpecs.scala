@@ -1,4 +1,4 @@
-package org.cakesolutions.akkapatterns.api
+package org.eigengo.akkapatterns.api
 
 class HomeServiceSpecs extends ApiSpecs with HomeService {
 

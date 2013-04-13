@@ -1,4 +1,4 @@
-package org.cakesolutions.akkapatterns
+package org.eigengo.akkapatterns
 
 import org.specs2.specification.Analysis
 import org.specs2.analysis.ClassycleDependencyFinder
@@ -14,7 +14,7 @@ class ArchitectureSpec extends NoActorSpecs with Analysis with ClassycleDependen
         "api",
         "core",
         "domain"
-      ).withPrefix("org.cakesolutions.akkapatterns").inTargetDir("target/scala-2.10")
+      ).withPrefix("org.eigengo.akkapatterns").inTargetDir("target/scala-2.10")
 
       ls must beRespected
     }

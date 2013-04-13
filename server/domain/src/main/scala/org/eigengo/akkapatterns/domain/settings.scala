@@ -1,4 +1,4 @@
-package org.cakesolutions.akkapatterns.domain
+package org.eigengo.akkapatterns.domain
 
 import com.typesafe.config.ConfigFactory
 import com.mongodb.{ServerAddress, WriteConcern}

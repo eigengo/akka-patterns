@@ -1,7 +1,7 @@
-package org.cakesolutions.akkapatterns.web
+package org.eigengo.akkapatterns.web
 
-import org.cakesolutions.akkapatterns.core.ServerCore
-import org.cakesolutions.akkapatterns.api.Api
+import org.eigengo.akkapatterns.core.ServerCore
+import org.eigengo.akkapatterns.api.Api
 import spray.can.server.SprayCanHttpServerApp
 import akka.actor.Props
 

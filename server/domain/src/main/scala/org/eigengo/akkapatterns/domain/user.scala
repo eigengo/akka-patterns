@@ -1,8 +1,8 @@
-package org.cakesolutions.akkapatterns.domain
+package org.eigengo.akkapatterns.domain
 
 import spray.json._
 import com.mongodb.DB
-import org.cakesolutions.scalad.mongo.sprayjson.UuidMarshalling
+import org.eigengo.scalad.mongo.sprayjson.UuidMarshalling
 
 /**
  * The user record, which stores the identity, the username and the password
@@ -77,7 +77,7 @@ trait UserFormats extends DefaultJsonProtocol with UuidMarshalling {
 // this is how we would use scalad for the user database, but we're actually using Neo4J
 //trait UserMongo extends UserFormats {
 //  this: Configured =>
-//  import org.cakesolutions.scalad.mongo.sprayjson._
+//  import org.eigengo.scalad.mongo.sprayjson._
 //
 //  protected implicit val UserProvider = new SprayMongoCollection[User](configured[DB], "users", "id":>1, "username":> 1)
 //}

@@ -1,10 +1,10 @@
-package org.cakesolutions.akkapatterns.core
+package org.eigengo.akkapatterns.core
 
 import akka.actor.{Props, ActorSystem}
 import akka.pattern.ask
 import akka.util.Timeout
 import concurrent.Await
-import org.cakesolutions.akkapatterns.core.ApplicationActor.Start
+import org.eigengo.akkapatterns.core.ApplicationActor.Start
 
 
 trait ServerCore {
