@@ -1,0 +1,26 @@
+@import "twitter-bootstrap-static/bootstrap.css";
+@import "twitter-bootstrap-static/fontawesome.css";
+@import "twitter-bootstrap-static/sprites.css";
+
+body { margin-top: 60px; }
+
+.nav {
+  width:100%;
+}
+.navbar .nav > li.pull-right {
+  float:right
+}
+
+#slideout a {
+  color: #333333;
+}
+
+.dropdown-menu .active > a {
+  color: #cccccc;
+  background-color: rgb(230, 230, 230);
+  background-image: linear-gradient(to bottom, rgb(207, 207, 207), rgb(230, 230, 230));
+}
+
+.dropdown-menu .active > a:hover {
+  color: #ffffff;
+}
