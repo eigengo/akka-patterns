@@ -18,7 +18,7 @@ import com.typesafe.sbt.SbtStartScript
 // main.db.mongo.hosts = ${test.db.mongo.hosts}
 // main.db.cassandra.hosts = ${test.db.cassandra.hosts}
 //
-// mkdir -p {domain,core,api,main,test}/src/{main,test}/{java,scala,resources}/org/cakesolutions/akkapatterns
+// mkdir -p {domain,core,api,main,test}/src/{main,test}/{java,scala,resources}/org/eigengo/akkapatterns
 //
 // the following were useful for writing this file
 // http://www.scala-sbt.org/release/docs/Getting-Started/Multi-Project.html
@@ -27,7 +27,7 @@ import com.typesafe.sbt.SbtStartScript
 object PatternsBuild extends Build {
 
   override val settings = super.settings ++ Seq(
-    organization := "org.cakesolutions.patterns",
+    organization := "org.eigengo",
     version := "1.0-SNAPSHOT",
     scalaVersion := "2.10.1"
   )
@@ -68,7 +68,7 @@ object PatternsBuild extends Build {
 	libraryDependencies += hector,
 	libraryDependencies += spring_core,
 	libraryDependencies += specs2 % "test",
-    packageName in scalaxb in Compile := "org.cakesolutions.patterns.domain.soap",
+    packageName in scalaxb in Compile := "org.eigengo.akkapatterns.domain.soap",
     sourceGenerators in Compile <+= scalaxb in Compile
     )
 
@@ -102,7 +102,7 @@ object PatternsBuild extends Build {
 	) settings (
 	  SbtStartScript.startScriptForClassesSettings: _*
   	) settings (
-	  mainClass in (Compile, run) := Some("org.cakesolutions.akkapatterns.main.Main")
+	  mainClass in (Compile, run) := Some("org.eigengo.akkapatterns.main.Main")
 	) aggregate (
       domain, test, core, api, main
     ) dependsOn (main) // yuck
@@ -122,7 +122,7 @@ object Dependencies {
   val spray_version = "1.1-M7"
 
   val java_logging = "com.github.fommil" % "java-logging" % "1.0"
-  val scalad = "org.cakesolutions" %% "scalad" % "1.3.0-SNAPSHOT" // https://github.com/janm399/scalad/issues/7
+  val scalad = "org.eigengo" %% "scalad" % "1.3.0-EG" // https://github.com/janm399/scalad/issues/7
   val akka = "com.typesafe.akka" %% "akka-actor" % akka_version
   val akka_contrib = "com.typesafe.akka" %% "akka-contrib" % akka_version intransitive()// JUL only
   val akka_testkit = "com.typesafe.akka" %% "akka-testkit" % akka_version
