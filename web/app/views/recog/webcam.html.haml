@@ -1,0 +1,16 @@
+%h1 Webcam recogniser
+%p To successfully log-in, use your webcam and show it a circle, rectangle and then your face
+= render 'camera'
+:javascript
+  function loggedIn(image, lastImages, restart) {
+
+  }
+
+  $(document).ready(function(){
+    startWebcamScan({
+      camera: $("#camera"),
+      preflightUrl: "#{Rails.application.config.server_url}/recog/#{params[:id]}",
+      onPreflight: feedback,
+      onPreflightComplete: loggedIn
+    });
+  });

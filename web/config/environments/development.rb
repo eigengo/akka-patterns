@@ -15,4 +15,6 @@ Web::Application.configure do
 
   # Debug mode disables concatenation and preprocessing of assets.
   config.assets.debug = true
+
+  config.server_url = 'http://localhost:8080'
 end

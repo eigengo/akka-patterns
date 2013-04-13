@@ -60,7 +60,7 @@
 				var newWidth=opts.width*opts.zoom;
 				var newHeight=opts.height*opts.zoom;
 				if (opts.chatRoom) {
-					newWidth=(opts.width*opts.zoom)+(opts.width*opts.zoomChat)+5; // make room for two horizontal video windows with a margin of 5
+					newWidth=(opts.width*opts.zoom)+(opts.width*opts.zoomChat)+5; // make room for two horizontal recog windows with a margin of 5
 					opts.posX=(opts.width*opts.zoom)+5;
 					newHeight=opts.height*Math.max(opts.zoom,opts.zoomChat);
 				};
