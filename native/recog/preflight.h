@@ -26,7 +26,7 @@ namespace eigengo { namespace akka {
 		FocusPreflightResult focus(const cv::Mat& image);
 		HistorgramPreflightResult histogram(const cv::Mat &image);
 	public:
-		PreflightResult preflight(const cv::Mat& image);
+		PreflightResult run(const cv::Mat& image);
 	};
 		
 } }
