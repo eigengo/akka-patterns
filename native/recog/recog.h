@@ -3,14 +3,22 @@
 #include <opencv2/opencv.hpp>
 
 namespace eigengo { namespace akka {
+	
+	enum Feature {
+		Circle,
+		Square,
+		Face
+	};
 
 	class Recogniser {
 	private:
 		cv::CascadeClassifier faceClassifier;
+		
+		bool recogniseFace(const cv::Mat &image);
 	public:
 		Recogniser();
 		
-		bool recognise(cv::Mat& image);
+		bool recognise(const cv::Mat &image, const Feature feature);
 	};
   
 } }
