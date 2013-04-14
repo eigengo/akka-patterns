@@ -16,7 +16,7 @@ include_directories(..)
 include_directories(${Boost_INCLUDE_DIRS})
 link_directories(${Boost_LIBRARY_DIRS})
 
-add_executable(recog main.cpp recog.cpp ../rabbit.cpp ../jzon.cpp ../im.cpp)
+add_executable(recog main.cpp preflight.cpp recog.cpp ../rabbit.cpp ../jzon.cpp ../im.cpp)
 target_link_libraries(recog ${Rabbitmqc_LIBRARY} ${Boost_LIBRARIES} ${SimpleAmqpClient_LIBRARY} ${OpenCV_LIBS})
 
 set(GTEST_ROOT "${PROJECT_SOURCE_DIR}/../gtest-1.6.0")
