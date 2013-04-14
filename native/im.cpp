@@ -27,7 +27,7 @@ std::vector<Image> ImageMessage::images() throw () {
 	return m_images;
 }
 
-Image ImageMessage::firstImage() throw () {
+Image ImageMessage::headImage() throw (std::out_of_range) {
 	return m_images.at(0);
 }
 
