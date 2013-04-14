@@ -16,6 +16,8 @@ std::string Main::handleMessage(const AmqpClient::BasicMessage::ptr_t message, c
 	return "foo";
 }
 
-int main() {
+int main(int argc, char** argv) {
+	Main main("recog", "amq.direct", "recog.key");
+	main.runAndJoin(8);
 	return 0;
 }

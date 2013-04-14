@@ -2,6 +2,6 @@
 #include "gtest/gtest.h"
 #include "preflight.h"
 
-TEST(Preflight, Trivial) {
+TEST(Preflight, NotFocused) {
 	EXPECT_TRUE(true);
 }

@@ -4,7 +4,7 @@ using namespace eigengo::akka;
 using namespace cv;
 
 Recogniser::Recogniser() {
-	if (!faceClassifier.load("haarcascade_frontalface_alt.xml")) throw "misconfigured";
+	if (!faceClassifier.load("face_cascade.xml")) throw "misconfigured";
 }
 
 bool Recogniser::recognise(cv::Mat &image) {
