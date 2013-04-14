@@ -69,9 +69,9 @@ namespace eigengo { namespace akka {
 		std::vector<Image> images() throw ();
 			
 		/**
-		 * Returns the first image in the images vector. It is the equivalent of calling ``images().get(0)``
+		 * Returns the first image in the images vector. It is roughly the equivalent of calling ``images().get(0)``.
 		 */
-		Image firstImage() throw ();
+		Image headImage() throw (std::out_of_range);
 	};
 
 } }
