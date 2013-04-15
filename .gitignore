@@ -48,3 +48,4 @@ provisioning/*/*.known
 log/
 tmp/
 build/
+akka-patterns-store/

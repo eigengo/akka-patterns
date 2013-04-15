@@ -17,7 +17,7 @@ trait ApiMarshalling extends DefaultJsonProtocol
   implicit val RegisteredUserFormat = jsonFormat1(RegisteredUser)
 
   implicit val ImplementationFormat = jsonFormat3(Implementation)
-  implicit val SystemInfoFormat = jsonFormat3(SystemInfo)
+  implicit val SystemInfoFormat = jsonFormat2(SystemInfo)
 }
 
 case class ErrorResponseException(responseStatus: StatusCode, response: Option[HttpEntity]) extends Exception
