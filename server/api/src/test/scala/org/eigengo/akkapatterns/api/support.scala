@@ -13,7 +13,7 @@ import akka.contrib.jul.JavaLogging
 import spray.routing.{HttpService, Rejection}
 import scala.reflect.ClassTag
 import org.eigengo.akkapatterns.{NoActorSpecs, CleanMongo, ActorSpecs}
-import org.eigengo.akkapatterns.core.{ServerCore, CoreActorRefs}
+import org.eigengo.akkapatterns.core.{LocalAmqpServerCore, ServerCore, CoreActorRefs}
 import akka.actor.ActorSystem
 import scala.concurrent.duration.Duration
 import java.util.concurrent.TimeUnit
@@ -144,14 +144,14 @@ trait TestFailureHandling {
   * test with Core.
   */
 trait ApiSpecs extends NoActorSpecs
-with Specs2RouteTest
-with RouteTestNiceness
-with EndpointMarshalling
-with JavaLogging
-with DefaultAuthenticationDirectives
-with AuthenticatedTestkit
-with TestFailureHandling
-with ServerCore with CoreActorRefs with CleanMongo with Tracking {
+  with Specs2RouteTest
+  with RouteTestNiceness
+  with EndpointMarshalling
+  with JavaLogging
+  with DefaultAuthenticationDirectives
+  with AuthenticatedTestkit
+  with TestFailureHandling
+  with ServerCore with LocalAmqpServerCore with CleanMongo with Tracking {
   this: HttpService =>
 
   def actorSystem = system // for ServerCore

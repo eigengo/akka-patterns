@@ -3,7 +3,7 @@ package org.eigengo.akkapatterns.core
 import org.eigengo.akkapatterns.domain.{SuperuserKind, User, UserFormats}
 import java.util.UUID
 
-// TODO https://github.com/janm399/akka-patterns/issues/35
+// TODO https://github.com/eigengo/akka-patterns/issues/35
 trait Neo4JFixtures extends TypedGraphDatabase with UserFormats with SprayJsonNodeMarshalling with UserGraphDatabaseIndexes {
 
   val RootUserPassword = "*******"
