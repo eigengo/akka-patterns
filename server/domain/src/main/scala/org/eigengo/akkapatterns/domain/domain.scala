@@ -29,4 +29,14 @@ package object domain {
    */
   type UserReference = UUID
 
+  /**
+   * Recognition session identity
+   */
+  type RecogSessionId = UUID
+
+  /**
+   * The image structure
+   */
+  type Image = Array[Byte]
+
 }

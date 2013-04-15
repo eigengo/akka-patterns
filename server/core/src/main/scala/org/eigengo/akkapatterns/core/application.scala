@@ -3,14 +3,18 @@ package org.eigengo.akkapatterns.core
 import akka.actor.{ActorLogging, Props, Actor}
 import akka.routing.FromConfig
 
+@deprecated("This is a rather clumsy idea.")
 case class GetImplementation()
+@deprecated("This is a rather clumsy idea.")
 case class Implementation(title: String, version: String, build: String)
 
+@deprecated("This is a rather clumsy idea.")
 object ApplicationActor {
   case class Start()
   case class Stop()
 }
 
+@deprecated("This is a rather clumsy idea.")
 class ApplicationActor extends Actor with ActorLogging {
   import ApplicationActor._
 

@@ -3,12 +3,13 @@ package org.eigengo.akkapatterns.api
 import akka.actor.Actor
 import spray._
 import routing._
-import org.eigengo.akkapatterns.core.CoreActorRefs
+import org.eigengo.akkapatterns.core.{AmqpServerCore, LocalAmqpServerCore, ServerCore}
 import akka.util.Timeout
 import org.eigengo.akkapatterns.domain.Configured
 
-class Api extends Actor with HttpServiceActor
-  with CoreActorRefs
+trait Api extends Actor with HttpServiceActor
+  with ServerCore
+  with AmqpServerCore
   with FailureHandling
   with Tracking with Configured
   with EndpointMarshalling
@@ -16,26 +17,23 @@ class Api extends Actor with HttpServiceActor
   with CustomerService
   with HomeService
   with UserService
-  {
+  with RecogService {
 
-    // used by the Akka ask pattern
-    implicit val timeout = Timeout(10000)
+  // used by the Akka ask pattern
+  implicit val timeout = Timeout(10000)
 
-    // lets the CoreActorRef find the actor system used by Spray
-    // (this could potentially be a separate system)
-    def system = actorSystem
-
-    val routes =
+  val routes =
       customerRoute ~
       homeRoute ~
-      userRoute
+      userRoute ~
+      recogRoute
 
-    def receive = runRoute (
-      handleRejections(rejectionHandler)(
-        handleExceptions(exceptionHandler)(
-          trackRequestResponse(routes)
-        )
+  def receive = runRoute (
+    handleRejections(rejectionHandler)(
+      handleExceptions(exceptionHandler)(
+        trackRequestResponse(routes)
       )
     )
+  )
 
 }
