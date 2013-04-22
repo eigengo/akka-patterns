@@ -12,8 +12,12 @@ std::string Main::handleMessage(const AmqpClient::BasicMessage::ptr_t message, c
 	ImageMessage imageMessage(message);
 	
 	auto image = imageMessage.headImage();
-	
-	return "foo";
+	Jzon::Object root;
+	root.add("accepted", true);
+	Jzon::Writer writer(root, Jzon::NoFormat);
+	writer.Write();
+
+	return writer.GetResult();
 }
 
 int main(int argc, char** argv) {
