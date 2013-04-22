@@ -66,7 +66,6 @@ private[recog] case object GetSession
 
 private[recog] trait AmqpOperations extends DefaultTimeout {
   this: Actor =>
-  type AmqpPayload = Array[Byte]
 
   protected def amqpAsk[A : JsonReader](amqp: ActorRef)
                                    (exchange: String, routingKey: String, payload: AmqpPayload, headers: Map[String, AnyRef] = Map()): Future[A] = {
@@ -93,7 +92,8 @@ private[recog] trait AmqpOperations extends DefaultTimeout {
  * @author janmachacek
  */
 class RecogSessionActor(connectionActor: ActorRef) extends Actor
-  with FSM[RecogSessionState, RecogSessionData] with AmqpOperations with RecogFormats {
+  with FSM[RecogSessionState, RecogSessionData] with AmqpOperations with RecogFormats with ImageEncoding {
+
   private val StartTimeout = FiniteDuration(20, scala.concurrent.duration.SECONDS)
   private val StepTimeout = FiniteDuration(300, scala.concurrent.duration.SECONDS)
 
@@ -126,7 +126,7 @@ class RecogSessionActor(connectionActor: ActorRef) extends Actor
       val realSender = sender
       implicit val executionContext = context.dispatcher
 
-      amqpAsk[RecogResult](amqp)("amq.direct", "recog.key", x) onComplete {
+      amqpAsk[RecogResult](amqp)("amq.direct", "recog.key", mkImagePayload(x)) onComplete {
         case Success(recogResult) => self ! SenderResult(realSender, recogResult)
         case Failure(_) => self ! SenderResult(realSender, RecogResult(false))
       }

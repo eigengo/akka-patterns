@@ -44,7 +44,7 @@ class RecogCoordinatorActor(connectionActor: ActorRef) extends Actor {
     case Begin =>
       val id = UUID.randomUUID()
       val instanceActor = context.actorOf(Props(new RecogSessionActor(connectionActor)), id.toString)
-      instanceActor ! SessionConfiguration(FaceFeature :: SquareFeature :: CircleFeature :: Nil)
+      instanceActor ! SessionConfiguration(FaceFeature :: Nil)
       sender ! id
     case ProcessImage(id, image) =>
       findInstanceActor(id).tell(image, sender)
