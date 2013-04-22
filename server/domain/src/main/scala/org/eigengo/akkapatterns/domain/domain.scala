@@ -39,4 +39,9 @@ package object domain {
    */
   type Image = Array[Byte]
 
+  /**
+   * The AMQP payload
+   */
+  type AmqpPayload = Array[Byte]
+
 }

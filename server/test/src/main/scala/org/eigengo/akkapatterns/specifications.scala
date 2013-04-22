@@ -5,7 +5,7 @@ import org.cassandraunit.DataLoader
 import org.cassandraunit.dataset.yaml.ClassPathYamlDataSet
 import com.mongodb.DB
 import me.prettyprint.hector.api.Cluster
-import org.specs2.mutable.Specification
+import org.specs2.mutable.{SpecificationLike, Specification}
 import collection.JavaConversions._
 import org.specs2.specification.{SpecificationStructure, Step, Fragments}
 import akka.contrib.jul.JavaLogging
@@ -38,7 +38,7 @@ abstract class NoActorSpecs extends Specification with JavaLogging {
   * exception.
   */
 //@RunWith(classOf[JUnitRunner])
-abstract class ActorSpecs extends TestKit(ActorSystem()) with Specification with JavaLogging {
+abstract class ActorSpecs extends TestKit(ActorSystem()) with SpecificationLike with JavaLogging {
 
   args.report(traceFilter = LoggedStackTraceFilter)
 

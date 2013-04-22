@@ -115,6 +115,7 @@ object Dependencies {
   val bad = Seq(
     ExclusionRule(name = "log4j"),
     ExclusionRule(name = "commons-logging"),
+    ExclusionRule(name = "commons-collections"),
     ExclusionRule(organization = "org.slf4j")
   )
 
@@ -126,8 +127,8 @@ object Dependencies {
   val akka = "com.typesafe.akka" %% "akka-actor" % akka_version
   val akka_contrib = "com.typesafe.akka" %% "akka-contrib" % akka_version intransitive()// JUL only
   val akka_testkit = "com.typesafe.akka" %% "akka-testkit" % akka_version
-  val scalaz_effect = "org.scalaz" %% "scalaz-effect" % "7.0.0-M9"
-  val spring_core = "org.springframework" % "spring-core" % "3.1.4.RELEASE" excludeAll (bad: _*)
+  val scalaz_effect = "org.scalaz" %% "scalaz-effect" % "7.0.0"
+  val spring_core = "org.springframework" % "spring-core" % "3.2.2.RELEASE" excludeAll (bad: _*)
   // beware Hector 1.1-2 and Guava 14: https://github.com/hector-client/hector/pull/591
   val guava = "com.google.guava" % "guava" % "13.0.1" // includes Cache
   val jsr305 = "com.google.code.findbugs" % "jsr305" % "2.0.1" // undeclared dep of Guava
@@ -136,10 +137,10 @@ object Dependencies {
   val spray_client = "io.spray" % "spray-client" % spray_version
   val spray_testkit = "io.spray" % "spray-testkit" % spray_version
   val cassandra_unit = "org.cassandraunit" % "cassandra-unit" % "1.1.2.1" excludeAll (bad: _*)
-  val specs2 = "org.specs2" %% "specs2" % "1.13"
+  val specs2 = "org.specs2" %% "specs2" % "1.14"
   val amqp = "com.github.sstone" %% "amqp-client" % "1.1"
   val rabbitmq = "com.rabbitmq" % "amqp-client" % "2.8.1"
-  val neo4j = "org.neo4j" % "neo4j" % "1.9.M05"
+  val neo4j = "org.neo4j" % "neo4j" % "1.9.RC1"
   val jasperreports = "net.sf.jasperreports" % "jasperreports" % "5.0.1" excludeAll (bad: _*)
   val poi = "org.apache.poi" % "poi" % "3.9"
   val mail = "javax.mail" % "mail" % "1.4.2"
