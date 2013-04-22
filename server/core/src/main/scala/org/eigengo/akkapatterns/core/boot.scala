@@ -19,20 +19,20 @@ trait LocalAmqpServerCore extends AmqpServerCore {
   def actorSystem: ActorSystem
 
   // AMQP business
-  val connectionFactory = new ConnectionFactory()
+  lazy val connectionFactory = new ConnectionFactory()
   connectionFactory.setHost("localhost")
   connectionFactory.setVirtualHost("/")
 
   // create a "connection owner" actor, which will try and reconnect automatically if the connection is lost
-  val connectionActor = actorSystem.actorOf(Props(new ConnectionOwner(connectionFactory)))
+  lazy val connectionActor = actorSystem.actorOf(Props(new ConnectionOwner(connectionFactory)))
 }
 
 trait ServerCore {
   this: AmqpServerCore =>
   def actorSystem: ActorSystem
 
-  val recogCoordinator = actorSystem.actorOf(Props(new RecogCoordinatorActor(connectionActor)))
-  val messageDelivery = actorSystem.actorOf(Props[MessageDeliveryActor].withDispatcher("low-priority-dispatcher"))
-  val userActor = actorSystem.actorOf(Props(new UserActor(messageDelivery)))
-  val loginActor = actorSystem.actorOf(Props(new LoginActor(messageDelivery)))
+  lazy val recogCoordinator = actorSystem.actorOf(Props(new RecogCoordinatorActor(connectionActor)))
+  lazy val messageDelivery = actorSystem.actorOf(Props[MessageDeliveryActor].withDispatcher("low-priority-dispatcher"))
+  lazy val userActor = actorSystem.actorOf(Props(new UserActor(messageDelivery)))
+  lazy val loginActor = actorSystem.actorOf(Props(new LoginActor(messageDelivery)))
 }

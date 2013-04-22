@@ -1,5 +1,6 @@
 #include "main.h"
 #include "im.h"
+#include "jzon.h"
 
 using namespace eigengo::akka;
 
@@ -9,11 +10,11 @@ RabbitRpcServer::RabbitRpcServer(queue, exchange, routingKey) {
 }
 
 std::string Main::handleMessage(const AmqpClient::BasicMessage::ptr_t message, const AmqpClient::Channel::ptr_t channel) {
-	ImageMessage imageMessage(message);
+	// ImageMessage imageMessage(message);
 	
-	auto image = imageMessage.headImage();
+	// auto image = imageMessage.headImage();
 	Jzon::Object root;
-	root.add("accepted", true);
+	root.Add("accepted", true);
 	Jzon::Writer writer(root, Jzon::NoFormat);
 	writer.Write();
 

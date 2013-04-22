@@ -127,17 +127,24 @@ class RecogSessionActor(connectionActor: ActorRef) extends Actor
       implicit val executionContext = context.dispatcher
 
       amqpAsk[RecogResult](amqp)("amq.direct", "recog.key", x) onComplete {
-        case Success(recogResult) => self ! (realSender, recogResult)
-        case Failure(_) => self ! (realSender, RecogResult(false))
+        case Success(recogResult) => self ! SenderResult(realSender, recogResult)
+        case Failure(_) => self ! SenderResult(realSender, RecogResult(false))
       }
       goto(WaitingForImageResult)
   }
 
-  whenUnhandled {
+  def unhandled: StateFunction = {
     case Event(GetSession, session: ActiveSession) =>
       sender ! session
       stay()
+    case Event(StateTimeout, _) =>
+      goto(Aborted)
   }
+
+  whenUnhandled(unhandled)
+  when(Completed, StepTimeout)(unhandled)
+  when(Aborted)(unhandled)
+  when(Corrupted)(unhandled)
 
   private def saveAnd(f: TransitionHandler): TransitionHandler = {
     case a -> b =>
@@ -155,6 +162,7 @@ class RecogSessionActor(connectionActor: ActorRef) extends Actor
       {
         case _ -> WaitingForMoreImages => // log
         case _ -> Completed => // send SMS
+        case _ -> _ => // do nothing
       }
     }
   }
