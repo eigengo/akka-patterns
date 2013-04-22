@@ -1,9 +1,9 @@
 %h1 Webcam recogniser
-%p To successfully log-in, use your webcam and show it a circle, rectangle and then your face
+%p To successfully log-in, use your webcam and show it the required pictures.
 = render 'camera'
 :javascript
   function loggedIn(image, restart) {
-    alert("We're in");
+    $('#accepted').attr('class', 'ok');
   }
 
   $(document).ready(function(){

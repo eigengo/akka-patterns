@@ -110,13 +110,16 @@ class RecogSessionActor(connectionActor: ActorRef) extends Actor
     case Event(SenderResult(sender, r@RecogResult(true)), session: ActiveSession) =>
       val newSession = session.withResult(r)
       if (newSession.completed) {
+        println("**completed")
         sender ! RecogSessionCompleted(UUID.randomUUID().toString)
         goto(Completed) using newSession
       } else {
+        println("**accepted")
         sender ! RecogSessionAccepted(r)
         goto(WaitingForMoreImages) using newSession
       }
     case Event(SenderResult(sender, r@RecogResult(false)), session: ActiveSession) =>
+      println("**rejected")
       sender ! RecogSessionRejected(r)
       goto(WaitingForMoreImages) using session
   }

@@ -6,14 +6,9 @@ function feedbackUI(elementId, text, clazz) {
 
 function feedback(data) {
 
-    function nothingChecked() {
-        feedbackUI('accepted', 'Accepted', 'not_checked');
-    }
+    feedbackUI('accepted', JSON.stringify(data), 'not_checked');
 
-    if (!data) { nothingChecked(); return false; }
-    if (data.accepted) feedbackUI('accepted', 'Accepted', 'ok'); else feedbackUI('accepted', 'Accepted', 'fail');
-
-    return data.accepted;
+    return true;
 
 }
 
@@ -46,6 +41,7 @@ function startWebcamScan(opts) {
                  }
             }).fail(function(jqXHR, textStatus, errorThrown) {
                  setTimeout(base64_to_image, 200);
+                 feedbackUI('accepted', 'Not accepted', 'fail');
             });
         } else {
             setTimeout(base64_to_image(), 200);
