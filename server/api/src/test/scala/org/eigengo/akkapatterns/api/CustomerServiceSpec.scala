@@ -2,7 +2,6 @@ package org.eigengo.akkapatterns.api
 
 import spray.http.StatusCodes._
 import org.eigengo.akkapatterns.TestCustomerData
-import org.eigengo.akkapatterns.core.Neo4JFixtures
 import org.eigengo.akkapatterns.MongoCollectionFixture.Fix
 import java.util.UUID
 

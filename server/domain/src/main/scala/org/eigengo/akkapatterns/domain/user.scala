@@ -1,7 +1,6 @@
 package org.eigengo.akkapatterns.domain
 
 import spray.json._
-import com.mongodb.DB
 import org.eigengo.scalad.mongo.sprayjson.UuidMarshalling
 
 /**

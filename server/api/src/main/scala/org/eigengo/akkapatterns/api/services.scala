@@ -3,7 +3,12 @@ package org.eigengo.akkapatterns.api
 import spray.http.StatusCodes._
 import spray.http._
 import spray.routing._
+import directives.{CompletionMagnet, RouteDirectives}
 import spray.util.LoggingContext
+import util.control.NonFatal
+import spray.httpx.marshalling.Marshaller
+import spray.http.HttpHeaders.RawHeader
+import akka.actor.Actor
 
 /** Provides a hook to catch exceptions and rejections from routes, allowing custom
   * responses to be provided, logs to be captured, and potentially remedial actions.
@@ -45,4 +50,47 @@ trait FailureHandling {
     ctx.complete(error, message)
   }
 
+}
+
+/**
+ * Allows you to construct Spray ``HttpService`` from a concatenation of routes; and wires in the error handler.
+ * @param route the (concatenated) route
+ */
+class RoutedHttpService(route: Route) extends Actor with HttpService {
+
+  implicit def actorRefFactory = context
+
+  implicit val handler = ExceptionHandler.fromPF {
+    case NonFatal(ErrorResponseException(statusCode, entity)) => ctx =>
+      ctx.complete(statusCode, entity)
+
+    case NonFatal(e) => ctx =>
+      ctx.complete(InternalServerError)
+    }
+
+
+  def receive = {
+    runRoute(route)(handler, RejectionHandler.Default, context, RoutingSettings.Default, LoggingContext.fromActorRefFactory)
+  }
+
+}
+
+/**
+ * Constructs ``CompletionMagnet``s that set the ``Access-Control-Allow-Origin`` header for modern browsers' AJAX
+ * requests on different domains / ports.
+ */
+trait CrossLocationRouteDirectives extends RouteDirectives {
+
+  implicit def fromObjectCross[T : Marshaller](origin: String)(obj: T) =
+    new CompletionMagnet {
+      def route: StandardRoute = new CompletionRoute(OK,
+        RawHeader("Access-Control-Allow-Origin", origin) :: Nil, obj)
+    }
+
+  private class CompletionRoute[T : Marshaller](status: StatusCode, headers: List[HttpHeader], obj: T)
+    extends StandardRoute {
+    def apply(ctx: RequestContext) {
+      ctx.complete(status, headers, obj)
+    }
+  }
 }

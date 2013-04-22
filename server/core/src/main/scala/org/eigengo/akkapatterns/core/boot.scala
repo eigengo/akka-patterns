@@ -32,7 +32,7 @@ trait ServerCore {
   def actorSystem: ActorSystem
 
   val recogCoordinator = actorSystem.actorOf(Props(new RecogCoordinatorActor(connectionActor)))
-  val messageDelivery = actorSystem.actorOf(Props[MessageDeliveryActor].withRouter(FromConfig()).withDispatcher("low-priority-dispatcher"))
-  val userActor = actorSystem.actorOf(Props(new UserActor(messageDelivery)).withRouter(FromConfig()))
-  val loginActor = actorSystem.actorOf(Props[LoginActor])
+  val messageDelivery = actorSystem.actorOf(Props[MessageDeliveryActor].withDispatcher("low-priority-dispatcher"))
+  val userActor = actorSystem.actorOf(Props(new UserActor(messageDelivery)))
+  val loginActor = actorSystem.actorOf(Props(new LoginActor(messageDelivery)))
 }
