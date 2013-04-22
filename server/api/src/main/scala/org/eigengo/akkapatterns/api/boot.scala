@@ -1,15 +1,16 @@
 package org.eigengo.akkapatterns.api
 
-import akka.actor.Actor
+import akka.actor.{Props, ActorRef, Actor}
 import spray._
+import http.{StatusCodes, HttpResponse}
 import routing._
-import org.eigengo.akkapatterns.core.{AmqpServerCore, LocalAmqpServerCore, ServerCore}
+import org.eigengo.akkapatterns.core.ServerCore
 import akka.util.Timeout
-import org.eigengo.akkapatterns.domain.Configured
 
-trait Api extends Actor with HttpServiceActor
-  with ServerCore
-  with AmqpServerCore
+/*
+
+
+class XApi(loginActor: ActorRef, recogCoordinator: ActorRef) extends Actor with HttpServiceActor
   with FailureHandling
   with Tracking with Configured
   with EndpointMarshalling
@@ -35,5 +36,22 @@ trait Api extends Actor with HttpServiceActor
       )
     )
   )
+
+}
+*/
+
+trait Api extends RouteConcatenation {
+  this: ServerCore =>
+
+  implicit val executionContext = actorSystem.dispatcher
+
+  val routes =
+    new RecogService(recogCoordinator, actorSystem.settings.config.getString("server.web-server")).route
+
+  def rejectionHandler: PartialFunction[scala.List[Rejection], HttpResponse] = {
+    case (rejections: List[Rejection]) => HttpResponse(StatusCodes.BadRequest)
+  }
+
+  val rootService = actorSystem.actorOf(Props(new RoutedHttpService(routes)))
 
 }
