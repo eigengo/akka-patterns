@@ -130,6 +130,7 @@ class RecogSessionActor(connectionActor: ActorRef) extends Actor
         case Success(recogResult) => self ! SenderResult(realSender, recogResult)
         case Failure(_) => self ! SenderResult(realSender, RecogResult(false))
       }
+
       goto(WaitingForImageResult)
   }
 
