@@ -6,7 +6,7 @@ addSbtPlugin("org.scalaxb" % "sbt-scalaxb" % "1.0.1")
 
 //addSbtPlugin("com.typesafe.sbt" % "sbt-scalariform" % "1.0.0")
 
-addSbtPlugin("net.virtual-void" % "sbt-dependency-graph" % "0.7.1")
+addSbtPlugin("net.virtual-void" % "sbt-dependency-graph" % "0.7.3")
 
 resolvers += "SCCT Snapshots" at "http://mtkopone.github.com/scct/maven-repo"
 
