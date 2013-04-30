@@ -1,14 +1,11 @@
 package org.eigengo.akkapatterns.api
 
-import spray.routing.{Directives, RequestContext}
-import org.eigengo.akkapatterns.domain.{DefaultTimeout, UuidFormats, RecogSessionId}
-import scala.reflect.ClassTag
-import spray.json.RootJsonFormat
+import spray.routing.Directives
+import org.eigengo.akkapatterns.domain.{DefaultTimeout, RecogSessionId}
 import akka.actor.ActorRef
 import org.eigengo.akkapatterns.core.recog._
 import org.apache.commons.codec.binary.Base64
 import spray.http.StatusCodes
-import spray.http.HttpHeaders.RawHeader
 import concurrent.ExecutionContext
 import org.eigengo.akkapatterns.core.recog.ProcessImage
 import org.eigengo.akkapatterns.core.recog.RecogSessionRejected
