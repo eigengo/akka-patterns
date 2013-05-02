@@ -31,8 +31,8 @@ trait ServerCore {
   this: AmqpServerCore =>
   def actorSystem: ActorSystem
 
-  lazy val recogCoordinator = actorSystem.actorOf(Props(new RecogCoordinatorActor(connectionActor)))
+  lazy val recogCoordinator = actorSystem.actorOf(Props(classOf[RecogCoordinatorActor], connectionActor))
   lazy val messageDelivery = actorSystem.actorOf(Props[MessageDeliveryActor].withDispatcher("low-priority-dispatcher"))
-  lazy val userActor = actorSystem.actorOf(Props(new UserActor(messageDelivery)))
-  lazy val loginActor = actorSystem.actorOf(Props(new LoginActor(messageDelivery)))
+  lazy val userActor = actorSystem.actorOf(Props(classOf[UserActor], messageDelivery))
+  lazy val loginActor = actorSystem.actorOf(Props(classOf[LoginActor], messageDelivery))
 }

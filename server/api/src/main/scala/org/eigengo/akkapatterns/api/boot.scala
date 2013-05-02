@@ -48,10 +48,6 @@ trait Api extends RouteConcatenation {
   val routes =
     new RecogService(recogCoordinator, actorSystem.settings.config.getString("server.web-server")).route
 
-  def rejectionHandler: PartialFunction[scala.List[Rejection], HttpResponse] = {
-    case (rejections: List[Rejection]) => HttpResponse(StatusCodes.BadRequest)
-  }
-
   val rootService = actorSystem.actorOf(Props(new RoutedHttpService(routes)))
 
 }

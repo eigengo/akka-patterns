@@ -119,7 +119,7 @@ object Dependencies {
     ExclusionRule(organization = "org.slf4j")
   )
 
-  val akka_version = "2.1.2"
+  val akka_version = "2.2-M3"
   val spray_version = "1.1-M7"
 
   val java_logging = "com.github.fommil" % "java-logging" % "1.0"

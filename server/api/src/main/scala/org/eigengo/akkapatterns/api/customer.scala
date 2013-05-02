@@ -6,6 +6,7 @@ import org.eigengo.akkapatterns.core.CustomerController
 import akka.util.Timeout
 import scala.concurrent.Future
 import java.util.Date
+import org.eigengo.akkapatterns.domain.CustomerFormats
 
 trait CustomerService extends HttpService {
   this: EndpointMarshalling with AuthenticationDirectives =>
