@@ -1,4 +1,4 @@
-#Akka patterns
+# Akka patterns
 
 This repository contains code that demonstrates large-scale Akka applications. My aim is to share my experience & the pains so that you don't have to re-invent the wheel yourself.
 
